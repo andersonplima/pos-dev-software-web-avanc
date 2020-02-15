@@ -1,0 +1,43 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.anderson.jhipsterapp1",
+      "nativeLanguage": "pt-br"
+    },
+    "jhipsterVersion": "6.7.1",
+    "applicationType": "monolith",
+    "baseName": "jhipsterapp1",
+    "packageName": "com.anderson.jhipsterapp1",
+    "packageFolder": "com/anderson/jhipsterapp1",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "OTViY2Q4YjZlNzcwNmI4ZTY4NzFmNTNkOGU0YzFkYjNhZWYzYzUxOGJkNWQzYmI3YjJlMjc2NDRmODdjZDNiNjAwZTlkNWY1ODU1YWNkZjkwYzY5ODk0Y2YzYjdkMWUyOWE3YzBhMTFhZDZhYTg1ZGFjMjBjZWIwZTY4OGVhNTg=",
+    "embeddableLaunchScript": false,
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "solar",
+    "clientThemeVariant": "dark",
+    "creationTimestamp": 1581770480647,
+    "testFrameworks": ["protractor"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "nativeLanguage": "pt-br",
+    "languages": ["pt-br", "bn", "en", "pl", "es"],
+    "blueprints": []
+  }
+}
