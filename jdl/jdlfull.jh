@@ -1,0 +1,49 @@
+
+entity Festa {
+	nome String required max(100),
+    tema String required max(50),
+    valor Float required min(0)
+}
+
+entity TipoFesta {
+	nome String required max(50),
+    descricao String required max(100)
+}
+
+entity Cliente {
+	nome String required max(100),
+    cpf String required unique pattern(/^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$/)
+}
+
+entity Pedido {
+	dataPedido Instant,
+    valorPedido BigDecimal required
+}
+
+entity ItemPedido {
+	nomeItem String required,
+    valorItem BigDecimal
+}
+
+relationship ManyToOne {
+	Festa{cliente} to Cliente,
+    Festa{tipoFesta} to TipoFesta,
+    ItemPedido{pedido} to Pedido
+}
+
+relationship OneToMany {
+	Cliente{festas} to Festa,
+    TipoFesta{festas} to Festa
+}
+
+// Set pagination options
+paginate all with infinite-scroll
+
+// Use Data Transfert Objects (DTO)
+dto all with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+// angularSuffix * with mySuffix

@@ -1,0 +1,77 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="jhipsterapp1App.festa.home.title">Festas</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-festa" [routerLink]="['/festa/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span  jhiTranslate="jhipsterapp1App.festa.home.createLabel">
+            Create a new Festa
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="festas?.length === 0">
+        <span jhiTranslate="jhipsterapp1App.festa.home.notFound">No festas found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="festas?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span jhiTranslate="global.field.id">ID</span></th>
+                    <th scope="col" ><span jhiTranslate="jhipsterapp1App.festa.nome">Nome</span></th>
+                    <th scope="col" ><span jhiTranslate="jhipsterapp1App.festa.tema">Tema</span></th>
+                    <th scope="col" ><span jhiTranslate="jhipsterapp1App.festa.valor">Valor</span></th>
+                    <th scope="col" ><span jhiTranslate="jhipsterapp1App.festa.tipoFesta">Tipo Festa</span></th>
+                    <th scope="col" ><span jhiTranslate="jhipsterapp1App.festa.cliente">Cliente</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let festa of festas ;trackBy: trackId">
+                    <td><a [routerLink]="['/festa', festa.id, 'view']">{{ festa.id }}</a></td>
+                    <td>{{ festa.nome }}</td>
+                    <td>{{ festa.tema }}</td>
+                    <td>{{ festa.valor }}</td>
+                    <td>
+                        <div *ngIf="festa.tipoFestaId">
+                            <a [routerLink]="['/tipo-festa', festa.tipoFestaId , 'view']" >{{ festa.tipoFestaNome }}</a>
+                        </div>
+                    </td>
+                    <td>
+                        <div *ngIf="festa.clienteId">
+                            <a [routerLink]="['/cliente', festa.clienteId , 'view']" >{{ festa.clienteCpf }}</a>
+                        </div>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/festa', festa.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/festa', festa.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(festa)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

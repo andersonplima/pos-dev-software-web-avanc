@@ -1,0 +1,24 @@
+{
+  "jhipsterapp1App": {
+    "tipoFesta": {
+      "home": {
+        "title": "Tipo Festas",
+        "createLabel": "Criar novo Tipo Festa",
+        "createOrEditLabel": "Criar ou editar Tipo Festa",
+        "notFound": "Nenhum Tipo Festa encontrado"
+      },
+      "created": "Um novo Tipo Festa foi criado com o identificador {{ param }}",
+      "updated": "Um Tipo Festa foi atualizado com o identificador {{ param }}",
+      "deleted": "Um Tipo Festa foi excluído com o identificador {{ param }}",
+      "delete": {
+        "question": "Tem certeza de que deseja excluir Tipo Festa {{ id }}?"
+      },
+      "detail": {
+        "title": "Tipo Festa"
+      },
+      "nome": "Nome",
+      "descricao": "Descricao",
+      "festa": "Festa"
+    }
+  }
+}

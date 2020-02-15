@@ -1,0 +1,26 @@
+{
+  "jhipsterapp1App": {
+    "festa": {
+      "home": {
+        "title": "Festas",
+        "createLabel": "Create a new Festa",
+        "createOrEditLabel": "Create or edit a Festa",
+        "notFound": "No Festas found"
+      },
+      "created": "A new Festa is created with identifier {{ param }}",
+      "updated": "A Festa is updated with identifier {{ param }}",
+      "deleted": "A Festa is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Festa {{ id }}?"
+      },
+      "detail": {
+        "title": "Festa"
+      },
+      "nome": "Nome",
+      "tema": "Tema",
+      "valor": "Valor",
+      "tipoFesta": "Tipo Festa",
+      "cliente": "Cliente"
+    }
+  }
+}
