@@ -37,7 +37,7 @@
   "devDependencies": {
     "@angular/cli": "21.2.7",
     "@angular/compiler-cli": "8.2.14",
-    "@ngtools/webpack": "8.3.29",
+    "@ngtools/webpack": "21.2.7",
     "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
     "@types/chai": "4.2.7",
     "@types/chai-string": "1.4.2",
