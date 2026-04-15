@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -37,7 +37,10 @@ export class SettingsComponent implements OnInit {
     login: new FormControl(initialAccount.login, { nonNullable: true }),
   });
 
-  constructor(private accountService: AccountService, private translateService: TranslateService) {}
+  constructor(
+    private accountService: AccountService,
+    private translateService: TranslateService,
+  ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
