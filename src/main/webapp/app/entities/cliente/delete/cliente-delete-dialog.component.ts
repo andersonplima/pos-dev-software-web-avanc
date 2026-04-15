@@ -11,7 +11,10 @@ import { ClienteService } from '../service/cliente.service';
 export class ClienteDeleteDialogComponent {
   cliente?: ICliente;
 
-  constructor(protected clienteService: ClienteService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected clienteService: ClienteService,
+    protected activeModal: NgbActiveModal,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

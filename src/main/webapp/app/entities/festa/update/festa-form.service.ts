@@ -40,7 +40,7 @@ export class FestaFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       nome: new FormControl(festaRawValue.nome, {
         validators: [Validators.required, Validators.maxLength(100)],
@@ -70,7 +70,7 @@ export class FestaFormService {
       {
         ...festaRawValue,
         id: { value: festaRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 

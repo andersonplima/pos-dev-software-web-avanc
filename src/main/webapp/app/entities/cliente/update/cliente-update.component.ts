@@ -21,7 +21,7 @@ export class ClienteUpdateComponent implements OnInit {
   constructor(
     protected clienteService: ClienteService,
     protected clienteFormService: ClienteFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

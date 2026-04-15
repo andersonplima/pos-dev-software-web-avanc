@@ -22,7 +22,7 @@ describe('TipoFesta Form Service', () => {
             id: expect.any(Object),
             nome: expect.any(Object),
             descricao: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -34,7 +34,7 @@ describe('TipoFesta Form Service', () => {
             id: expect.any(Object),
             nome: expect.any(Object),
             descricao: expect.any(Object),
-          })
+          }),
         );
       });
     });

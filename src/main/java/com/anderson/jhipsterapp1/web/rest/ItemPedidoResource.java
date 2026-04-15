@@ -61,8 +61,7 @@ public class ItemPedidoResource {
             throw new BadRequestAlertException("A new itemPedido cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ItemPedidoDTO result = itemPedidoService.save(itemPedidoDTO);
-        return ResponseEntity
-            .created(new URI("/api/item-pedidos/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/item-pedidos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -95,8 +94,7 @@ public class ItemPedidoResource {
         }
 
         ItemPedidoDTO result = itemPedidoService.update(itemPedidoDTO);
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, itemPedidoDTO.getId().toString()))
             .body(result);
     }
@@ -174,8 +172,7 @@ public class ItemPedidoResource {
     public ResponseEntity<Void> deleteItemPedido(@PathVariable Long id) {
         log.debug("REST request to delete ItemPedido : {}", id);
         itemPedidoService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }

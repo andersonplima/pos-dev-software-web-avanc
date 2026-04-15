@@ -9,7 +9,10 @@ import { ItemPedidoService } from '../service/item-pedido.service';
 
 @Injectable({ providedIn: 'root' })
 export class ItemPedidoRoutingResolveService implements Resolve<IItemPedido | null> {
-  constructor(protected service: ItemPedidoService, protected router: Router) {}
+  constructor(
+    protected service: ItemPedidoService,
+    protected router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IItemPedido | null | never> {
     const id = route.params.id;
@@ -21,7 +24,7 @@ export class ItemPedidoRoutingResolveService implements Resolve<IItemPedido | nu
           }
           this.router.navigate(['404']);
           return EMPTY;
-        })
+        }),
       );
     }
     return of(null);

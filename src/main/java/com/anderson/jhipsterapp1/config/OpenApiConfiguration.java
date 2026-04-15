@@ -22,8 +22,7 @@ public class OpenApiConfiguration {
         JHipsterProperties jHipsterProperties
     ) {
         JHipsterProperties.ApiDocs properties = jHipsterProperties.getApiDocs();
-        return GroupedOpenApi
-            .builder()
+        return GroupedOpenApi.builder()
             .group("openapi")
             .addOpenApiCustomiser(jhipsterOpenApiCustomizer)
             .packagesToScan(API_FIRST_PACKAGE)

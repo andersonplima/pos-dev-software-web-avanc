@@ -11,7 +11,10 @@ import { PedidoService } from '../service/pedido.service';
 export class PedidoDeleteDialogComponent {
   pedido?: IPedido;
 
-  constructor(protected pedidoService: PedidoService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected pedidoService: PedidoService,
+    protected activeModal: NgbActiveModal,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

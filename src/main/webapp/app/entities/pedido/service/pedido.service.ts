@@ -28,7 +28,10 @@ export type EntityArrayResponseType = HttpResponse<IPedido[]>;
 export class PedidoService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pedidos');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+  ) {}
 
   create(pedido: NewPedido): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(pedido);

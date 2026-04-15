@@ -70,7 +70,7 @@ describe('Festa Management Update Component', () => {
       expect(tipoFestaService.query).toHaveBeenCalled();
       expect(tipoFestaService.addTipoFestaToCollectionIfMissing).toHaveBeenCalledWith(
         tipoFestaCollection,
-        ...additionalTipoFestas.map(expect.objectContaining)
+        ...additionalTipoFestas.map(expect.objectContaining),
       );
       expect(comp.tipoFestasSharedCollection).toEqual(expectedCollection);
     });
@@ -92,7 +92,7 @@ describe('Festa Management Update Component', () => {
       expect(clienteService.query).toHaveBeenCalled();
       expect(clienteService.addClienteToCollectionIfMissing).toHaveBeenCalledWith(
         clienteCollection,
-        ...additionalClientes.map(expect.objectContaining)
+        ...additionalClientes.map(expect.objectContaining),
       );
       expect(comp.clientesSharedCollection).toEqual(expectedCollection);
     });

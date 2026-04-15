@@ -37,7 +37,7 @@ export class TipoFestaFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       nome: new FormControl(tipoFestaRawValue.nome, {
         validators: [Validators.required, Validators.maxLength(50)],
@@ -58,7 +58,7 @@ export class TipoFestaFormService {
       {
         ...tipoFestaRawValue,
         id: { value: tipoFestaRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 

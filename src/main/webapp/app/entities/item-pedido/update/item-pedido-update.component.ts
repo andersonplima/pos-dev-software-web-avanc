@@ -26,7 +26,7 @@ export class ItemPedidoUpdateComponent implements OnInit {
     protected itemPedidoService: ItemPedidoService,
     protected itemPedidoFormService: ItemPedidoFormService,
     protected pedidoService: PedidoService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   comparePedido = (o1: IPedido | null, o2: IPedido | null): boolean => this.pedidoService.comparePedido(o1, o2);
@@ -81,7 +81,7 @@ export class ItemPedidoUpdateComponent implements OnInit {
 
     this.pedidosSharedCollection = this.pedidoService.addPedidoToCollectionIfMissing<IPedido>(
       this.pedidosSharedCollection,
-      itemPedido.pedido
+      itemPedido.pedido,
     );
   }
 

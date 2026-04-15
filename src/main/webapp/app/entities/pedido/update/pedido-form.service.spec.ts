@@ -22,7 +22,7 @@ describe('Pedido Form Service', () => {
             id: expect.any(Object),
             dataPedido: expect.any(Object),
             valorPedido: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -34,7 +34,7 @@ describe('Pedido Form Service', () => {
             id: expect.any(Object),
             dataPedido: expect.any(Object),
             valorPedido: expect.any(Object),
-          })
+          }),
         );
       });
     });

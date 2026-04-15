@@ -66,7 +66,7 @@ describe('ItemPedido Management Update Component', () => {
       expect(pedidoService.query).toHaveBeenCalled();
       expect(pedidoService.addPedidoToCollectionIfMissing).toHaveBeenCalledWith(
         pedidoCollection,
-        ...additionalPedidos.map(expect.objectContaining)
+        ...additionalPedidos.map(expect.objectContaining),
       );
       expect(comp.pedidosSharedCollection).toEqual(expectedCollection);
     });

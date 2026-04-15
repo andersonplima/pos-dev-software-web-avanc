@@ -21,7 +21,7 @@ export class PedidoUpdateComponent implements OnInit {
   constructor(
     protected pedidoService: PedidoService,
     protected pedidoFormService: PedidoFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

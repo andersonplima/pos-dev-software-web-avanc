@@ -35,7 +35,7 @@ import { errorRoute } from './layouts/error/error.route';
         navbarRoute,
         ...errorRoute,
       ],
-      { enableTracing: DEBUG_INFO_ENABLED }
+      { enableTracing: DEBUG_INFO_ENABLED },
     ),
   ],
   exports: [RouterModule],

@@ -16,7 +16,10 @@ export type EntityArrayResponseType = HttpResponse<ICliente[]>;
 export class ClienteService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/clientes');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+  ) {}
 
   create(cliente: NewCliente): Observable<EntityResponseType> {
     return this.http.post<ICliente>(this.resourceUrl, cliente, { observe: 'response' });

@@ -9,7 +9,10 @@ import { FestaService } from '../service/festa.service';
 
 @Injectable({ providedIn: 'root' })
 export class FestaRoutingResolveService implements Resolve<IFesta | null> {
-  constructor(protected service: FestaService, protected router: Router) {}
+  constructor(
+    protected service: FestaService,
+    protected router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IFesta | null | never> {
     const id = route.params.id;
@@ -21,7 +24,7 @@ export class FestaRoutingResolveService implements Resolve<IFesta | null> {
           }
           this.router.navigate(['404']);
           return EMPTY;
-        })
+        }),
       );
     }
     return of(null);

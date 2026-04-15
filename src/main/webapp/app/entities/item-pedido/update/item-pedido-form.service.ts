@@ -38,7 +38,7 @@ export class ItemPedidoFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       nomeItem: new FormControl(itemPedidoRawValue.nomeItem, {
         validators: [Validators.required],
@@ -58,7 +58,7 @@ export class ItemPedidoFormService {
       {
         ...itemPedidoRawValue,
         id: { value: itemPedidoRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 

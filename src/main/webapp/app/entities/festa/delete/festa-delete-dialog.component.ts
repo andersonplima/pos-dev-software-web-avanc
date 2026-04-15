@@ -11,7 +11,10 @@ import { FestaService } from '../service/festa.service';
 export class FestaDeleteDialogComponent {
   festa?: IFesta;
 
-  constructor(protected festaService: FestaService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected festaService: FestaService,
+    protected activeModal: NgbActiveModal,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

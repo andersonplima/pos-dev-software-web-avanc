@@ -56,8 +56,7 @@ public class FestaResource {
             throw new BadRequestAlertException("A new festa cannot already have an ID", ENTITY_NAME, "idexists");
         }
         FestaDTO result = festaService.save(festaDTO);
-        return ResponseEntity
-            .created(new URI("/api/festas/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/festas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -90,8 +89,7 @@ public class FestaResource {
         }
 
         FestaDTO result = festaService.update(festaDTO);
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, festaDTO.getId().toString()))
             .body(result);
     }
@@ -167,8 +165,7 @@ public class FestaResource {
     public ResponseEntity<Void> deleteFesta(@PathVariable Long id) {
         log.debug("REST request to delete Festa : {}", id);
         festaService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }

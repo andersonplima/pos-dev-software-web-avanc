@@ -25,7 +25,7 @@ describe('Festa Form Service', () => {
             valor: expect.any(Object),
             tipoFesta: expect.any(Object),
             cliente: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -40,7 +40,7 @@ describe('Festa Form Service', () => {
             valor: expect.any(Object),
             tipoFesta: expect.any(Object),
             cliente: expect.any(Object),
-          })
+          }),
         );
       });
     });

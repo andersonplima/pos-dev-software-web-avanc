@@ -21,7 +21,7 @@ export class TipoFestaUpdateComponent implements OnInit {
   constructor(
     protected tipoFestaService: TipoFestaService,
     protected tipoFestaFormService: TipoFestaFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

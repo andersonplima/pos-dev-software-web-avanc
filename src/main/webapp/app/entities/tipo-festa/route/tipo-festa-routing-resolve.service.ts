@@ -9,7 +9,10 @@ import { TipoFestaService } from '../service/tipo-festa.service';
 
 @Injectable({ providedIn: 'root' })
 export class TipoFestaRoutingResolveService implements Resolve<ITipoFesta | null> {
-  constructor(protected service: TipoFestaService, protected router: Router) {}
+  constructor(
+    protected service: TipoFestaService,
+    protected router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ITipoFesta | null | never> {
     const id = route.params.id;
@@ -21,7 +24,7 @@ export class TipoFestaRoutingResolveService implements Resolve<ITipoFesta | null
           }
           this.router.navigate(['404']);
           return EMPTY;
-        })
+        }),
       );
     }
     return of(null);

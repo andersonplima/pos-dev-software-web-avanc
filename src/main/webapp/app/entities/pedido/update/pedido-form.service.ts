@@ -50,7 +50,7 @@ export class PedidoFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       dataPedido: new FormControl(pedidoRawValue.dataPedido),
       valorPedido: new FormControl(pedidoRawValue.valorPedido, {
@@ -69,7 +69,7 @@ export class PedidoFormService {
       {
         ...pedidoRawValue,
         id: { value: pedidoRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 
@@ -90,7 +90,7 @@ export class PedidoFormService {
   }
 
   private convertPedidoToPedidoRawValue(
-    pedido: IPedido | (Partial<NewPedido> & PedidoFormDefaults)
+    pedido: IPedido | (Partial<NewPedido> & PedidoFormDefaults),
   ): PedidoFormRawValue | PartialWithRequiredKeyOf<NewPedidoFormRawValue> {
     return {
       ...pedido,

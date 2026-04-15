@@ -22,7 +22,7 @@ describe('Cliente Form Service', () => {
             id: expect.any(Object),
             nome: expect.any(Object),
             cpf: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -34,7 +34,7 @@ describe('Cliente Form Service', () => {
             id: expect.any(Object),
             nome: expect.any(Object),
             cpf: expect.any(Object),
-          })
+          }),
         );
       });
     });

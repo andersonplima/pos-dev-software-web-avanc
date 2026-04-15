@@ -17,7 +17,7 @@ export class AuthServerProvider {
     private http: HttpClient,
     private localStorageService: LocalStorageService,
     private sessionStorageService: SessionStorageService,
-    private applicationConfigService: ApplicationConfigService
+    private applicationConfigService: ApplicationConfigService,
   ) {}
 
   getToken(): string {

@@ -23,7 +23,7 @@ describe('ItemPedido Form Service', () => {
             nomeItem: expect.any(Object),
             valorItem: expect.any(Object),
             pedido: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -36,7 +36,7 @@ describe('ItemPedido Form Service', () => {
             nomeItem: expect.any(Object),
             valorItem: expect.any(Object),
             pedido: expect.any(Object),
-          })
+          }),
         );
       });
     });

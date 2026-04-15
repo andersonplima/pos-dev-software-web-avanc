@@ -11,7 +11,10 @@ import { TipoFestaService } from '../service/tipo-festa.service';
 export class TipoFestaDeleteDialogComponent {
   tipoFesta?: ITipoFesta;
 
-  constructor(protected tipoFestaService: TipoFestaService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected tipoFestaService: TipoFestaService,
+    protected activeModal: NgbActiveModal,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

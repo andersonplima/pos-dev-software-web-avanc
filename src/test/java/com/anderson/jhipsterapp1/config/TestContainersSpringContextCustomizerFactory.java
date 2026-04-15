@@ -28,9 +28,9 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                 log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
                 log.info("Warming up the sql database");
                 if (
-                    Arrays
-                        .asList(context.getEnvironment().getActiveProfiles())
-                        .contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION)
+                    Arrays.asList(context.getEnvironment().getActiveProfiles()).contains(
+                        "test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION
+                    )
                 ) {
                     if (null == prodTestContainer) {
                         try {
@@ -44,12 +44,11 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                             throw new RuntimeException(e);
                         }
                     }
-                    testValues =
-                        testValues.and(
-                            "spring.datasource.url=" +
-                            prodTestContainer.getTestContainer().getJdbcUrl() +
-                            "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true"
-                        );
+                    testValues = testValues.and(
+                        "spring.datasource.url=" +
+                        prodTestContainer.getTestContainer().getJdbcUrl() +
+                        "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true"
+                    );
                     testValues = testValues.and("spring.datasource.username=" + prodTestContainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.datasource.password=" + prodTestContainer.getTestContainer().getPassword());
                 }
