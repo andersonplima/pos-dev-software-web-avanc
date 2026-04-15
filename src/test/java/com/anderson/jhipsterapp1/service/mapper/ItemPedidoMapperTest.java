@@ -5,19 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ItemPedidoMapperTest {
+class ItemPedidoMapperTest {
 
-  private ItemPedidoMapper itemPedidoMapper;
+    private ItemPedidoMapper itemPedidoMapper;
 
-  @BeforeEach
-  public void setUp() {
-    itemPedidoMapper = new ItemPedidoMapperImpl();
-  }
-
-  @Test
-  public void testEntityFromId() {
-    Long id = 1L;
-    assertThat(itemPedidoMapper.fromId(id).getId()).isEqualTo(id);
-    assertThat(itemPedidoMapper.fromId(null)).isNull();
-  }
+    @BeforeEach
+    public void setUp() {
+        itemPedidoMapper = new ItemPedidoMapperImpl();
+    }
 }

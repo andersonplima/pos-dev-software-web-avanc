@@ -32,13 +32,13 @@ exports.config = {
     timeout: 720000,
   },
 
-  beforeLaunch () {
+  beforeLaunch: function () {
     require('ts-node').register({
       project: 'tsconfig.e2e.json',
     });
   },
 
-  onPrepare () {
+  onPrepare: function () {
     browser.driver.manage().window().setSize(1280, 1024);
     // Disable animations
     // @ts-ignore

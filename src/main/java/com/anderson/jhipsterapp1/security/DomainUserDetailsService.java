@@ -1,5 +1,6 @@
 package com.anderson.jhipsterapp1.security;
 
+import com.anderson.jhipsterapp1.domain.Authority;
 import com.anderson.jhipsterapp1.domain.User;
 import com.anderson.jhipsterapp1.repository.UserRepository;
 import java.util.*;
@@ -21,42 +22,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
 
-  private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
+    private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public DomainUserDetailsService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
-  @Override
-  @Transactional
-  public UserDetails loadUserByUsername(final String login) {
-    log.debug("Authenticating {}", login);
-
-    if (new EmailValidator().isValid(login, null)) {
-      return userRepository
-        .findOneWithAuthoritiesByEmailIgnoreCase(login)
-        .map(user -> createSpringSecurityUser(login, user))
-        .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+    public DomainUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-    return userRepository
-      .findOneWithAuthoritiesByLogin(lowercaseLogin)
-      .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-      .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
-  }
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(final String login) {
+        log.debug("Authenticating {}", login);
 
-  private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-    if (!user.getActivated()) {
-      throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+        if (new EmailValidator().isValid(login, null)) {
+            return userRepository
+                .findOneWithAuthoritiesByEmailIgnoreCase(login)
+                .map(user -> createSpringSecurityUser(login, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+        }
+
+        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
+        return userRepository
+            .findOneWithAuthoritiesByLogin(lowercaseLogin)
+            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
+            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
     }
-    List<GrantedAuthority> grantedAuthorities = user
-      .getAuthorities()
-      .stream()
-      .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-      .collect(Collectors.toList());
-    return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
-  }
+
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+        if (!user.isActivated()) {
+            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+        }
+        List<GrantedAuthority> grantedAuthorities = user
+            .getAuthorities()
+            .stream()
+            .map(Authority::getName)
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
+    }
 }

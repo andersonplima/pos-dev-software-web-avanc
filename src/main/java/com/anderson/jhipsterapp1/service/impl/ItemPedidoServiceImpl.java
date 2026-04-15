@@ -20,65 +20,65 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ItemPedidoServiceImpl implements ItemPedidoService {
 
-  private final Logger log = LoggerFactory.getLogger(ItemPedidoServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(ItemPedidoServiceImpl.class);
 
-  private final ItemPedidoRepository itemPedidoRepository;
+    private final ItemPedidoRepository itemPedidoRepository;
 
-  private final ItemPedidoMapper itemPedidoMapper;
+    private final ItemPedidoMapper itemPedidoMapper;
 
-  public ItemPedidoServiceImpl(ItemPedidoRepository itemPedidoRepository, ItemPedidoMapper itemPedidoMapper) {
-    this.itemPedidoRepository = itemPedidoRepository;
-    this.itemPedidoMapper = itemPedidoMapper;
-  }
+    public ItemPedidoServiceImpl(ItemPedidoRepository itemPedidoRepository, ItemPedidoMapper itemPedidoMapper) {
+        this.itemPedidoRepository = itemPedidoRepository;
+        this.itemPedidoMapper = itemPedidoMapper;
+    }
 
-  /**
-   * Save a itemPedido.
-   *
-   * @param itemPedidoDTO the entity to save.
-   * @return the persisted entity.
-   */
-  @Override
-  public ItemPedidoDTO save(ItemPedidoDTO itemPedidoDTO) {
-    log.debug("Request to save ItemPedido : {}", itemPedidoDTO);
-    ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
-    itemPedido = itemPedidoRepository.save(itemPedido);
-    return itemPedidoMapper.toDto(itemPedido);
-  }
+    @Override
+    public ItemPedidoDTO save(ItemPedidoDTO itemPedidoDTO) {
+        log.debug("Request to save ItemPedido : {}", itemPedidoDTO);
+        ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
+        itemPedido = itemPedidoRepository.save(itemPedido);
+        return itemPedidoMapper.toDto(itemPedido);
+    }
 
-  /**
-   * Get all the itemPedidos.
-   *
-   * @param pageable the pagination information.
-   * @return the list of entities.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public Page<ItemPedidoDTO> findAll(Pageable pageable) {
-    log.debug("Request to get all ItemPedidos");
-    return itemPedidoRepository.findAll(pageable).map(itemPedidoMapper::toDto);
-  }
+    @Override
+    public ItemPedidoDTO update(ItemPedidoDTO itemPedidoDTO) {
+        log.debug("Request to update ItemPedido : {}", itemPedidoDTO);
+        ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
+        itemPedido = itemPedidoRepository.save(itemPedido);
+        return itemPedidoMapper.toDto(itemPedido);
+    }
 
-  /**
-   * Get one itemPedido by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public Optional<ItemPedidoDTO> findOne(Long id) {
-    log.debug("Request to get ItemPedido : {}", id);
-    return itemPedidoRepository.findById(id).map(itemPedidoMapper::toDto);
-  }
+    @Override
+    public Optional<ItemPedidoDTO> partialUpdate(ItemPedidoDTO itemPedidoDTO) {
+        log.debug("Request to partially update ItemPedido : {}", itemPedidoDTO);
 
-  /**
-   * Delete the itemPedido by id.
-   *
-   * @param id the id of the entity.
-   */
-  @Override
-  public void delete(Long id) {
-    log.debug("Request to delete ItemPedido : {}", id);
-    itemPedidoRepository.deleteById(id);
-  }
+        return itemPedidoRepository
+            .findById(itemPedidoDTO.getId())
+            .map(existingItemPedido -> {
+                itemPedidoMapper.partialUpdate(existingItemPedido, itemPedidoDTO);
+
+                return existingItemPedido;
+            })
+            .map(itemPedidoRepository::save)
+            .map(itemPedidoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ItemPedidoDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all ItemPedidos");
+        return itemPedidoRepository.findAll(pageable).map(itemPedidoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ItemPedidoDTO> findOne(Long id) {
+        log.debug("Request to get ItemPedido : {}", id);
+        return itemPedidoRepository.findById(id).map(itemPedidoMapper::toDto);
+    }
+
+    @Override
+    public void delete(Long id) {
+        log.debug("Request to delete ItemPedido : {}", id);
+        itemPedidoRepository.deleteById(id);
+    }
 }

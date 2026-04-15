@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { flatMap } from 'rxjs/operators';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { combineLatest } from 'rxjs';
 
-import { Metrics, MetricsKey, MetricsService, Thread, ThreadDump } from './metrics.service';
+import { MetricsService } from './metrics.service';
+import { Metrics, Thread } from './metrics.model';
 
 @Component({
   selector: 'jhi-metrics',
@@ -13,10 +14,7 @@ export class MetricsComponent implements OnInit {
   threads?: Thread[];
   updatingMetrics = true;
 
-  constructor(
-    private metricsService: MetricsService,
-    private changeDetector: ChangeDetectorRef,
-  ) {}
+  constructor(private metricsService: MetricsService, private changeDetector: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.refresh();
@@ -24,27 +22,19 @@ export class MetricsComponent implements OnInit {
 
   refresh(): void {
     this.updatingMetrics = true;
-    this.metricsService
-      .getMetrics()
-      .pipe(
-        flatMap(
-          () => this.metricsService.threadDump(),
-          (metrics: Metrics, threadDump: ThreadDump) => {
-            this.metrics = metrics;
-            this.threads = threadDump.threads;
-            this.updatingMetrics = false;
-            this.changeDetector.detectChanges();
-          },
-        ),
-      )
-      .subscribe();
+    combineLatest([this.metricsService.getMetrics(), this.metricsService.threadDump()]).subscribe(([metrics, threadDump]) => {
+      this.metrics = metrics;
+      this.threads = threadDump.threads;
+      this.updatingMetrics = false;
+      this.changeDetector.markForCheck();
+    });
   }
 
-  metricsKeyExists(key: MetricsKey): boolean {
-    return this.metrics && this.metrics[key];
+  metricsKeyExists(key: keyof Metrics): boolean {
+    return Boolean(this.metrics?.[key]);
   }
 
-  metricsKeyExistsAndObjectNotEmpty(key: MetricsKey): boolean {
-    return this.metrics && this.metrics[key] && JSON.stringify(this.metrics[key]) !== '{}';
+  metricsKeyExistsAndObjectNotEmpty(key: keyof Metrics): boolean {
+    return Boolean(this.metrics?.[key] && JSON.stringify(this.metrics[key]) !== '{}');
   }
 }

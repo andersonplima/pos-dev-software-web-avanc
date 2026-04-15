@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { Jhipsterapp1SharedModule } from 'app/shared/shared.module';
-import { TipoFestaComponent } from './tipo-festa.component';
-import { TipoFestaDetailComponent } from './tipo-festa-detail.component';
-import { TipoFestaUpdateComponent } from './tipo-festa-update.component';
-import { TipoFestaDeleteDialogComponent } from './tipo-festa-delete-dialog.component';
-import { tipoFestaRoute } from './tipo-festa.route';
+import { SharedModule } from 'app/shared/shared.module';
+import { TipoFestaComponent } from './list/tipo-festa.component';
+import { TipoFestaDetailComponent } from './detail/tipo-festa-detail.component';
+import { TipoFestaUpdateComponent } from './update/tipo-festa-update.component';
+import { TipoFestaDeleteDialogComponent } from './delete/tipo-festa-delete-dialog.component';
+import { TipoFestaRoutingModule } from './route/tipo-festa-routing.module';
 
 @NgModule({
-  imports: [Jhipsterapp1SharedModule, RouterModule.forChild(tipoFestaRoute)],
+  imports: [SharedModule, TipoFestaRoutingModule],
   declarations: [TipoFestaComponent, TipoFestaDetailComponent, TipoFestaUpdateComponent, TipoFestaDeleteDialogComponent],
-  entryComponents: [TipoFestaDeleteDialogComponent],
 })
-export class Jhipsterapp1TipoFestaModule {}
+export class TipoFestaModule {}

@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { Jhipsterapp1SharedModule } from 'app/shared/shared.module';
-import { PedidoComponent } from './pedido.component';
-import { PedidoDetailComponent } from './pedido-detail.component';
-import { PedidoUpdateComponent } from './pedido-update.component';
-import { PedidoDeleteDialogComponent } from './pedido-delete-dialog.component';
-import { pedidoRoute } from './pedido.route';
+import { SharedModule } from 'app/shared/shared.module';
+import { PedidoComponent } from './list/pedido.component';
+import { PedidoDetailComponent } from './detail/pedido-detail.component';
+import { PedidoUpdateComponent } from './update/pedido-update.component';
+import { PedidoDeleteDialogComponent } from './delete/pedido-delete-dialog.component';
+import { PedidoRoutingModule } from './route/pedido-routing.module';
 
 @NgModule({
-  imports: [Jhipsterapp1SharedModule, RouterModule.forChild(pedidoRoute)],
+  imports: [SharedModule, PedidoRoutingModule],
   declarations: [PedidoComponent, PedidoDetailComponent, PedidoUpdateComponent, PedidoDeleteDialogComponent],
-  entryComponents: [PedidoDeleteDialogComponent],
 })
-export class Jhipsterapp1PedidoModule {}
+export class PedidoModule {}

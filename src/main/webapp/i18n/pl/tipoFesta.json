@@ -3,6 +3,7 @@
     "tipoFesta": {
       "home": {
         "title": "Tipo Festa",
+        "refreshListLabel": "Refresh list",
         "createLabel": "Dodaj Tipo Festa",
         "createOrEditLabel": "Dodaj lub edytuj: Tipo Festa",
         "notFound": "No Tipo Festas found"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Tipo Festa"
       },
+      "id": "ID",
       "nome": "Nome",
       "descricao": "Descricao",
       "festa": "Festa"

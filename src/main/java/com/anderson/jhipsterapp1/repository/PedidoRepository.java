@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data  repository for the Pedido entity.
+ * Spring Data JPA repository for the Pedido entity.
  */
 @SuppressWarnings("unused")
 @Repository

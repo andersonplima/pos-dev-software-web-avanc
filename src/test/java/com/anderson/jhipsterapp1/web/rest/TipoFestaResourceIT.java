@@ -1,286 +1,439 @@
 package com.anderson.jhipsterapp1.web.rest;
 
-import static com.anderson.jhipsterapp1.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.anderson.jhipsterapp1.Jhipsterapp1App;
+import com.anderson.jhipsterapp1.IntegrationTest;
 import com.anderson.jhipsterapp1.domain.TipoFesta;
 import com.anderson.jhipsterapp1.repository.TipoFestaRepository;
-import com.anderson.jhipsterapp1.service.TipoFestaService;
 import com.anderson.jhipsterapp1.service.dto.TipoFestaDTO;
 import com.anderson.jhipsterapp1.service.mapper.TipoFestaMapper;
-import com.anderson.jhipsterapp1.web.rest.errors.ExceptionTranslator;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
 
 /**
  * Integration tests for the {@link TipoFestaResource} REST controller.
  */
-@SpringBootTest(classes = Jhipsterapp1App.class)
-public class TipoFestaResourceIT {
+@IntegrationTest
+@AutoConfigureMockMvc
+@WithMockUser
+class TipoFestaResourceIT {
 
-  private static final String DEFAULT_NOME = "AAAAAAAAAA";
-  private static final String UPDATED_NOME = "BBBBBBBBBB";
+    private static final String DEFAULT_NOME = "AAAAAAAAAA";
+    private static final String UPDATED_NOME = "BBBBBBBBBB";
 
-  private static final String DEFAULT_DESCRICAO = "AAAAAAAAAA";
-  private static final String UPDATED_DESCRICAO = "BBBBBBBBBB";
+    private static final String DEFAULT_DESCRICAO = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRICAO = "BBBBBBBBBB";
 
-  @Autowired
-  private TipoFestaRepository tipoFestaRepository;
+    private static final String ENTITY_API_URL = "/api/tipo-festas";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-  @Autowired
-  private TipoFestaMapper tipoFestaMapper;
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
-  @Autowired
-  private TipoFestaService tipoFestaService;
+    @Autowired
+    private TipoFestaRepository tipoFestaRepository;
 
-  @Autowired
-  private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private TipoFestaMapper tipoFestaMapper;
 
-  @Autowired
-  private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private EntityManager em;
 
-  @Autowired
-  private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MockMvc restTipoFestaMockMvc;
 
-  @Autowired
-  private EntityManager em;
+    private TipoFesta tipoFesta;
 
-  @Autowired
-  private Validator validator;
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static TipoFesta createEntity(EntityManager em) {
+        TipoFesta tipoFesta = new TipoFesta().nome(DEFAULT_NOME).descricao(DEFAULT_DESCRICAO);
+        return tipoFesta;
+    }
 
-  private MockMvc restTipoFestaMockMvc;
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static TipoFesta createUpdatedEntity(EntityManager em) {
+        TipoFesta tipoFesta = new TipoFesta().nome(UPDATED_NOME).descricao(UPDATED_DESCRICAO);
+        return tipoFesta;
+    }
 
-  private TipoFesta tipoFesta;
+    @BeforeEach
+    public void initTest() {
+        tipoFesta = createEntity(em);
+    }
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final TipoFestaResource tipoFestaResource = new TipoFestaResource(tipoFestaService);
-    this.restTipoFestaMockMvc = MockMvcBuilders.standaloneSetup(tipoFestaResource)
-      .setCustomArgumentResolvers(pageableArgumentResolver)
-      .setControllerAdvice(exceptionTranslator)
-      .setConversionService(createFormattingConversionService())
-      .setMessageConverters(jacksonMessageConverter)
-      .setValidator(validator)
-      .build();
-  }
+    @Test
+    @Transactional
+    void createTipoFesta() throws Exception {
+        int databaseSizeBeforeCreate = tipoFestaRepository.findAll().size();
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+        restTipoFestaMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
+            .andExpect(status().isCreated());
 
-  /**
-   * Create an entity for this test.
-   *
-   * This is a static method, as tests for other entities might also need it,
-   * if they test an entity which requires the current entity.
-   */
-  public static TipoFesta createEntity(EntityManager em) {
-    TipoFesta tipoFesta = new TipoFesta().nome(DEFAULT_NOME).descricao(DEFAULT_DESCRICAO);
-    return tipoFesta;
-  }
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeCreate + 1);
+        TipoFesta testTipoFesta = tipoFestaList.get(tipoFestaList.size() - 1);
+        assertThat(testTipoFesta.getNome()).isEqualTo(DEFAULT_NOME);
+        assertThat(testTipoFesta.getDescricao()).isEqualTo(DEFAULT_DESCRICAO);
+    }
 
-  /**
-   * Create an updated entity for this test.
-   *
-   * This is a static method, as tests for other entities might also need it,
-   * if they test an entity which requires the current entity.
-   */
-  public static TipoFesta createUpdatedEntity(EntityManager em) {
-    TipoFesta tipoFesta = new TipoFesta().nome(UPDATED_NOME).descricao(UPDATED_DESCRICAO);
-    return tipoFesta;
-  }
+    @Test
+    @Transactional
+    void createTipoFestaWithExistingId() throws Exception {
+        // Create the TipoFesta with an existing ID
+        tipoFesta.setId(1L);
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
 
-  @BeforeEach
-  public void initTest() {
-    tipoFesta = createEntity(em);
-  }
+        int databaseSizeBeforeCreate = tipoFestaRepository.findAll().size();
 
-  @Test
-  @Transactional
-  public void createTipoFesta() throws Exception {
-    int databaseSizeBeforeCreate = tipoFestaRepository.findAll().size();
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restTipoFestaMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Create the TipoFesta
-    TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
-    restTipoFestaMockMvc
-      .perform(post("/api/tipo-festas").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
-      .andExpect(status().isCreated());
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeCreate);
+    }
 
-    // Validate the TipoFesta in the database
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeCreate + 1);
-    TipoFesta testTipoFesta = tipoFestaList.get(tipoFestaList.size() - 1);
-    assertThat(testTipoFesta.getNome()).isEqualTo(DEFAULT_NOME);
-    assertThat(testTipoFesta.getDescricao()).isEqualTo(DEFAULT_DESCRICAO);
-  }
+    @Test
+    @Transactional
+    void checkNomeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tipoFestaRepository.findAll().size();
+        // set the field null
+        tipoFesta.setNome(null);
 
-  @Test
-  @Transactional
-  public void createTipoFestaWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = tipoFestaRepository.findAll().size();
+        // Create the TipoFesta, which fails.
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
 
-    // Create the TipoFesta with an existing ID
-    tipoFesta.setId(1L);
-    TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+        restTipoFestaMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
+            .andExpect(status().isBadRequest());
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restTipoFestaMockMvc
-      .perform(post("/api/tipo-festas").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
-      .andExpect(status().isBadRequest());
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeTest);
+    }
 
-    // Validate the TipoFesta in the database
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeCreate);
-  }
+    @Test
+    @Transactional
+    void checkDescricaoIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tipoFestaRepository.findAll().size();
+        // set the field null
+        tipoFesta.setDescricao(null);
 
-  @Test
-  @Transactional
-  public void checkNomeIsRequired() throws Exception {
-    int databaseSizeBeforeTest = tipoFestaRepository.findAll().size();
-    // set the field null
-    tipoFesta.setNome(null);
+        // Create the TipoFesta, which fails.
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
 
-    // Create the TipoFesta, which fails.
-    TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+        restTipoFestaMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
+            .andExpect(status().isBadRequest());
 
-    restTipoFestaMockMvc
-      .perform(post("/api/tipo-festas").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
-      .andExpect(status().isBadRequest());
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeTest);
+    }
 
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeTest);
-  }
+    @Test
+    @Transactional
+    void getAllTipoFestas() throws Exception {
+        // Initialize the database
+        tipoFestaRepository.saveAndFlush(tipoFesta);
 
-  @Test
-  @Transactional
-  public void checkDescricaoIsRequired() throws Exception {
-    int databaseSizeBeforeTest = tipoFestaRepository.findAll().size();
-    // set the field null
-    tipoFesta.setDescricao(null);
+        // Get all the tipoFestaList
+        restTipoFestaMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(tipoFesta.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].descricao").value(hasItem(DEFAULT_DESCRICAO)));
+    }
 
-    // Create the TipoFesta, which fails.
-    TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+    @Test
+    @Transactional
+    void getTipoFesta() throws Exception {
+        // Initialize the database
+        tipoFestaRepository.saveAndFlush(tipoFesta);
 
-    restTipoFestaMockMvc
-      .perform(post("/api/tipo-festas").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
-      .andExpect(status().isBadRequest());
+        // Get the tipoFesta
+        restTipoFestaMockMvc
+            .perform(get(ENTITY_API_URL_ID, tipoFesta.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(tipoFesta.getId().intValue()))
+            .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
+            .andExpect(jsonPath("$.descricao").value(DEFAULT_DESCRICAO));
+    }
 
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeTest);
-  }
+    @Test
+    @Transactional
+    void getNonExistingTipoFesta() throws Exception {
+        // Get the tipoFesta
+        restTipoFestaMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void getAllTipoFestas() throws Exception {
-    // Initialize the database
-    tipoFestaRepository.saveAndFlush(tipoFesta);
+    @Test
+    @Transactional
+    void putExistingTipoFesta() throws Exception {
+        // Initialize the database
+        tipoFestaRepository.saveAndFlush(tipoFesta);
 
-    // Get all the tipoFestaList
-    restTipoFestaMockMvc
-      .perform(get("/api/tipo-festas?sort=id,desc"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(tipoFesta.getId().intValue())))
-      .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
-      .andExpect(jsonPath("$.[*].descricao").value(hasItem(DEFAULT_DESCRICAO)));
-  }
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
 
-  @Test
-  @Transactional
-  public void getTipoFesta() throws Exception {
-    // Initialize the database
-    tipoFestaRepository.saveAndFlush(tipoFesta);
+        // Update the tipoFesta
+        TipoFesta updatedTipoFesta = tipoFestaRepository.findById(tipoFesta.getId()).get();
+        // Disconnect from session so that the updates on updatedTipoFesta are not directly saved in db
+        em.detach(updatedTipoFesta);
+        updatedTipoFesta.nome(UPDATED_NOME).descricao(UPDATED_DESCRICAO);
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(updatedTipoFesta);
 
-    // Get the tipoFesta
-    restTipoFestaMockMvc
-      .perform(get("/api/tipo-festas/{id}", tipoFesta.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-      .andExpect(jsonPath("$.id").value(tipoFesta.getId().intValue()))
-      .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
-      .andExpect(jsonPath("$.descricao").value(DEFAULT_DESCRICAO));
-  }
+        restTipoFestaMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, tipoFestaDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO))
+            )
+            .andExpect(status().isOk());
 
-  @Test
-  @Transactional
-  public void getNonExistingTipoFesta() throws Exception {
-    // Get the tipoFesta
-    restTipoFestaMockMvc.perform(get("/api/tipo-festas/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
-  }
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+        TipoFesta testTipoFesta = tipoFestaList.get(tipoFestaList.size() - 1);
+        assertThat(testTipoFesta.getNome()).isEqualTo(UPDATED_NOME);
+        assertThat(testTipoFesta.getDescricao()).isEqualTo(UPDATED_DESCRICAO);
+    }
 
-  @Test
-  @Transactional
-  public void updateTipoFesta() throws Exception {
-    // Initialize the database
-    tipoFestaRepository.saveAndFlush(tipoFesta);
+    @Test
+    @Transactional
+    void putNonExistingTipoFesta() throws Exception {
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        tipoFesta.setId(count.incrementAndGet());
 
-    int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
 
-    // Update the tipoFesta
-    TipoFesta updatedTipoFesta = tipoFestaRepository.findById(tipoFesta.getId()).get();
-    // Disconnect from session so that the updates on updatedTipoFesta are not directly saved in db
-    em.detach(updatedTipoFesta);
-    updatedTipoFesta.nome(UPDATED_NOME).descricao(UPDATED_DESCRICAO);
-    TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(updatedTipoFesta);
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restTipoFestaMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, tipoFestaDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO))
+            )
+            .andExpect(status().isBadRequest());
 
-    restTipoFestaMockMvc
-      .perform(put("/api/tipo-festas").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
-      .andExpect(status().isOk());
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the TipoFesta in the database
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
-    TipoFesta testTipoFesta = tipoFestaList.get(tipoFestaList.size() - 1);
-    assertThat(testTipoFesta.getNome()).isEqualTo(UPDATED_NOME);
-    assertThat(testTipoFesta.getDescricao()).isEqualTo(UPDATED_DESCRICAO);
-  }
+    @Test
+    @Transactional
+    void putWithIdMismatchTipoFesta() throws Exception {
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        tipoFesta.setId(count.incrementAndGet());
 
-  @Test
-  @Transactional
-  public void updateNonExistingTipoFesta() throws Exception {
-    int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
 
-    // Create the TipoFesta
-    TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restTipoFestaMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO))
+            )
+            .andExpect(status().isBadRequest());
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restTipoFestaMockMvc
-      .perform(put("/api/tipo-festas").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
-      .andExpect(status().isBadRequest());
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the TipoFesta in the database
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
-  }
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamTipoFesta() throws Exception {
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        tipoFesta.setId(count.incrementAndGet());
 
-  @Test
-  @Transactional
-  public void deleteTipoFesta() throws Exception {
-    // Initialize the database
-    tipoFestaRepository.saveAndFlush(tipoFesta);
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
 
-    int databaseSizeBeforeDelete = tipoFestaRepository.findAll().size();
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restTipoFestaMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO)))
+            .andExpect(status().isMethodNotAllowed());
 
-    // Delete the tipoFesta
-    restTipoFestaMockMvc
-      .perform(delete("/api/tipo-festas/{id}", tipoFesta.getId()).accept(TestUtil.APPLICATION_JSON))
-      .andExpect(status().isNoContent());
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the database contains one less item
-    List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
-    assertThat(tipoFestaList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+    @Test
+    @Transactional
+    void partialUpdateTipoFestaWithPatch() throws Exception {
+        // Initialize the database
+        tipoFestaRepository.saveAndFlush(tipoFesta);
+
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+
+        // Update the tipoFesta using partial update
+        TipoFesta partialUpdatedTipoFesta = new TipoFesta();
+        partialUpdatedTipoFesta.setId(tipoFesta.getId());
+
+        partialUpdatedTipoFesta.nome(UPDATED_NOME);
+
+        restTipoFestaMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedTipoFesta.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedTipoFesta))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+        TipoFesta testTipoFesta = tipoFestaList.get(tipoFestaList.size() - 1);
+        assertThat(testTipoFesta.getNome()).isEqualTo(UPDATED_NOME);
+        assertThat(testTipoFesta.getDescricao()).isEqualTo(DEFAULT_DESCRICAO);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdateTipoFestaWithPatch() throws Exception {
+        // Initialize the database
+        tipoFestaRepository.saveAndFlush(tipoFesta);
+
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+
+        // Update the tipoFesta using partial update
+        TipoFesta partialUpdatedTipoFesta = new TipoFesta();
+        partialUpdatedTipoFesta.setId(tipoFesta.getId());
+
+        partialUpdatedTipoFesta.nome(UPDATED_NOME).descricao(UPDATED_DESCRICAO);
+
+        restTipoFestaMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedTipoFesta.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedTipoFesta))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+        TipoFesta testTipoFesta = tipoFestaList.get(tipoFestaList.size() - 1);
+        assertThat(testTipoFesta.getNome()).isEqualTo(UPDATED_NOME);
+        assertThat(testTipoFesta.getDescricao()).isEqualTo(UPDATED_DESCRICAO);
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingTipoFesta() throws Exception {
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        tipoFesta.setId(count.incrementAndGet());
+
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restTipoFestaMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, tipoFestaDTO.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchTipoFesta() throws Exception {
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        tipoFesta.setId(count.incrementAndGet());
+
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restTipoFestaMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamTipoFesta() throws Exception {
+        int databaseSizeBeforeUpdate = tipoFestaRepository.findAll().size();
+        tipoFesta.setId(count.incrementAndGet());
+
+        // Create the TipoFesta
+        TipoFestaDTO tipoFestaDTO = tipoFestaMapper.toDto(tipoFesta);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restTipoFestaMockMvc
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(tipoFestaDTO))
+            )
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the TipoFesta in the database
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void deleteTipoFesta() throws Exception {
+        // Initialize the database
+        tipoFestaRepository.saveAndFlush(tipoFesta);
+
+        int databaseSizeBeforeDelete = tipoFestaRepository.findAll().size();
+
+        // Delete the tipoFesta
+        restTipoFestaMockMvc
+            .perform(delete(ENTITY_API_URL_ID, tipoFesta.getId()).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        // Validate the database contains one less item
+        List<TipoFesta> tipoFestaList = tipoFestaRepository.findAll();
+        assertThat(tipoFestaList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 }

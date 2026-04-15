@@ -1,6 +1,6 @@
 package com.anderson.jhipsterapp1.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Instant;
 import javax.persistence.Column;
@@ -13,64 +13,63 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * Base abstract class for entities which will hold definitions for created, last modified by and created,
- * last modified by date.
+ * Base abstract class for entities which will hold definitions for created, last modified, created by,
+ * last modified by attributes.
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AbstractAuditingEntity implements Serializable {
+@JsonIgnoreProperties(value = { "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate" }, allowGetters = true)
+public abstract class AbstractAuditingEntity<T> implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @CreatedBy
-  @Column(name = "created_by", nullable = false, length = 50, updatable = false)
-  @JsonIgnore
-  private String createdBy;
+    public abstract T getId();
 
-  @CreatedDate
-  @Column(name = "created_date", updatable = false)
-  @JsonIgnore
-  private Instant createdDate = Instant.now();
+    @CreatedBy
+    @Column(name = "created_by", nullable = false, length = 50, updatable = false)
+    private String createdBy;
 
-  @LastModifiedBy
-  @Column(name = "last_modified_by", length = 50)
-  @JsonIgnore
-  private String lastModifiedBy;
+    @CreatedDate
+    @Column(name = "created_date", updatable = false)
+    private Instant createdDate = Instant.now();
 
-  @LastModifiedDate
-  @Column(name = "last_modified_date")
-  @JsonIgnore
-  private Instant lastModifiedDate = Instant.now();
+    @LastModifiedBy
+    @Column(name = "last_modified_by", length = 50)
+    private String lastModifiedBy;
 
-  public String getCreatedBy() {
-    return createdBy;
-  }
+    @LastModifiedDate
+    @Column(name = "last_modified_date")
+    private Instant lastModifiedDate = Instant.now();
 
-  public void setCreatedBy(String createdBy) {
-    this.createdBy = createdBy;
-  }
+    public String getCreatedBy() {
+        return createdBy;
+    }
 
-  public Instant getCreatedDate() {
-    return createdDate;
-  }
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
 
-  public void setCreatedDate(Instant createdDate) {
-    this.createdDate = createdDate;
-  }
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
 
-  public String getLastModifiedBy() {
-    return lastModifiedBy;
-  }
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
 
-  public void setLastModifiedBy(String lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
 
-  public Instant getLastModifiedDate() {
-    return lastModifiedDate;
-  }
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 
-  public void setLastModifiedDate(Instant lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
-  }
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
 }

@@ -17,6 +17,8 @@
       "hystrix": "Hystrix",
       "diskSpace": "Przestrzeń dyskowa",
       "mail": "Email",
+      "livenessState": "Liveness state",
+      "readinessState": "Readiness state",
       "ping": "Application",
       "db": "Baza danych"
     },

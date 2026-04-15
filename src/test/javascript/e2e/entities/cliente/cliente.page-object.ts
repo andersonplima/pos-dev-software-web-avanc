@@ -1,4 +1,4 @@
-import { ElementFinder, by, element } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 export class ClienteComponentsPage {
   createButton = element(by.id('jh-create-entity'));
@@ -29,11 +29,20 @@ export class ClienteUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
 
+  idInput = element(by.id('field_id'));
   nomeInput = element(by.id('field_nome'));
   cpfInput = element(by.id('field_cpf'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
+  }
+
+  async setIdInput(id: string): Promise<void> {
+    await this.idInput.sendKeys(id);
+  }
+
+  async getIdInput(): Promise<string> {
+    return await this.idInput.getAttribute('value');
   }
 
   async setNomeInput(nome: string): Promise<void> {

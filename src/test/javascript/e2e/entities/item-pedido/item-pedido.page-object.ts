@@ -1,4 +1,4 @@
-import { ElementFinder, by, element } from 'protractor';
+import { element, by, ElementFinder } from 'protractor';
 
 export class ItemPedidoComponentsPage {
   createButton = element(by.id('jh-create-entity'));
@@ -29,6 +29,7 @@ export class ItemPedidoUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
 
+  idInput = element(by.id('field_id'));
   nomeItemInput = element(by.id('field_nomeItem'));
   valorItemInput = element(by.id('field_valorItem'));
 
@@ -36,6 +37,14 @@ export class ItemPedidoUpdatePage {
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
+  }
+
+  async setIdInput(id: string): Promise<void> {
+    await this.idInput.sendKeys(id);
+  }
+
+  async getIdInput(): Promise<string> {
+    return await this.idInput.getAttribute('value');
   }
 
   async setNomeItemInput(nomeItem: string): Promise<void> {

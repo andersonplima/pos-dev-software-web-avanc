@@ -1,27 +1,25 @@
 {
-    "name": "Pedido",
-    "fields": [
-        {
-            "fieldName": "dataPedido",
-            "fieldType": "Instant"
-        },
-        {
-            "fieldName": "valorPedido",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
-    "relationships": [],
-    "changelogDate": "20200215171500",
-    "entityTableName": "pedido",
-    "dto": "mapstruct",
-    "pagination": "infinite-scroll",
-    "service": "serviceImpl",
-    "jpaMetamodelFiltering": false,
-    "fluentMethods": true,
-    "readOnly": false,
-    "clientRootFolder": "",
-    "applications": "*"
+  "applications": "*",
+  "changelogDate": "20200215171500",
+  "clientRootFolder": "",
+  "dto": "mapstruct",
+  "entityTableName": "pedido",
+  "fields": [
+    {
+      "fieldName": "dataPedido",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "valorPedido",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Pedido",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
 }

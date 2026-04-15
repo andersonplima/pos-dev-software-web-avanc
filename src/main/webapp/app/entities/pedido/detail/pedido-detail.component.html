@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pedido">
+      <h2 data-cy="pedidoDetailsHeading"><span jhiTranslate="jhipsterapp1App.pedido.detail.title">Pedido</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">Código</span></dt>
+        <dd>
+          <span>{{ pedido.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterapp1App.pedido.dataPedido">Data Pedido</span></dt>
+        <dd>
+          <span>{{ pedido.dataPedido | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterapp1App.pedido.valorPedido">Valor Pedido</span></dt>
+        <dd>
+          <span>{{ pedido.valorPedido }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Voltar</span>
+      </button>
+
+      <button type="button" [routerLink]="['/pedido', pedido.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+      </button>
+    </div>
+  </div>
+</div>

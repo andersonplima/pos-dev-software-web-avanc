@@ -20,65 +20,65 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PedidoServiceImpl implements PedidoService {
 
-  private final Logger log = LoggerFactory.getLogger(PedidoServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(PedidoServiceImpl.class);
 
-  private final PedidoRepository pedidoRepository;
+    private final PedidoRepository pedidoRepository;
 
-  private final PedidoMapper pedidoMapper;
+    private final PedidoMapper pedidoMapper;
 
-  public PedidoServiceImpl(PedidoRepository pedidoRepository, PedidoMapper pedidoMapper) {
-    this.pedidoRepository = pedidoRepository;
-    this.pedidoMapper = pedidoMapper;
-  }
+    public PedidoServiceImpl(PedidoRepository pedidoRepository, PedidoMapper pedidoMapper) {
+        this.pedidoRepository = pedidoRepository;
+        this.pedidoMapper = pedidoMapper;
+    }
 
-  /**
-   * Save a pedido.
-   *
-   * @param pedidoDTO the entity to save.
-   * @return the persisted entity.
-   */
-  @Override
-  public PedidoDTO save(PedidoDTO pedidoDTO) {
-    log.debug("Request to save Pedido : {}", pedidoDTO);
-    Pedido pedido = pedidoMapper.toEntity(pedidoDTO);
-    pedido = pedidoRepository.save(pedido);
-    return pedidoMapper.toDto(pedido);
-  }
+    @Override
+    public PedidoDTO save(PedidoDTO pedidoDTO) {
+        log.debug("Request to save Pedido : {}", pedidoDTO);
+        Pedido pedido = pedidoMapper.toEntity(pedidoDTO);
+        pedido = pedidoRepository.save(pedido);
+        return pedidoMapper.toDto(pedido);
+    }
 
-  /**
-   * Get all the pedidos.
-   *
-   * @param pageable the pagination information.
-   * @return the list of entities.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public Page<PedidoDTO> findAll(Pageable pageable) {
-    log.debug("Request to get all Pedidos");
-    return pedidoRepository.findAll(pageable).map(pedidoMapper::toDto);
-  }
+    @Override
+    public PedidoDTO update(PedidoDTO pedidoDTO) {
+        log.debug("Request to update Pedido : {}", pedidoDTO);
+        Pedido pedido = pedidoMapper.toEntity(pedidoDTO);
+        pedido = pedidoRepository.save(pedido);
+        return pedidoMapper.toDto(pedido);
+    }
 
-  /**
-   * Get one pedido by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Override
-  @Transactional(readOnly = true)
-  public Optional<PedidoDTO> findOne(Long id) {
-    log.debug("Request to get Pedido : {}", id);
-    return pedidoRepository.findById(id).map(pedidoMapper::toDto);
-  }
+    @Override
+    public Optional<PedidoDTO> partialUpdate(PedidoDTO pedidoDTO) {
+        log.debug("Request to partially update Pedido : {}", pedidoDTO);
 
-  /**
-   * Delete the pedido by id.
-   *
-   * @param id the id of the entity.
-   */
-  @Override
-  public void delete(Long id) {
-    log.debug("Request to delete Pedido : {}", id);
-    pedidoRepository.deleteById(id);
-  }
+        return pedidoRepository
+            .findById(pedidoDTO.getId())
+            .map(existingPedido -> {
+                pedidoMapper.partialUpdate(existingPedido, pedidoDTO);
+
+                return existingPedido;
+            })
+            .map(pedidoRepository::save)
+            .map(pedidoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PedidoDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all Pedidos");
+        return pedidoRepository.findAll(pageable).map(pedidoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<PedidoDTO> findOne(Long id) {
+        log.debug("Request to get Pedido : {}", id);
+        return pedidoRepository.findById(id).map(pedidoMapper::toDto);
+    }
+
+    @Override
+    public void delete(Long id) {
+        log.debug("Request to delete Pedido : {}", id);
+        pedidoRepository.deleteById(id);
+    }
 }

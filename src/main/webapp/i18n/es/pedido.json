@@ -3,6 +3,7 @@
     "pedido": {
       "home": {
         "title": "Pedidos",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Pedido",
         "createOrEditLabel": "Crear o editar Pedido",
         "notFound": "Ningún Pedidos encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Pedido"
       },
+      "id": "ID",
       "dataPedido": "Data Pedido",
       "valorPedido": "Valor Pedido"
     }

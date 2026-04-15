@@ -8,84 +8,79 @@ import javax.validation.constraints.*;
 /**
  * A DTO for the {@link com.anderson.jhipsterapp1.domain.ItemPedido} entity.
  */
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ItemPedidoDTO implements Serializable {
 
-  private Long id;
+    private Long id;
 
-  @NotNull
-  private String nomeItem;
+    @NotNull
+    private String nomeItem;
 
-  private BigDecimal valorItem;
+    private BigDecimal valorItem;
 
-  private Long pedidoId;
+    private PedidoDTO pedido;
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getNomeItem() {
-    return nomeItem;
-  }
-
-  public void setNomeItem(String nomeItem) {
-    this.nomeItem = nomeItem;
-  }
-
-  public BigDecimal getValorItem() {
-    return valorItem;
-  }
-
-  public void setValorItem(BigDecimal valorItem) {
-    this.valorItem = valorItem;
-  }
-
-  public Long getPedidoId() {
-    return pedidoId;
-  }
-
-  public void setPedidoId(Long pedidoId) {
-    this.pedidoId = pedidoId;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+    public Long getId() {
+        return id;
     }
 
-    ItemPedidoDTO itemPedidoDTO = (ItemPedidoDTO) o;
-    if (itemPedidoDTO.getId() == null || getId() == null) {
-      return false;
+    public void setId(Long id) {
+        this.id = id;
     }
-    return Objects.equals(getId(), itemPedidoDTO.getId());
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(getId());
-  }
+    public String getNomeItem() {
+        return nomeItem;
+    }
 
-  @Override
-  public String toString() {
-    return (
-      "ItemPedidoDTO{" +
-      "id=" +
-      getId() +
-      ", nomeItem='" +
-      getNomeItem() +
-      "'" +
-      ", valorItem=" +
-      getValorItem() +
-      ", pedidoId=" +
-      getPedidoId() +
-      "}"
-    );
-  }
+    public void setNomeItem(String nomeItem) {
+        this.nomeItem = nomeItem;
+    }
+
+    public BigDecimal getValorItem() {
+        return valorItem;
+    }
+
+    public void setValorItem(BigDecimal valorItem) {
+        this.valorItem = valorItem;
+    }
+
+    public PedidoDTO getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(PedidoDTO pedido) {
+        this.pedido = pedido;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ItemPedidoDTO)) {
+            return false;
+        }
+
+        ItemPedidoDTO itemPedidoDTO = (ItemPedidoDTO) o;
+        if (this.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, itemPedidoDTO.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "ItemPedidoDTO{" +
+            "id=" + getId() +
+            ", nomeItem='" + getNomeItem() + "'" +
+            ", valorItem=" + getValorItem() +
+            ", pedido=" + getPedido() +
+            "}";
+    }
 }

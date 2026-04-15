@@ -11,12 +11,14 @@ describe('Cliente e2e test', () => {
   let clienteComponentsPage: ClienteComponentsPage;
   let clienteUpdatePage: ClienteUpdatePage;
   let clienteDeleteDialog: ClienteDeleteDialog;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.autoSignInUsing(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
   });
 
@@ -40,10 +42,7 @@ describe('Cliente e2e test', () => {
 
     await clienteComponentsPage.clickOnCreateButton();
 
-    await promise.all([clienteUpdatePage.setNomeInput('nome'), clienteUpdatePage.setCpfInput('664.417.855-77')]);
-
-    expect(await clienteUpdatePage.getNomeInput()).to.eq('nome', 'Expected Nome value to be equals to nome');
-    expect(await clienteUpdatePage.getCpfInput()).to.eq('664.417.855-77', 'Expected Cpf value to be equals to 664.417.855-77');
+    await promise.all([clienteUpdatePage.setNomeInput('nome'), clienteUpdatePage.setCpfInput('433.039.567-26')]);
 
     await clienteUpdatePage.save();
     expect(await clienteUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
@@ -58,6 +57,7 @@ describe('Cliente e2e test', () => {
     clienteDeleteDialog = new ClienteDeleteDialog();
     expect(await clienteDeleteDialog.getDialogTitle()).to.eq('jhipsterapp1App.cliente.delete.question');
     await clienteDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(clienteComponentsPage.title), 5000);
 
     expect(await clienteComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
   });

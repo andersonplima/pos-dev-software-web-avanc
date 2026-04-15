@@ -3,6 +3,7 @@
     "itemPedido": {
       "home": {
         "title": "Item Pedido",
+        "refreshListLabel": "Refresh list",
         "createLabel": "Dodaj Item Pedido",
         "createOrEditLabel": "Dodaj lub edytuj: Item Pedido",
         "notFound": "No Item Pedidos found"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Item Pedido"
       },
+      "id": "ID",
       "nomeItem": "Nome Item",
       "valorItem": "Valor Item",
       "pedido": "Pedido"

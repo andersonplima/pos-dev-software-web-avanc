@@ -1,5 +1,5 @@
-import { Directive, ElementRef, Input, OnInit, Renderer } from '@angular/core';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { Directive, OnInit, ElementRef, Renderer2, Input } from '@angular/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Directive({
   selector: '[jhiActiveMenu]',
@@ -7,11 +7,7 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 export class ActiveMenuDirective implements OnInit {
   @Input() jhiActiveMenu?: string;
 
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer,
-    private translateService: TranslateService,
-  ) {}
+  constructor(private el: ElementRef, private renderer: Renderer2, private translateService: TranslateService) {}
 
   ngOnInit(): void {
     this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
@@ -23,9 +19,9 @@ export class ActiveMenuDirective implements OnInit {
 
   updateActiveFlag(selectedLanguage: string): void {
     if (this.jhiActiveMenu === selectedLanguage) {
-      this.renderer.setElementClass(this.el.nativeElement, 'active', true);
+      this.renderer.addClass(this.el.nativeElement, 'active');
     } else {
-      this.renderer.setElementClass(this.el.nativeElement, 'active', false);
+      this.renderer.removeClass(this.el.nativeElement, 'active');
     }
   }
 }

@@ -3,6 +3,7 @@
     "festa": {
       "home": {
         "title": "Festas",
+        "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Festa",
         "createOrEditLabel": "Crear o editar Festa",
         "notFound": "Ningún Festas encontrado"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Festa"
       },
+      "id": "ID",
       "nome": "Nome",
       "tema": "Tema",
       "valor": "Valor",

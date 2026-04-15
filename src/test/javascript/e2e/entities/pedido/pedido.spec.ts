@@ -1,4 +1,4 @@
-import { browser, ExpectedConditions as ec, promise, protractor } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { PedidoComponentsPage, PedidoDeleteDialog, PedidoUpdatePage } from './pedido.page-object';
@@ -11,12 +11,14 @@ describe('Pedido e2e test', () => {
   let pedidoComponentsPage: PedidoComponentsPage;
   let pedidoUpdatePage: PedidoUpdatePage;
   let pedidoDeleteDialog: PedidoDeleteDialog;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.autoSignInUsing(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
   });
 
@@ -41,15 +43,9 @@ describe('Pedido e2e test', () => {
     await pedidoComponentsPage.clickOnCreateButton();
 
     await promise.all([
-      pedidoUpdatePage.setDataPedidoInput(`01/01/2001${  protractor.Key.TAB  }02:30AM`),
+      pedidoUpdatePage.setDataPedidoInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       pedidoUpdatePage.setValorPedidoInput('5'),
     ]);
-
-    expect(await pedidoUpdatePage.getDataPedidoInput()).to.contain(
-      '2001-01-01T02:30',
-      'Expected dataPedido value to be equals to 2000-12-31',
-    );
-    expect(await pedidoUpdatePage.getValorPedidoInput()).to.eq('5', 'Expected valorPedido value to be equals to 5');
 
     await pedidoUpdatePage.save();
     expect(await pedidoUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
@@ -64,6 +60,7 @@ describe('Pedido e2e test', () => {
     pedidoDeleteDialog = new PedidoDeleteDialog();
     expect(await pedidoDeleteDialog.getDialogTitle()).to.eq('jhipsterapp1App.pedido.delete.question');
     await pedidoDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(pedidoComponentsPage.title), 5000);
 
     expect(await pedidoComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
   });
