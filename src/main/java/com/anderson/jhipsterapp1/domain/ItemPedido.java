@@ -1,6 +1,5 @@
 package com.anderson.jhipsterapp1.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.*;
@@ -13,94 +12,107 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "item_pedido")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ItemPedido implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-  @NotNull
-  @Column(name = "nome_item", nullable = false)
-  private String nomeItem;
+    @NotNull
+    @Column(name = "nome_item", nullable = false)
+    private String nomeItem;
 
-  @Column(name = "valor_item", precision = 21, scale = 2)
-  private BigDecimal valorItem;
+    @Column(name = "valor_item", precision = 21, scale = 2)
+    private BigDecimal valorItem;
 
-  @ManyToOne
-  @JsonIgnoreProperties("itemPedidos")
-  private Pedido pedido;
+    @ManyToOne
+    private Pedido pedido;
 
-  // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-  public Long getId() {
-    return id;
-  }
+    // jhipster-needle-entity-add-field - JHipster will add fields here
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getNomeItem() {
-    return nomeItem;
-  }
-
-  public ItemPedido nomeItem(String nomeItem) {
-    this.nomeItem = nomeItem;
-    return this;
-  }
-
-  public void setNomeItem(String nomeItem) {
-    this.nomeItem = nomeItem;
-  }
-
-  public BigDecimal getValorItem() {
-    return valorItem;
-  }
-
-  public ItemPedido valorItem(BigDecimal valorItem) {
-    this.valorItem = valorItem;
-    return this;
-  }
-
-  public void setValorItem(BigDecimal valorItem) {
-    this.valorItem = valorItem;
-  }
-
-  public Pedido getPedido() {
-    return pedido;
-  }
-
-  public ItemPedido pedido(Pedido pedido) {
-    this.pedido = pedido;
-    return this;
-  }
-
-  public void setPedido(Pedido pedido) {
-    this.pedido = pedido;
-  }
-
-  // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    public Long getId() {
+        return this.id;
     }
-    if (!(o instanceof ItemPedido)) {
-      return false;
+
+    public ItemPedido id(Long id) {
+        this.setId(id);
+        return this;
     }
-    return id != null && id.equals(((ItemPedido) o).id);
-  }
 
-  @Override
-  public int hashCode() {
-    return 31;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  @Override
-  public String toString() {
-    return "ItemPedido{" + "id=" + getId() + ", nomeItem='" + getNomeItem() + "'" + ", valorItem=" + getValorItem() + "}";
-  }
+    public String getNomeItem() {
+        return this.nomeItem;
+    }
+
+    public ItemPedido nomeItem(String nomeItem) {
+        this.setNomeItem(nomeItem);
+        return this;
+    }
+
+    public void setNomeItem(String nomeItem) {
+        this.nomeItem = nomeItem;
+    }
+
+    public BigDecimal getValorItem() {
+        return this.valorItem;
+    }
+
+    public ItemPedido valorItem(BigDecimal valorItem) {
+        this.setValorItem(valorItem);
+        return this;
+    }
+
+    public void setValorItem(BigDecimal valorItem) {
+        this.valorItem = valorItem;
+    }
+
+    public Pedido getPedido() {
+        return this.pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public ItemPedido pedido(Pedido pedido) {
+        this.setPedido(pedido);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ItemPedido)) {
+            return false;
+        }
+        return id != null && id.equals(((ItemPedido) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "ItemPedido{" +
+            "id=" + getId() +
+            ", nomeItem='" + getNomeItem() + "'" +
+            ", valorItem=" + getValorItem() +
+            "}";
+    }
 }

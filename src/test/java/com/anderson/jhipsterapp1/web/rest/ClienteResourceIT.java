@@ -1,286 +1,439 @@
 package com.anderson.jhipsterapp1.web.rest;
 
-import static com.anderson.jhipsterapp1.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.anderson.jhipsterapp1.Jhipsterapp1App;
+import com.anderson.jhipsterapp1.IntegrationTest;
 import com.anderson.jhipsterapp1.domain.Cliente;
 import com.anderson.jhipsterapp1.repository.ClienteRepository;
-import com.anderson.jhipsterapp1.service.ClienteService;
 import com.anderson.jhipsterapp1.service.dto.ClienteDTO;
 import com.anderson.jhipsterapp1.service.mapper.ClienteMapper;
-import com.anderson.jhipsterapp1.web.rest.errors.ExceptionTranslator;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
 
 /**
  * Integration tests for the {@link ClienteResource} REST controller.
  */
-@SpringBootTest(classes = Jhipsterapp1App.class)
-public class ClienteResourceIT {
+@IntegrationTest
+@AutoConfigureMockMvc
+@WithMockUser
+class ClienteResourceIT {
 
-  private static final String DEFAULT_NOME = "AAAAAAAAAA";
-  private static final String UPDATED_NOME = "BBBBBBBBBB";
+    private static final String DEFAULT_NOME = "AAAAAAAAAA";
+    private static final String UPDATED_NOME = "BBBBBBBBBB";
 
-  private static final String DEFAULT_CPF = "478.673.673-42";
-  private static final String UPDATED_CPF = "981.794.956-19";
+    private static final String DEFAULT_CPF = "392.230.979-96";
+    private static final String UPDATED_CPF = "129.123.886-21";
 
-  @Autowired
-  private ClienteRepository clienteRepository;
+    private static final String ENTITY_API_URL = "/api/clientes";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-  @Autowired
-  private ClienteMapper clienteMapper;
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
-  @Autowired
-  private ClienteService clienteService;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
-  @Autowired
-  private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private ClienteMapper clienteMapper;
 
-  @Autowired
-  private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private EntityManager em;
 
-  @Autowired
-  private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MockMvc restClienteMockMvc;
 
-  @Autowired
-  private EntityManager em;
+    private Cliente cliente;
 
-  @Autowired
-  private Validator validator;
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Cliente createEntity(EntityManager em) {
+        Cliente cliente = new Cliente().nome(DEFAULT_NOME).cpf(DEFAULT_CPF);
+        return cliente;
+    }
 
-  private MockMvc restClienteMockMvc;
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Cliente createUpdatedEntity(EntityManager em) {
+        Cliente cliente = new Cliente().nome(UPDATED_NOME).cpf(UPDATED_CPF);
+        return cliente;
+    }
 
-  private Cliente cliente;
+    @BeforeEach
+    public void initTest() {
+        cliente = createEntity(em);
+    }
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final ClienteResource clienteResource = new ClienteResource(clienteService);
-    this.restClienteMockMvc = MockMvcBuilders.standaloneSetup(clienteResource)
-      .setCustomArgumentResolvers(pageableArgumentResolver)
-      .setControllerAdvice(exceptionTranslator)
-      .setConversionService(createFormattingConversionService())
-      .setMessageConverters(jacksonMessageConverter)
-      .setValidator(validator)
-      .build();
-  }
+    @Test
+    @Transactional
+    void createCliente() throws Exception {
+        int databaseSizeBeforeCreate = clienteRepository.findAll().size();
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+        restClienteMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .andExpect(status().isCreated());
 
-  /**
-   * Create an entity for this test.
-   *
-   * This is a static method, as tests for other entities might also need it,
-   * if they test an entity which requires the current entity.
-   */
-  public static Cliente createEntity(EntityManager em) {
-    Cliente cliente = new Cliente().nome(DEFAULT_NOME).cpf(DEFAULT_CPF);
-    return cliente;
-  }
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeCreate + 1);
+        Cliente testCliente = clienteList.get(clienteList.size() - 1);
+        assertThat(testCliente.getNome()).isEqualTo(DEFAULT_NOME);
+        assertThat(testCliente.getCpf()).isEqualTo(DEFAULT_CPF);
+    }
 
-  /**
-   * Create an updated entity for this test.
-   *
-   * This is a static method, as tests for other entities might also need it,
-   * if they test an entity which requires the current entity.
-   */
-  public static Cliente createUpdatedEntity(EntityManager em) {
-    Cliente cliente = new Cliente().nome(UPDATED_NOME).cpf(UPDATED_CPF);
-    return cliente;
-  }
+    @Test
+    @Transactional
+    void createClienteWithExistingId() throws Exception {
+        // Create the Cliente with an existing ID
+        cliente.setId(1L);
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-  @BeforeEach
-  public void initTest() {
-    cliente = createEntity(em);
-  }
+        int databaseSizeBeforeCreate = clienteRepository.findAll().size();
 
-  @Test
-  @Transactional
-  public void createCliente() throws Exception {
-    int databaseSizeBeforeCreate = clienteRepository.findAll().size();
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restClienteMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Create the Cliente
-    ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
-    restClienteMockMvc
-      .perform(post("/api/clientes").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-      .andExpect(status().isCreated());
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeCreate);
+    }
 
-    // Validate the Cliente in the database
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeCreate + 1);
-    Cliente testCliente = clienteList.get(clienteList.size() - 1);
-    assertThat(testCliente.getNome()).isEqualTo(DEFAULT_NOME);
-    assertThat(testCliente.getCpf()).isEqualTo(DEFAULT_CPF);
-  }
+    @Test
+    @Transactional
+    void checkNomeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = clienteRepository.findAll().size();
+        // set the field null
+        cliente.setNome(null);
 
-  @Test
-  @Transactional
-  public void createClienteWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = clienteRepository.findAll().size();
+        // Create the Cliente, which fails.
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-    // Create the Cliente with an existing ID
-    cliente.setId(1L);
-    ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+        restClienteMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .andExpect(status().isBadRequest());
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restClienteMockMvc
-      .perform(post("/api/clientes").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-      .andExpect(status().isBadRequest());
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeTest);
+    }
 
-    // Validate the Cliente in the database
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeCreate);
-  }
+    @Test
+    @Transactional
+    void checkCpfIsRequired() throws Exception {
+        int databaseSizeBeforeTest = clienteRepository.findAll().size();
+        // set the field null
+        cliente.setCpf(null);
 
-  @Test
-  @Transactional
-  public void checkNomeIsRequired() throws Exception {
-    int databaseSizeBeforeTest = clienteRepository.findAll().size();
-    // set the field null
-    cliente.setNome(null);
+        // Create the Cliente, which fails.
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-    // Create the Cliente, which fails.
-    ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+        restClienteMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .andExpect(status().isBadRequest());
 
-    restClienteMockMvc
-      .perform(post("/api/clientes").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-      .andExpect(status().isBadRequest());
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeTest);
+    }
 
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeTest);
-  }
+    @Test
+    @Transactional
+    void getAllClientes() throws Exception {
+        // Initialize the database
+        clienteRepository.saveAndFlush(cliente);
 
-  @Test
-  @Transactional
-  public void checkCpfIsRequired() throws Exception {
-    int databaseSizeBeforeTest = clienteRepository.findAll().size();
-    // set the field null
-    cliente.setCpf(null);
+        // Get all the clienteList
+        restClienteMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(cliente.getId().intValue())))
+            .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
+            .andExpect(jsonPath("$.[*].cpf").value(hasItem(DEFAULT_CPF)));
+    }
 
-    // Create the Cliente, which fails.
-    ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+    @Test
+    @Transactional
+    void getCliente() throws Exception {
+        // Initialize the database
+        clienteRepository.saveAndFlush(cliente);
 
-    restClienteMockMvc
-      .perform(post("/api/clientes").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-      .andExpect(status().isBadRequest());
+        // Get the cliente
+        restClienteMockMvc
+            .perform(get(ENTITY_API_URL_ID, cliente.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(cliente.getId().intValue()))
+            .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
+            .andExpect(jsonPath("$.cpf").value(DEFAULT_CPF));
+    }
 
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeTest);
-  }
+    @Test
+    @Transactional
+    void getNonExistingCliente() throws Exception {
+        // Get the cliente
+        restClienteMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void getAllClientes() throws Exception {
-    // Initialize the database
-    clienteRepository.saveAndFlush(cliente);
+    @Test
+    @Transactional
+    void putExistingCliente() throws Exception {
+        // Initialize the database
+        clienteRepository.saveAndFlush(cliente);
 
-    // Get all the clienteList
-    restClienteMockMvc
-      .perform(get("/api/clientes?sort=id,desc"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(cliente.getId().intValue())))
-      .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
-      .andExpect(jsonPath("$.[*].cpf").value(hasItem(DEFAULT_CPF)));
-  }
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
 
-  @Test
-  @Transactional
-  public void getCliente() throws Exception {
-    // Initialize the database
-    clienteRepository.saveAndFlush(cliente);
+        // Update the cliente
+        Cliente updatedCliente = clienteRepository.findById(cliente.getId()).get();
+        // Disconnect from session so that the updates on updatedCliente are not directly saved in db
+        em.detach(updatedCliente);
+        updatedCliente.nome(UPDATED_NOME).cpf(UPDATED_CPF);
+        ClienteDTO clienteDTO = clienteMapper.toDto(updatedCliente);
 
-    // Get the cliente
-    restClienteMockMvc
-      .perform(get("/api/clientes/{id}", cliente.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-      .andExpect(jsonPath("$.id").value(cliente.getId().intValue()))
-      .andExpect(jsonPath("$.nome").value(DEFAULT_NOME))
-      .andExpect(jsonPath("$.cpf").value(DEFAULT_CPF));
-  }
+        restClienteMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, clienteDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+            )
+            .andExpect(status().isOk());
 
-  @Test
-  @Transactional
-  public void getNonExistingCliente() throws Exception {
-    // Get the cliente
-    restClienteMockMvc.perform(get("/api/clientes/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
-  }
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        Cliente testCliente = clienteList.get(clienteList.size() - 1);
+        assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
+        assertThat(testCliente.getCpf()).isEqualTo(UPDATED_CPF);
+    }
 
-  @Test
-  @Transactional
-  public void updateCliente() throws Exception {
-    // Initialize the database
-    clienteRepository.saveAndFlush(cliente);
+    @Test
+    @Transactional
+    void putNonExistingCliente() throws Exception {
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        cliente.setId(count.incrementAndGet());
 
-    int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-    // Update the cliente
-    Cliente updatedCliente = clienteRepository.findById(cliente.getId()).get();
-    // Disconnect from session so that the updates on updatedCliente are not directly saved in db
-    em.detach(updatedCliente);
-    updatedCliente.nome(UPDATED_NOME).cpf(UPDATED_CPF);
-    ClienteDTO clienteDTO = clienteMapper.toDto(updatedCliente);
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restClienteMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, clienteDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+            )
+            .andExpect(status().isBadRequest());
 
-    restClienteMockMvc
-      .perform(put("/api/clientes").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-      .andExpect(status().isOk());
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the Cliente in the database
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
-    Cliente testCliente = clienteList.get(clienteList.size() - 1);
-    assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
-    assertThat(testCliente.getCpf()).isEqualTo(UPDATED_CPF);
-  }
+    @Test
+    @Transactional
+    void putWithIdMismatchCliente() throws Exception {
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        cliente.setId(count.incrementAndGet());
 
-  @Test
-  @Transactional
-  public void updateNonExistingCliente() throws Exception {
-    int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-    // Create the Cliente
-    ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restClienteMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+            )
+            .andExpect(status().isBadRequest());
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restClienteMockMvc
-      .perform(put("/api/clientes").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-      .andExpect(status().isBadRequest());
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the Cliente in the database
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
-  }
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamCliente() throws Exception {
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        cliente.setId(count.incrementAndGet());
 
-  @Test
-  @Transactional
-  public void deleteCliente() throws Exception {
-    // Initialize the database
-    clienteRepository.saveAndFlush(cliente);
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-    int databaseSizeBeforeDelete = clienteRepository.findAll().size();
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restClienteMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .andExpect(status().isMethodNotAllowed());
 
-    // Delete the cliente
-    restClienteMockMvc
-      .perform(delete("/api/clientes/{id}", cliente.getId()).accept(TestUtil.APPLICATION_JSON))
-      .andExpect(status().isNoContent());
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the database contains one less item
-    List<Cliente> clienteList = clienteRepository.findAll();
-    assertThat(clienteList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+    @Test
+    @Transactional
+    void partialUpdateClienteWithPatch() throws Exception {
+        // Initialize the database
+        clienteRepository.saveAndFlush(cliente);
+
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+
+        // Update the cliente using partial update
+        Cliente partialUpdatedCliente = new Cliente();
+        partialUpdatedCliente.setId(cliente.getId());
+
+        partialUpdatedCliente.nome(UPDATED_NOME);
+
+        restClienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedCliente.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedCliente))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        Cliente testCliente = clienteList.get(clienteList.size() - 1);
+        assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
+        assertThat(testCliente.getCpf()).isEqualTo(DEFAULT_CPF);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdateClienteWithPatch() throws Exception {
+        // Initialize the database
+        clienteRepository.saveAndFlush(cliente);
+
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+
+        // Update the cliente using partial update
+        Cliente partialUpdatedCliente = new Cliente();
+        partialUpdatedCliente.setId(cliente.getId());
+
+        partialUpdatedCliente.nome(UPDATED_NOME).cpf(UPDATED_CPF);
+
+        restClienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedCliente.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedCliente))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        Cliente testCliente = clienteList.get(clienteList.size() - 1);
+        assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
+        assertThat(testCliente.getCpf()).isEqualTo(UPDATED_CPF);
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingCliente() throws Exception {
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        cliente.setId(count.incrementAndGet());
+
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restClienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, clienteDTO.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchCliente() throws Exception {
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        cliente.setId(count.incrementAndGet());
+
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restClienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamCliente() throws Exception {
+        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        cliente.setId(count.incrementAndGet());
+
+        // Create the Cliente
+        ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restClienteMockMvc
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+            )
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Cliente in the database
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void deleteCliente() throws Exception {
+        // Initialize the database
+        clienteRepository.saveAndFlush(cliente);
+
+        int databaseSizeBeforeDelete = clienteRepository.findAll().size();
+
+        // Delete the cliente
+        restClienteMockMvc
+            .perform(delete(ENTITY_API_URL_ID, cliente.getId()).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        // Validate the database contains one less item
+        List<Cliente> clienteList = clienteRepository.findAll();
+        assertThat(clienteList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 }

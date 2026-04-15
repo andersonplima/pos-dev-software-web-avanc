@@ -1,35 +1,39 @@
 package com.anderson.jhipsterapp1.service.dto;
 
+import java.io.Serializable;
+
 /**
  * A DTO representing a password change required data - current and new password.
  */
-public class PasswordChangeDTO {
+public class PasswordChangeDTO implements Serializable {
 
-  private String currentPassword;
-  private String newPassword;
+    private static final long serialVersionUID = 1L;
 
-  public PasswordChangeDTO() {
-    // Empty constructor needed for Jackson.
-  }
+    private String currentPassword;
+    private String newPassword;
 
-  public PasswordChangeDTO(String currentPassword, String newPassword) {
-    this.currentPassword = currentPassword;
-    this.newPassword = newPassword;
-  }
+    public PasswordChangeDTO() {
+        // Empty constructor needed for Jackson.
+    }
 
-  public String getCurrentPassword() {
-    return currentPassword;
-  }
+    public PasswordChangeDTO(String currentPassword, String newPassword) {
+        this.currentPassword = currentPassword;
+        this.newPassword = newPassword;
+    }
 
-  public void setCurrentPassword(String currentPassword) {
-    this.currentPassword = currentPassword;
-  }
+    public String getCurrentPassword() {
+        return currentPassword;
+    }
 
-  public String getNewPassword() {
-    return newPassword;
-  }
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
+    }
 
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
-  }
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }

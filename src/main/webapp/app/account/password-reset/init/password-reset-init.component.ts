@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Renderer, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { PasswordResetInitService } from './password-reset-init.service';
@@ -16,15 +16,11 @@ export class PasswordResetInitComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
   });
 
-  constructor(
-    private passwordResetInitService: PasswordResetInitService,
-    private renderer: Renderer,
-    private fb: FormBuilder,
-  ) {}
+  constructor(private passwordResetInitService: PasswordResetInitService, private fb: FormBuilder) {}
 
   ngAfterViewInit(): void {
     if (this.email) {
-      this.renderer.invokeElementMethod(this.email.nativeElement, 'focus', []);
+      this.email.nativeElement.focus();
     }
   }
 

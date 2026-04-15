@@ -20,60 +20,93 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TipoFestaService {
 
-  private final Logger log = LoggerFactory.getLogger(TipoFestaService.class);
+    private final Logger log = LoggerFactory.getLogger(TipoFestaService.class);
 
-  private final TipoFestaRepository tipoFestaRepository;
+    private final TipoFestaRepository tipoFestaRepository;
 
-  private final TipoFestaMapper tipoFestaMapper;
+    private final TipoFestaMapper tipoFestaMapper;
 
-  public TipoFestaService(TipoFestaRepository tipoFestaRepository, TipoFestaMapper tipoFestaMapper) {
-    this.tipoFestaRepository = tipoFestaRepository;
-    this.tipoFestaMapper = tipoFestaMapper;
-  }
+    public TipoFestaService(TipoFestaRepository tipoFestaRepository, TipoFestaMapper tipoFestaMapper) {
+        this.tipoFestaRepository = tipoFestaRepository;
+        this.tipoFestaMapper = tipoFestaMapper;
+    }
 
-  /**
-   * Save a tipoFesta.
-   *
-   * @param tipoFestaDTO the entity to save.
-   * @return the persisted entity.
-   */
-  public TipoFestaDTO save(TipoFestaDTO tipoFestaDTO) {
-    log.debug("Request to save TipoFesta : {}", tipoFestaDTO);
-    TipoFesta tipoFesta = tipoFestaMapper.toEntity(tipoFestaDTO);
-    tipoFesta = tipoFestaRepository.save(tipoFesta);
-    return tipoFestaMapper.toDto(tipoFesta);
-  }
+    /**
+     * Save a tipoFesta.
+     *
+     * @param tipoFestaDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public TipoFestaDTO save(TipoFestaDTO tipoFestaDTO) {
+        log.debug("Request to save TipoFesta : {}", tipoFestaDTO);
+        TipoFesta tipoFesta = tipoFestaMapper.toEntity(tipoFestaDTO);
+        tipoFesta = tipoFestaRepository.save(tipoFesta);
+        return tipoFestaMapper.toDto(tipoFesta);
+    }
 
-  /**
-   * Get all the tipoFestas.
-   *
-   * @return the list of entities.
-   */
-  @Transactional(readOnly = true)
-  public List<TipoFestaDTO> findAll() {
-    log.debug("Request to get all TipoFestas");
-    return tipoFestaRepository.findAll().stream().map(tipoFestaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
-  }
+    /**
+     * Update a tipoFesta.
+     *
+     * @param tipoFestaDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public TipoFestaDTO update(TipoFestaDTO tipoFestaDTO) {
+        log.debug("Request to update TipoFesta : {}", tipoFestaDTO);
+        TipoFesta tipoFesta = tipoFestaMapper.toEntity(tipoFestaDTO);
+        tipoFesta = tipoFestaRepository.save(tipoFesta);
+        return tipoFestaMapper.toDto(tipoFesta);
+    }
 
-  /**
-   * Get one tipoFesta by id.
-   *
-   * @param id the id of the entity.
-   * @return the entity.
-   */
-  @Transactional(readOnly = true)
-  public Optional<TipoFestaDTO> findOne(Long id) {
-    log.debug("Request to get TipoFesta : {}", id);
-    return tipoFestaRepository.findById(id).map(tipoFestaMapper::toDto);
-  }
+    /**
+     * Partially update a tipoFesta.
+     *
+     * @param tipoFestaDTO the entity to update partially.
+     * @return the persisted entity.
+     */
+    public Optional<TipoFestaDTO> partialUpdate(TipoFestaDTO tipoFestaDTO) {
+        log.debug("Request to partially update TipoFesta : {}", tipoFestaDTO);
 
-  /**
-   * Delete the tipoFesta by id.
-   *
-   * @param id the id of the entity.
-   */
-  public void delete(Long id) {
-    log.debug("Request to delete TipoFesta : {}", id);
-    tipoFestaRepository.deleteById(id);
-  }
+        return tipoFestaRepository
+            .findById(tipoFestaDTO.getId())
+            .map(existingTipoFesta -> {
+                tipoFestaMapper.partialUpdate(existingTipoFesta, tipoFestaDTO);
+
+                return existingTipoFesta;
+            })
+            .map(tipoFestaRepository::save)
+            .map(tipoFestaMapper::toDto);
+    }
+
+    /**
+     * Get all the tipoFestas.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<TipoFestaDTO> findAll() {
+        log.debug("Request to get all TipoFestas");
+        return tipoFestaRepository.findAll().stream().map(tipoFestaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get one tipoFesta by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<TipoFestaDTO> findOne(Long id) {
+        log.debug("Request to get TipoFesta : {}", id);
+        return tipoFestaRepository.findById(id).map(tipoFestaMapper::toDto);
+    }
+
+    /**
+     * Delete the tipoFesta by id.
+     *
+     * @param id the id of the entity.
+     */
+    public void delete(Long id) {
+        log.debug("Request to delete TipoFesta : {}", id);
+        tipoFestaRepository.deleteById(id);
+    }
 }

@@ -3,6 +3,7 @@
     "festa": {
       "home": {
         "title": "Festa",
+        "refreshListLabel": "Refresh list",
         "createLabel": "Dodaj Festa",
         "createOrEditLabel": "Dodaj lub edytuj: Festa",
         "notFound": "No Festas found"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Festa"
       },
+      "id": "ID",
       "nome": "Nome",
       "tema": "Tema",
       "valor": "Valor",

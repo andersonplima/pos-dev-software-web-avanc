@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { Jhipsterapp1SharedModule } from 'app/shared/shared.module';
-import { ClienteComponent } from './cliente.component';
-import { ClienteDetailComponent } from './cliente-detail.component';
-import { ClienteUpdateComponent } from './cliente-update.component';
-import { ClienteDeleteDialogComponent } from './cliente-delete-dialog.component';
-import { clienteRoute } from './cliente.route';
+import { SharedModule } from 'app/shared/shared.module';
+import { ClienteComponent } from './list/cliente.component';
+import { ClienteDetailComponent } from './detail/cliente-detail.component';
+import { ClienteUpdateComponent } from './update/cliente-update.component';
+import { ClienteDeleteDialogComponent } from './delete/cliente-delete-dialog.component';
+import { ClienteRoutingModule } from './route/cliente-routing.module';
 
 @NgModule({
-  imports: [Jhipsterapp1SharedModule, RouterModule.forChild(clienteRoute)],
+  imports: [SharedModule, ClienteRoutingModule],
   declarations: [ClienteComponent, ClienteDetailComponent, ClienteUpdateComponent, ClienteDeleteDialogComponent],
-  entryComponents: [ClienteDeleteDialogComponent],
 })
-export class Jhipsterapp1ClienteModule {}
+export class ClienteModule {}

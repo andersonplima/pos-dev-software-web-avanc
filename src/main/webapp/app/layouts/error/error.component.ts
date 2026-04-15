@@ -12,10 +12,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
   errorKey?: string;
   langChangeSubscription?: Subscription;
 
-  constructor(
-    private translateService: TranslateService,
-    private route: ActivatedRoute,
-  ) {}
+  constructor(private translateService: TranslateService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(routeData => {
@@ -36,7 +33,9 @@ export class ErrorComponent implements OnInit, OnDestroy {
   private getErrorMessageTranslation(): void {
     this.errorMessage = '';
     if (this.errorKey) {
-      this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => (this.errorMessage = translatedErrorMessage));
+      this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => {
+        this.errorMessage = translatedErrorMessage;
+      });
     }
   }
 }

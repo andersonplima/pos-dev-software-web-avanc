@@ -3,6 +3,7 @@
     "cliente": {
       "home": {
         "title": "Clientes",
+        "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Cliente",
         "createOrEditLabel": "Create or edit a Cliente",
         "notFound": "No Clientes found"
@@ -16,6 +17,7 @@
       "detail": {
         "title": "Cliente"
       },
+      "id": "ID",
       "nome": "Nome",
       "cpf": "Cpf",
       "festa": "Festa"

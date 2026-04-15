@@ -1,23 +1,13 @@
 package com.anderson.jhipsterapp1.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-public class FestaMapperTest {
+class FestaMapperTest {
 
-  private FestaMapper festaMapper;
+    private FestaMapper festaMapper;
 
-  @BeforeEach
-  public void setUp() {
-    festaMapper = new FestaMapperImpl();
-  }
-
-  @Test
-  public void testEntityFromId() {
-    Long id = 1L;
-    assertThat(festaMapper.fromId(id).getId()).isEqualTo(id);
-    assertThat(festaMapper.fromId(null)).isNull();
-  }
+    @BeforeEach
+    public void setUp() {
+        festaMapper = new FestaMapperImpl();
+    }
 }

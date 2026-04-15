@@ -11,12 +11,14 @@ describe('TipoFesta e2e test', () => {
   let tipoFestaComponentsPage: TipoFestaComponentsPage;
   let tipoFestaUpdatePage: TipoFestaUpdatePage;
   let tipoFestaDeleteDialog: TipoFestaDeleteDialog;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.autoSignInUsing(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
   });
 
@@ -42,9 +44,6 @@ describe('TipoFesta e2e test', () => {
 
     await promise.all([tipoFestaUpdatePage.setNomeInput('nome'), tipoFestaUpdatePage.setDescricaoInput('descricao')]);
 
-    expect(await tipoFestaUpdatePage.getNomeInput()).to.eq('nome', 'Expected Nome value to be equals to nome');
-    expect(await tipoFestaUpdatePage.getDescricaoInput()).to.eq('descricao', 'Expected Descricao value to be equals to descricao');
-
     await tipoFestaUpdatePage.save();
     expect(await tipoFestaUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
@@ -58,6 +57,7 @@ describe('TipoFesta e2e test', () => {
     tipoFestaDeleteDialog = new TipoFestaDeleteDialog();
     expect(await tipoFestaDeleteDialog.getDialogTitle()).to.eq('jhipsterapp1App.tipoFesta.delete.question');
     await tipoFestaDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(tipoFestaComponentsPage.title), 5000);
 
     expect(await tipoFestaComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
   });

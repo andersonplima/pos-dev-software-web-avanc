@@ -29,6 +29,7 @@ export class FestaUpdatePage {
   saveButton = element(by.id('save-entity'));
   cancelButton = element(by.id('cancel-save'));
 
+  idInput = element(by.id('field_id'));
   nomeInput = element(by.id('field_nome'));
   temaInput = element(by.id('field_tema'));
   valorInput = element(by.id('field_valor'));
@@ -38,6 +39,14 @@ export class FestaUpdatePage {
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getAttribute('jhiTranslate');
+  }
+
+  async setIdInput(id: string): Promise<void> {
+    await this.idInput.sendKeys(id);
+  }
+
+  async getIdInput(): Promise<string> {
+    return await this.idInput.getAttribute('value');
   }
 
   async setNomeInput(nome: string): Promise<void> {

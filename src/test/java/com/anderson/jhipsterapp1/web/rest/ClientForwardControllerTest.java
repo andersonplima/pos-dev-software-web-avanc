@@ -17,42 +17,52 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Unit tests for the {@link ClientForwardController} REST controller.
  */
-public class ClientForwardControllerTest {
+class ClientForwardControllerTest {
 
-  private MockMvc restMockMvc;
+    private MockMvc restMockMvc;
 
-  @BeforeEach
-  public void setup() {
-    ClientForwardController clientForwardController = new ClientForwardController();
-    this.restMockMvc = MockMvcBuilders.standaloneSetup(clientForwardController, new TestController()).build();
-  }
-
-  @Test
-  public void getBackendEndpoint() throws Exception {
-    restMockMvc
-      .perform(get("/test"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN_VALUE))
-      .andExpect(content().string("test"));
-  }
-
-  @Test
-  public void getClientEndpoint() throws Exception {
-    ResultActions perform = restMockMvc.perform(get("/non-existant-mapping"));
-    perform.andExpect(status().isOk()).andExpect(forwardedUrl("/"));
-  }
-
-  @Test
-  public void getNestedClientEndpoint() throws Exception {
-    restMockMvc.perform(get("/admin/user-management")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
-  }
-
-  @RestController
-  public static class TestController {
-
-    @RequestMapping(value = "/test")
-    public String test() {
-      return "test";
+    @BeforeEach
+    public void setup() {
+        ClientForwardController clientForwardController = new ClientForwardController();
+        this.restMockMvc = MockMvcBuilders.standaloneSetup(clientForwardController, new TestController()).build();
     }
-  }
+
+    @Test
+    void getBackendEndpoint() throws Exception {
+        restMockMvc
+            .perform(get("/test"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN_VALUE))
+            .andExpect(content().string("test"));
+    }
+
+    @Test
+    void getClientEndpoint() throws Exception {
+        ResultActions perform = restMockMvc.perform(get("/non-existant-mapping"));
+        perform.andExpect(status().isOk()).andExpect(forwardedUrl("/"));
+    }
+
+    @Test
+    void getNestedClientEndpoint() throws Exception {
+        restMockMvc.perform(get("/admin/user-management")).andExpect(status().isOk()).andExpect(forwardedUrl("/"));
+    }
+
+    @Test
+    void getUnmappedDottedEndpoint() throws Exception {
+        restMockMvc.perform(get("/foo.js")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getUnmappedNestedDottedEndpoint() throws Exception {
+        restMockMvc.perform(get("/foo/bar.js")).andExpect(status().isNotFound());
+    }
+
+    @RestController
+    public static class TestController {
+
+        @RequestMapping(value = "/test")
+        public String test() {
+            return "test";
+        }
+    }
 }

@@ -11,12 +11,14 @@ describe('ItemPedido e2e test', () => {
   let itemPedidoComponentsPage: ItemPedidoComponentsPage;
   let itemPedidoUpdatePage: ItemPedidoUpdatePage;
   let itemPedidoDeleteDialog: ItemPedidoDeleteDialog;
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.autoSignInUsing(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
   });
 
@@ -46,9 +48,6 @@ describe('ItemPedido e2e test', () => {
       itemPedidoUpdatePage.pedidoSelectLastOption(),
     ]);
 
-    expect(await itemPedidoUpdatePage.getNomeItemInput()).to.eq('nomeItem', 'Expected NomeItem value to be equals to nomeItem');
-    expect(await itemPedidoUpdatePage.getValorItemInput()).to.eq('5', 'Expected valorItem value to be equals to 5');
-
     await itemPedidoUpdatePage.save();
     expect(await itemPedidoUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
@@ -62,6 +61,7 @@ describe('ItemPedido e2e test', () => {
     itemPedidoDeleteDialog = new ItemPedidoDeleteDialog();
     expect(await itemPedidoDeleteDialog.getDialogTitle()).to.eq('jhipsterapp1App.itemPedido.delete.question');
     await itemPedidoDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(itemPedidoComponentsPage.title), 5000);
 
     expect(await itemPedidoComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
   });

@@ -1,271 +1,425 @@
 package com.anderson.jhipsterapp1.web.rest;
 
-import static com.anderson.jhipsterapp1.web.rest.TestUtil.createFormattingConversionService;
+import static com.anderson.jhipsterapp1.web.rest.TestUtil.sameNumber;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.anderson.jhipsterapp1.Jhipsterapp1App;
+import com.anderson.jhipsterapp1.IntegrationTest;
 import com.anderson.jhipsterapp1.domain.Pedido;
 import com.anderson.jhipsterapp1.repository.PedidoRepository;
-import com.anderson.jhipsterapp1.service.PedidoService;
 import com.anderson.jhipsterapp1.service.dto.PedidoDTO;
 import com.anderson.jhipsterapp1.service.mapper.PedidoMapper;
-import com.anderson.jhipsterapp1.web.rest.errors.ExceptionTranslator;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
 
 /**
  * Integration tests for the {@link PedidoResource} REST controller.
  */
-@SpringBootTest(classes = Jhipsterapp1App.class)
-public class PedidoResourceIT {
+@IntegrationTest
+@AutoConfigureMockMvc
+@WithMockUser
+class PedidoResourceIT {
 
-  private static final Instant DEFAULT_DATA_PEDIDO = Instant.ofEpochMilli(0L);
-  private static final Instant UPDATED_DATA_PEDIDO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant DEFAULT_DATA_PEDIDO = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_DATA_PEDIDO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-  private static final BigDecimal DEFAULT_VALOR_PEDIDO = new BigDecimal(1);
-  private static final BigDecimal UPDATED_VALOR_PEDIDO = new BigDecimal(2);
+    private static final BigDecimal DEFAULT_VALOR_PEDIDO = new BigDecimal(1);
+    private static final BigDecimal UPDATED_VALOR_PEDIDO = new BigDecimal(2);
 
-  @Autowired
-  private PedidoRepository pedidoRepository;
+    private static final String ENTITY_API_URL = "/api/pedidos";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-  @Autowired
-  private PedidoMapper pedidoMapper;
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
-  @Autowired
-  private PedidoService pedidoService;
+    @Autowired
+    private PedidoRepository pedidoRepository;
 
-  @Autowired
-  private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+    @Autowired
+    private PedidoMapper pedidoMapper;
 
-  @Autowired
-  private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Autowired
+    private EntityManager em;
 
-  @Autowired
-  private ExceptionTranslator exceptionTranslator;
+    @Autowired
+    private MockMvc restPedidoMockMvc;
 
-  @Autowired
-  private EntityManager em;
+    private Pedido pedido;
 
-  @Autowired
-  private Validator validator;
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Pedido createEntity(EntityManager em) {
+        Pedido pedido = new Pedido().dataPedido(DEFAULT_DATA_PEDIDO).valorPedido(DEFAULT_VALOR_PEDIDO);
+        return pedido;
+    }
 
-  private MockMvc restPedidoMockMvc;
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Pedido createUpdatedEntity(EntityManager em) {
+        Pedido pedido = new Pedido().dataPedido(UPDATED_DATA_PEDIDO).valorPedido(UPDATED_VALOR_PEDIDO);
+        return pedido;
+    }
 
-  private Pedido pedido;
+    @BeforeEach
+    public void initTest() {
+        pedido = createEntity(em);
+    }
 
-  @BeforeEach
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-    final PedidoResource pedidoResource = new PedidoResource(pedidoService);
-    this.restPedidoMockMvc = MockMvcBuilders.standaloneSetup(pedidoResource)
-      .setCustomArgumentResolvers(pageableArgumentResolver)
-      .setControllerAdvice(exceptionTranslator)
-      .setConversionService(createFormattingConversionService())
-      .setMessageConverters(jacksonMessageConverter)
-      .setValidator(validator)
-      .build();
-  }
+    @Test
+    @Transactional
+    void createPedido() throws Exception {
+        int databaseSizeBeforeCreate = pedidoRepository.findAll().size();
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+        restPedidoMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
+            .andExpect(status().isCreated());
 
-  /**
-   * Create an entity for this test.
-   *
-   * This is a static method, as tests for other entities might also need it,
-   * if they test an entity which requires the current entity.
-   */
-  public static Pedido createEntity(EntityManager em) {
-    Pedido pedido = new Pedido().dataPedido(DEFAULT_DATA_PEDIDO).valorPedido(DEFAULT_VALOR_PEDIDO);
-    return pedido;
-  }
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeCreate + 1);
+        Pedido testPedido = pedidoList.get(pedidoList.size() - 1);
+        assertThat(testPedido.getDataPedido()).isEqualTo(DEFAULT_DATA_PEDIDO);
+        assertThat(testPedido.getValorPedido()).isEqualByComparingTo(DEFAULT_VALOR_PEDIDO);
+    }
 
-  /**
-   * Create an updated entity for this test.
-   *
-   * This is a static method, as tests for other entities might also need it,
-   * if they test an entity which requires the current entity.
-   */
-  public static Pedido createUpdatedEntity(EntityManager em) {
-    Pedido pedido = new Pedido().dataPedido(UPDATED_DATA_PEDIDO).valorPedido(UPDATED_VALOR_PEDIDO);
-    return pedido;
-  }
+    @Test
+    @Transactional
+    void createPedidoWithExistingId() throws Exception {
+        // Create the Pedido with an existing ID
+        pedido.setId(1L);
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
 
-  @BeforeEach
-  public void initTest() {
-    pedido = createEntity(em);
-  }
+        int databaseSizeBeforeCreate = pedidoRepository.findAll().size();
 
-  @Test
-  @Transactional
-  public void createPedido() throws Exception {
-    int databaseSizeBeforeCreate = pedidoRepository.findAll().size();
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restPedidoMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
+            .andExpect(status().isBadRequest());
 
-    // Create the Pedido
-    PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
-    restPedidoMockMvc
-      .perform(post("/api/pedidos").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
-      .andExpect(status().isCreated());
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeCreate);
+    }
 
-    // Validate the Pedido in the database
-    List<Pedido> pedidoList = pedidoRepository.findAll();
-    assertThat(pedidoList).hasSize(databaseSizeBeforeCreate + 1);
-    Pedido testPedido = pedidoList.get(pedidoList.size() - 1);
-    assertThat(testPedido.getDataPedido()).isEqualTo(DEFAULT_DATA_PEDIDO);
-    assertThat(testPedido.getValorPedido()).isEqualTo(DEFAULT_VALOR_PEDIDO);
-  }
+    @Test
+    @Transactional
+    void checkValorPedidoIsRequired() throws Exception {
+        int databaseSizeBeforeTest = pedidoRepository.findAll().size();
+        // set the field null
+        pedido.setValorPedido(null);
 
-  @Test
-  @Transactional
-  public void createPedidoWithExistingId() throws Exception {
-    int databaseSizeBeforeCreate = pedidoRepository.findAll().size();
+        // Create the Pedido, which fails.
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
 
-    // Create the Pedido with an existing ID
-    pedido.setId(1L);
-    PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+        restPedidoMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
+            .andExpect(status().isBadRequest());
 
-    // An entity with an existing ID cannot be created, so this API call must fail
-    restPedidoMockMvc
-      .perform(post("/api/pedidos").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
-      .andExpect(status().isBadRequest());
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeTest);
+    }
 
-    // Validate the Pedido in the database
-    List<Pedido> pedidoList = pedidoRepository.findAll();
-    assertThat(pedidoList).hasSize(databaseSizeBeforeCreate);
-  }
+    @Test
+    @Transactional
+    void getAllPedidos() throws Exception {
+        // Initialize the database
+        pedidoRepository.saveAndFlush(pedido);
 
-  @Test
-  @Transactional
-  public void checkValorPedidoIsRequired() throws Exception {
-    int databaseSizeBeforeTest = pedidoRepository.findAll().size();
-    // set the field null
-    pedido.setValorPedido(null);
+        // Get all the pedidoList
+        restPedidoMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(pedido.getId().intValue())))
+            .andExpect(jsonPath("$.[*].dataPedido").value(hasItem(DEFAULT_DATA_PEDIDO.toString())))
+            .andExpect(jsonPath("$.[*].valorPedido").value(hasItem(sameNumber(DEFAULT_VALOR_PEDIDO))));
+    }
 
-    // Create the Pedido, which fails.
-    PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+    @Test
+    @Transactional
+    void getPedido() throws Exception {
+        // Initialize the database
+        pedidoRepository.saveAndFlush(pedido);
 
-    restPedidoMockMvc
-      .perform(post("/api/pedidos").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
-      .andExpect(status().isBadRequest());
+        // Get the pedido
+        restPedidoMockMvc
+            .perform(get(ENTITY_API_URL_ID, pedido.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(pedido.getId().intValue()))
+            .andExpect(jsonPath("$.dataPedido").value(DEFAULT_DATA_PEDIDO.toString()))
+            .andExpect(jsonPath("$.valorPedido").value(sameNumber(DEFAULT_VALOR_PEDIDO)));
+    }
 
-    List<Pedido> pedidoList = pedidoRepository.findAll();
-    assertThat(pedidoList).hasSize(databaseSizeBeforeTest);
-  }
+    @Test
+    @Transactional
+    void getNonExistingPedido() throws Exception {
+        // Get the pedido
+        restPedidoMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+    }
 
-  @Test
-  @Transactional
-  public void getAllPedidos() throws Exception {
-    // Initialize the database
-    pedidoRepository.saveAndFlush(pedido);
+    @Test
+    @Transactional
+    void putExistingPedido() throws Exception {
+        // Initialize the database
+        pedidoRepository.saveAndFlush(pedido);
 
-    // Get all the pedidoList
-    restPedidoMockMvc
-      .perform(get("/api/pedidos?sort=id,desc"))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-      .andExpect(jsonPath("$.[*].id").value(hasItem(pedido.getId().intValue())))
-      .andExpect(jsonPath("$.[*].dataPedido").value(hasItem(DEFAULT_DATA_PEDIDO.toString())))
-      .andExpect(jsonPath("$.[*].valorPedido").value(hasItem(DEFAULT_VALOR_PEDIDO.intValue())));
-  }
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
 
-  @Test
-  @Transactional
-  public void getPedido() throws Exception {
-    // Initialize the database
-    pedidoRepository.saveAndFlush(pedido);
+        // Update the pedido
+        Pedido updatedPedido = pedidoRepository.findById(pedido.getId()).get();
+        // Disconnect from session so that the updates on updatedPedido are not directly saved in db
+        em.detach(updatedPedido);
+        updatedPedido.dataPedido(UPDATED_DATA_PEDIDO).valorPedido(UPDATED_VALOR_PEDIDO);
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(updatedPedido);
 
-    // Get the pedido
-    restPedidoMockMvc
-      .perform(get("/api/pedidos/{id}", pedido.getId()))
-      .andExpect(status().isOk())
-      .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-      .andExpect(jsonPath("$.id").value(pedido.getId().intValue()))
-      .andExpect(jsonPath("$.dataPedido").value(DEFAULT_DATA_PEDIDO.toString()))
-      .andExpect(jsonPath("$.valorPedido").value(DEFAULT_VALOR_PEDIDO.intValue()));
-  }
+        restPedidoMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, pedidoDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(pedidoDTO))
+            )
+            .andExpect(status().isOk());
 
-  @Test
-  @Transactional
-  public void getNonExistingPedido() throws Exception {
-    // Get the pedido
-    restPedidoMockMvc.perform(get("/api/pedidos/{id}", Long.MAX_VALUE)).andExpect(status().isNotFound());
-  }
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+        Pedido testPedido = pedidoList.get(pedidoList.size() - 1);
+        assertThat(testPedido.getDataPedido()).isEqualTo(UPDATED_DATA_PEDIDO);
+        assertThat(testPedido.getValorPedido()).isEqualByComparingTo(UPDATED_VALOR_PEDIDO);
+    }
 
-  @Test
-  @Transactional
-  public void updatePedido() throws Exception {
-    // Initialize the database
-    pedidoRepository.saveAndFlush(pedido);
+    @Test
+    @Transactional
+    void putNonExistingPedido() throws Exception {
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        pedido.setId(count.incrementAndGet());
 
-    int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
 
-    // Update the pedido
-    Pedido updatedPedido = pedidoRepository.findById(pedido.getId()).get();
-    // Disconnect from session so that the updates on updatedPedido are not directly saved in db
-    em.detach(updatedPedido);
-    updatedPedido.dataPedido(UPDATED_DATA_PEDIDO).valorPedido(UPDATED_VALOR_PEDIDO);
-    PedidoDTO pedidoDTO = pedidoMapper.toDto(updatedPedido);
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restPedidoMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, pedidoDTO.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(pedidoDTO))
+            )
+            .andExpect(status().isBadRequest());
 
-    restPedidoMockMvc
-      .perform(put("/api/pedidos").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
-      .andExpect(status().isOk());
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the Pedido in the database
-    List<Pedido> pedidoList = pedidoRepository.findAll();
-    assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
-    Pedido testPedido = pedidoList.get(pedidoList.size() - 1);
-    assertThat(testPedido.getDataPedido()).isEqualTo(UPDATED_DATA_PEDIDO);
-    assertThat(testPedido.getValorPedido()).isEqualTo(UPDATED_VALOR_PEDIDO);
-  }
+    @Test
+    @Transactional
+    void putWithIdMismatchPedido() throws Exception {
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        pedido.setId(count.incrementAndGet());
 
-  @Test
-  @Transactional
-  public void updateNonExistingPedido() throws Exception {
-    int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
 
-    // Create the Pedido
-    PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPedidoMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(pedidoDTO))
+            )
+            .andExpect(status().isBadRequest());
 
-    // If the entity doesn't have an ID, it will throw BadRequestAlertException
-    restPedidoMockMvc
-      .perform(put("/api/pedidos").contentType(TestUtil.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
-      .andExpect(status().isBadRequest());
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the Pedido in the database
-    List<Pedido> pedidoList = pedidoRepository.findAll();
-    assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
-  }
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamPedido() throws Exception {
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        pedido.setId(count.incrementAndGet());
 
-  @Test
-  @Transactional
-  public void deletePedido() throws Exception {
-    // Initialize the database
-    pedidoRepository.saveAndFlush(pedido);
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
 
-    int databaseSizeBeforeDelete = pedidoRepository.findAll().size();
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPedidoMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(pedidoDTO)))
+            .andExpect(status().isMethodNotAllowed());
 
-    // Delete the pedido
-    restPedidoMockMvc
-      .perform(delete("/api/pedidos/{id}", pedido.getId()).accept(TestUtil.APPLICATION_JSON))
-      .andExpect(status().isNoContent());
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+    }
 
-    // Validate the database contains one less item
-    List<Pedido> pedidoList = pedidoRepository.findAll();
-    assertThat(pedidoList).hasSize(databaseSizeBeforeDelete - 1);
-  }
+    @Test
+    @Transactional
+    void partialUpdatePedidoWithPatch() throws Exception {
+        // Initialize the database
+        pedidoRepository.saveAndFlush(pedido);
+
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+
+        // Update the pedido using partial update
+        Pedido partialUpdatedPedido = new Pedido();
+        partialUpdatedPedido.setId(pedido.getId());
+
+        partialUpdatedPedido.dataPedido(UPDATED_DATA_PEDIDO);
+
+        restPedidoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedPedido.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPedido))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+        Pedido testPedido = pedidoList.get(pedidoList.size() - 1);
+        assertThat(testPedido.getDataPedido()).isEqualTo(UPDATED_DATA_PEDIDO);
+        assertThat(testPedido.getValorPedido()).isEqualByComparingTo(DEFAULT_VALOR_PEDIDO);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdatePedidoWithPatch() throws Exception {
+        // Initialize the database
+        pedidoRepository.saveAndFlush(pedido);
+
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+
+        // Update the pedido using partial update
+        Pedido partialUpdatedPedido = new Pedido();
+        partialUpdatedPedido.setId(pedido.getId());
+
+        partialUpdatedPedido.dataPedido(UPDATED_DATA_PEDIDO).valorPedido(UPDATED_VALOR_PEDIDO);
+
+        restPedidoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedPedido.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedPedido))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+        Pedido testPedido = pedidoList.get(pedidoList.size() - 1);
+        assertThat(testPedido.getDataPedido()).isEqualTo(UPDATED_DATA_PEDIDO);
+        assertThat(testPedido.getValorPedido()).isEqualByComparingTo(UPDATED_VALOR_PEDIDO);
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingPedido() throws Exception {
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        pedido.setId(count.incrementAndGet());
+
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restPedidoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, pedidoDTO.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(pedidoDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchPedido() throws Exception {
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        pedido.setId(count.incrementAndGet());
+
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPedidoMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(pedidoDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamPedido() throws Exception {
+        int databaseSizeBeforeUpdate = pedidoRepository.findAll().size();
+        pedido.setId(count.incrementAndGet());
+
+        // Create the Pedido
+        PedidoDTO pedidoDTO = pedidoMapper.toDto(pedido);
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restPedidoMockMvc
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(pedidoDTO))
+            )
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Pedido in the database
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void deletePedido() throws Exception {
+        // Initialize the database
+        pedidoRepository.saveAndFlush(pedido);
+
+        int databaseSizeBeforeDelete = pedidoRepository.findAll().size();
+
+        // Delete the pedido
+        restPedidoMockMvc
+            .perform(delete(ENTITY_API_URL_ID, pedido.getId()).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        // Validate the database contains one less item
+        List<Pedido> pedidoList = pedidoRepository.findAll();
+        assertThat(pedidoList).hasSize(databaseSizeBeforeDelete - 1);
+    }
 }

@@ -11,7 +11,7 @@ export class NavBarPage {
   passwordMenu = element(by.css('[routerLink="account/password"]'));
   settingsMenu = element(by.css('[routerLink="account/settings"]'));
 
-  constructor(asAdmin?: Boolean) {
+  constructor(asAdmin?: boolean) {
     if (asAdmin) {
       this.adminMenu = element(by.id('admin-menu'));
     }
@@ -50,11 +50,11 @@ export class NavBarPage {
   }
 
   async clickOnEntity(entityName: string): Promise<void> {
-    await element(by.css(`[routerLink="${  entityName  }"]`)).click();
+    await element(by.css(`[routerLink="${entityName}"]`)).click();
   }
 
   async clickOnAdmin(entityName: string): Promise<void> {
-    await element(by.css(`[routerLink="admin/${  entityName  }"]`)).click();
+    await element(by.css(`[routerLink="admin/${entityName}"]`)).click();
   }
 
   async getSignInPage(): Promise<SignInPage> {

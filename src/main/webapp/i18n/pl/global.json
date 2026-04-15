@@ -31,7 +31,6 @@
         "health": "Status",
         "configuration": "Konfiguracja",
         "logs": "Logi",
-        "audits": "Audyty",
         "apidocs": "API",
         "database": "Baza danych",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
@@ -103,7 +102,8 @@
       "edit": "Edytuj",
       "open": "Otwórz",
       "save": "Zapisz",
-      "view": "Widok"
+      "view": "Widok",
+      "show": "Show {{otherEntity}}"
     },
     "detail": {
       "field": "Pole",
@@ -123,6 +123,11 @@
       "pattern": "Wartość powinna być zgodna ze wzorem {{pattern}}.",
       "number": "Wartość powinna być liczbowa.",
       "datetimelocal": "Wartość powinna zawierać datę i czas."
+    },
+    "filters": {
+      "set": "Following filters are set",
+      "clear": "Clear filter",
+      "clearAll": "Clear all filters"
     }
   },
   "error": {
@@ -135,6 +140,8 @@
     "emailexists": "Użytkownik z takim adresem email już istnieje!",
     "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID",
     "idnull": "Błędne ID",
+    "idinvalid": "Invalid Id",
+    "idnotfound": "ID cannot be found",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

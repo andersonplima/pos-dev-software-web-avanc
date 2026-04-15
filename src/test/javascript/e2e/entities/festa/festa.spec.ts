@@ -15,12 +15,14 @@ describe('Festa e2e test', () => {
   let festaComponentsPage: FestaComponentsPage;
   let festaUpdatePage: FestaUpdatePage;
   /* let festaDeleteDialog: FestaDeleteDialog; */
+  const username = process.env.E2E_USERNAME ?? 'admin';
+  const password = process.env.E2E_PASSWORD ?? 'admin';
 
   before(async () => {
     await browser.get('/');
     navBarPage = new NavBarPage();
     signInPage = await navBarPage.getSignInPage();
-    await signInPage.autoSignInUsing('admin', 'admin');
+    await signInPage.autoSignInUsing(username, password);
     await browser.wait(ec.visibilityOf(navBarPage.entityMenu), 5000);
   });
 
@@ -52,10 +54,6 @@ describe('Festa e2e test', () => {
             festaUpdatePage.clienteSelectLastOption(),
         ]);
 
-        expect(await festaUpdatePage.getNomeInput()).to.eq('nome', 'Expected Nome value to be equals to nome');
-        expect(await festaUpdatePage.getTemaInput()).to.eq('tema', 'Expected Tema value to be equals to tema');
-        expect(await festaUpdatePage.getValorInput()).to.eq('5', 'Expected valor value to be equals to 5');
-
         await festaUpdatePage.save();
         expect(await festaUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
@@ -70,6 +68,7 @@ describe('Festa e2e test', () => {
         expect(await festaDeleteDialog.getDialogTitle())
             .to.eq('jhipsterapp1App.festa.delete.question');
         await festaDeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(festaComponentsPage.title), 5000);
 
         expect(await festaComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     }); */

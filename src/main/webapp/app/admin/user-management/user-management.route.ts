@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Routes } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { JhiResolvePagingParams } from 'ng-jhipster';
 
-import { IUser, User } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
-import { UserManagementComponent } from './user-management.component';
-import { UserManagementDetailComponent } from './user-management-detail.component';
-import { UserManagementUpdateComponent } from './user-management-update.component';
+import { IUser } from './user-management.model';
+import { UserManagementService } from './service/user-management.service';
+import { UserManagementComponent } from './list/user-management.component';
+import { UserManagementDetailComponent } from './detail/user-management-detail.component';
+import { UserManagementUpdateComponent } from './update/user-management-update.component';
 
 @Injectable({ providedIn: 'root' })
-export class UserManagementResolve implements Resolve<IUser> {
-  constructor(private service: UserService) {}
+export class UserManagementResolve implements Resolve<IUser | null> {
+  constructor(private service: UserManagementService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IUser> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IUser | null> {
     const id = route.params.login;
     if (id) {
       return this.service.find(id);
     }
-    return of(new User());
+    return of(null);
   }
 }
 
@@ -26,9 +25,6 @@ export const userManagementRoute: Routes = [
   {
     path: '',
     component: UserManagementComponent,
-    resolve: {
-      pagingParams: JhiResolvePagingParams,
-    },
     data: {
       defaultSort: 'id,asc',
     },

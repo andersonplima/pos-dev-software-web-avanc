@@ -1,30 +1,31 @@
 package com.anderson.jhipsterapp1.service.mapper;
 
-import com.anderson.jhipsterapp1.domain.*;
+import com.anderson.jhipsterapp1.domain.Cliente;
+import com.anderson.jhipsterapp1.domain.Festa;
+import com.anderson.jhipsterapp1.domain.TipoFesta;
+import com.anderson.jhipsterapp1.service.dto.ClienteDTO;
 import com.anderson.jhipsterapp1.service.dto.FestaDTO;
+import com.anderson.jhipsterapp1.service.dto.TipoFestaDTO;
 import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link Festa} and its DTO {@link FestaDTO}.
  */
-@Mapper(componentModel = "spring", uses = { TipoFestaMapper.class, ClienteMapper.class })
+@Mapper(componentModel = "spring")
 public interface FestaMapper extends EntityMapper<FestaDTO, Festa> {
-  @Mapping(source = "tipoFesta.id", target = "tipoFestaId")
-  @Mapping(source = "tipoFesta.nome", target = "tipoFestaNome")
-  @Mapping(source = "cliente.id", target = "clienteId")
-  @Mapping(source = "cliente.cpf", target = "clienteCpf")
-  FestaDTO toDto(Festa festa);
+    @Mapping(target = "tipoFesta", source = "tipoFesta", qualifiedByName = "tipoFestaNome")
+    @Mapping(target = "cliente", source = "cliente", qualifiedByName = "clienteCpf")
+    FestaDTO toDto(Festa s);
 
-  @Mapping(source = "tipoFestaId", target = "tipoFesta")
-  @Mapping(source = "clienteId", target = "cliente")
-  Festa toEntity(FestaDTO festaDTO);
+    @Named("tipoFestaNome")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "nome", source = "nome")
+    TipoFestaDTO toDtoTipoFestaNome(TipoFesta tipoFesta);
 
-  default Festa fromId(Long id) {
-    if (id == null) {
-      return null;
-    }
-    Festa festa = new Festa();
-    festa.setId(id);
-    return festa;
-  }
+    @Named("clienteCpf")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "cpf", source = "cpf")
+    ClienteDTO toDtoClienteCpf(Cliente cliente);
 }
