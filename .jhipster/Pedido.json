@@ -1,0 +1,25 @@
+{
+  "applications": "*",
+  "changelogDate": "20200215171500",
+  "clientRootFolder": "",
+  "dto": "mapstruct",
+  "entityTableName": "pedido",
+  "fields": [
+    {
+      "fieldName": "dataPedido",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "valorPedido",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Pedido",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}
