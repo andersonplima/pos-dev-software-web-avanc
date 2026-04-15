@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { Observable, combineLatest, filter, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { SortService } from 'app/shared/sort/sort.service';
 import { IFesta } from '../festa.model';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, FestaService } from '../service/festa.service';
 import { FestaDeleteDialogComponent } from '../delete/festa-delete-dialog.component';
-import { SortService } from 'app/shared/sort/sort.service';
 
 @Component({
   selector: 'jhi-festa',
@@ -25,7 +25,7 @@ export class FestaComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected sortService: SortService,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
   ) {}
 
   trackId = (_index: number, item: IFesta): number => this.festaService.getFestaIdentifier(item);
@@ -41,7 +41,7 @@ export class FestaComponent implements OnInit {
     modalRef.closed
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations())
+        switchMap(() => this.loadFromBackendWithRouteInformations()),
       )
       .subscribe({
         next: (res: EntityArrayResponseType) => {
@@ -65,7 +65,7 @@ export class FestaComponent implements OnInit {
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending))
+      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
     );
   }
 
@@ -112,8 +112,8 @@ export class FestaComponent implements OnInit {
     const ascendingQueryParam = ascending ? ASC : DESC;
     if (predicate === '') {
       return [];
-    } else {
-      return [predicate + ',' + ascendingQueryParam];
-    }
+    } 
+      return [`${predicate  },${  ascendingQueryParam}`];
+    
   }
 }

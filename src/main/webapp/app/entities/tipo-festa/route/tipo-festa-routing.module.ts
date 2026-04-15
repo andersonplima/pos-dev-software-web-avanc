@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { ASC } from 'app/config/navigation.constants';
 import { TipoFestaComponent } from '../list/tipo-festa.component';
 import { TipoFestaDetailComponent } from '../detail/tipo-festa-detail.component';
 import { TipoFestaUpdateComponent } from '../update/tipo-festa-update.component';
 import { TipoFestaRoutingResolveService } from './tipo-festa-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
 
 const tipoFestaRoute: Routes = [
   {
     path: '',
     component: TipoFestaComponent,
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: `id,${  ASC}`,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -16,7 +16,10 @@ export type EntityArrayResponseType = HttpResponse<ITipoFesta[]>;
 export class TipoFestaService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tipo-festas');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+  ) {}
 
   create(tipoFesta: NewTipoFesta): Observable<EntityResponseType> {
     return this.http.post<ITipoFesta>(this.resourceUrl, tipoFesta, { observe: 'response' });

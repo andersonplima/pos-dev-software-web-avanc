@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { sampleWithRequiredData, sampleWithNewData } from '../tipo-festa.test-samples';
+import { sampleWithNewData, sampleWithRequiredData } from '../tipo-festa.test-samples';
 
 import { TipoFestaFormService } from './tipo-festa-form.service';
 
@@ -22,7 +22,7 @@ describe('TipoFesta Form Service', () => {
             id: expect.any(Object),
             nome: expect.any(Object),
             descricao: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -34,7 +34,7 @@ describe('TipoFesta Form Service', () => {
             id: expect.any(Object),
             nome: expect.any(Object),
             descricao: expect.any(Object),
-          })
+          }),
         );
       });
     });

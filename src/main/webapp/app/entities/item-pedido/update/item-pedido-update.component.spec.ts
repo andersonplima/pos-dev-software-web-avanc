@@ -4,13 +4,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
-import { ItemPedidoFormService } from './item-pedido-form.service';
-import { ItemPedidoService } from '../service/item-pedido.service';
-import { IItemPedido } from '../item-pedido.model';
 import { IPedido } from 'app/entities/pedido/pedido.model';
 import { PedidoService } from 'app/entities/pedido/service/pedido.service';
+import { ItemPedidoService } from '../service/item-pedido.service';
+import { IItemPedido } from '../item-pedido.model';
+import { ItemPedidoFormService } from './item-pedido-form.service';
 
 import { ItemPedidoUpdateComponent } from './item-pedido-update.component';
 
@@ -66,7 +66,7 @@ describe('ItemPedido Management Update Component', () => {
       expect(pedidoService.query).toHaveBeenCalled();
       expect(pedidoService.addPedidoToCollectionIfMissing).toHaveBeenCalledWith(
         pedidoCollection,
-        ...additionalPedidos.map(expect.objectContaining)
+        ...additionalPedidos.map(expect.objectContaining),
       );
       expect(comp.pedidosSharedCollection).toEqual(expectedCollection);
     });

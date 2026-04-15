@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { IFesta } from '../festa.model';
 import { FestaService } from '../service/festa.service';
-import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './festa-delete-dialog.component.html',
@@ -11,7 +11,10 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 export class FestaDeleteDialogComponent {
   festa?: IFesta;
 
-  constructor(protected festaService: FestaService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected festaService: FestaService,
+    protected activeModal: NgbActiveModal,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

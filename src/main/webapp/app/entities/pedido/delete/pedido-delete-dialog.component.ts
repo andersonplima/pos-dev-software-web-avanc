@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { IPedido } from '../pedido.model';
 import { PedidoService } from '../service/pedido.service';
-import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './pedido-delete-dialog.component.html',
@@ -11,7 +11,10 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 export class PedidoDeleteDialogComponent {
   pedido?: IPedido;
 
-  constructor(protected pedidoService: PedidoService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected pedidoService: PedidoService,
+    protected activeModal: NgbActiveModal,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

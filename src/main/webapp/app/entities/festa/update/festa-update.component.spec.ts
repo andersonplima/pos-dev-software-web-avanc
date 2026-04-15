@@ -4,15 +4,15 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
-import { FestaFormService } from './festa-form.service';
-import { FestaService } from '../service/festa.service';
-import { IFesta } from '../festa.model';
 import { ITipoFesta } from 'app/entities/tipo-festa/tipo-festa.model';
 import { TipoFestaService } from 'app/entities/tipo-festa/service/tipo-festa.service';
 import { ICliente } from 'app/entities/cliente/cliente.model';
 import { ClienteService } from 'app/entities/cliente/service/cliente.service';
+import { IFesta } from '../festa.model';
+import { FestaService } from '../service/festa.service';
+import { FestaFormService } from './festa-form.service';
 
 import { FestaUpdateComponent } from './festa-update.component';
 
@@ -70,7 +70,7 @@ describe('Festa Management Update Component', () => {
       expect(tipoFestaService.query).toHaveBeenCalled();
       expect(tipoFestaService.addTipoFestaToCollectionIfMissing).toHaveBeenCalledWith(
         tipoFestaCollection,
-        ...additionalTipoFestas.map(expect.objectContaining)
+        ...additionalTipoFestas.map(expect.objectContaining),
       );
       expect(comp.tipoFestasSharedCollection).toEqual(expectedCollection);
     });
@@ -92,7 +92,7 @@ describe('Festa Management Update Component', () => {
       expect(clienteService.query).toHaveBeenCalled();
       expect(clienteService.addClienteToCollectionIfMissing).toHaveBeenCalledWith(
         clienteCollection,
-        ...additionalClientes.map(expect.objectContaining)
+        ...additionalClientes.map(expect.objectContaining),
       );
       expect(comp.clientesSharedCollection).toEqual(expectedCollection);
     });

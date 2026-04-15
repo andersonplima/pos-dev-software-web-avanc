@@ -4,11 +4,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
-import { PedidoFormService } from './pedido-form.service';
 import { PedidoService } from '../service/pedido.service';
 import { IPedido } from '../pedido.model';
+import { PedidoFormService } from './pedido-form.service';
 
 import { PedidoUpdateComponent } from './pedido-update.component';
 

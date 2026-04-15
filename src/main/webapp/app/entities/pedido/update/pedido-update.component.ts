@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { PedidoFormService, PedidoFormGroup } from './pedido-form.service';
 import { IPedido } from '../pedido.model';
 import { PedidoService } from '../service/pedido.service';
+import { PedidoFormGroup, PedidoFormService } from './pedido-form.service';
 
 @Component({
   selector: 'jhi-pedido-update',
@@ -21,7 +21,7 @@ export class PedidoUpdateComponent implements OnInit {
   constructor(
     protected pedidoService: PedidoService,
     protected pedidoFormService: PedidoFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

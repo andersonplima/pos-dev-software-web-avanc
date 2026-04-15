@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { ASC } from 'app/config/navigation.constants';
 import { PedidoComponent } from '../list/pedido.component';
 import { PedidoDetailComponent } from '../detail/pedido-detail.component';
 import { PedidoUpdateComponent } from '../update/pedido-update.component';
 import { PedidoRoutingResolveService } from './pedido-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
 
 const pedidoRoute: Routes = [
   {
     path: '',
     component: PedidoComponent,
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: `id,${  ASC}`,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -4,13 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { FestaFormService, FestaFormGroup } from './festa-form.service';
-import { IFesta } from '../festa.model';
-import { FestaService } from '../service/festa.service';
 import { ITipoFesta } from 'app/entities/tipo-festa/tipo-festa.model';
 import { TipoFestaService } from 'app/entities/tipo-festa/service/tipo-festa.service';
 import { ICliente } from 'app/entities/cliente/cliente.model';
 import { ClienteService } from 'app/entities/cliente/service/cliente.service';
+import { FestaService } from '../service/festa.service';
+import { IFesta } from '../festa.model';
+import { FestaFormGroup, FestaFormService } from './festa-form.service';
 
 @Component({
   selector: 'jhi-festa-update',
@@ -30,7 +30,7 @@ export class FestaUpdateComponent implements OnInit {
     protected festaFormService: FestaFormService,
     protected tipoFestaService: TipoFestaService,
     protected clienteService: ClienteService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   compareTipoFesta = (o1: ITipoFesta | null, o2: ITipoFesta | null): boolean => this.tipoFestaService.compareTipoFesta(o1, o2);
@@ -87,11 +87,11 @@ export class FestaUpdateComponent implements OnInit {
 
     this.tipoFestasSharedCollection = this.tipoFestaService.addTipoFestaToCollectionIfMissing<ITipoFesta>(
       this.tipoFestasSharedCollection,
-      festa.tipoFesta
+      festa.tipoFesta,
     );
     this.clientesSharedCollection = this.clienteService.addClienteToCollectionIfMissing<ICliente>(
       this.clientesSharedCollection,
-      festa.cliente
+      festa.cliente,
     );
   }
 
@@ -101,8 +101,8 @@ export class FestaUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ITipoFesta[]>) => res.body ?? []))
       .pipe(
         map((tipoFestas: ITipoFesta[]) =>
-          this.tipoFestaService.addTipoFestaToCollectionIfMissing<ITipoFesta>(tipoFestas, this.festa?.tipoFesta)
-        )
+          this.tipoFestaService.addTipoFestaToCollectionIfMissing<ITipoFesta>(tipoFestas, this.festa?.tipoFesta),
+        ),
       )
       .subscribe((tipoFestas: ITipoFesta[]) => (this.tipoFestasSharedCollection = tipoFestas));
 

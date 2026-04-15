@@ -1,4 +1,4 @@
-import { element, by, ElementFinder } from 'protractor';
+import { ElementFinder, by, element } from 'protractor';
 
 /* eslint @typescript-eslint/no-use-before-define: 0 */
 export class NavBarPage {
@@ -50,11 +50,11 @@ export class NavBarPage {
   }
 
   async clickOnEntity(entityName: string): Promise<void> {
-    await element(by.css('[routerLink="' + entityName + '"]')).click();
+    await element(by.css(`[routerLink="${  entityName  }"]`)).click();
   }
 
   async clickOnAdmin(entityName: string): Promise<void> {
-    await element(by.css('[routerLink="admin/' + entityName + '"]')).click();
+    await element(by.css(`[routerLink="admin/${  entityName  }"]`)).click();
   }
 
   async getSignInPage(): Promise<SignInPage> {

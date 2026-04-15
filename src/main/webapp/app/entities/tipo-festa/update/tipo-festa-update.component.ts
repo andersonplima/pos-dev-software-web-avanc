@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { TipoFestaFormService, TipoFestaFormGroup } from './tipo-festa-form.service';
 import { ITipoFesta } from '../tipo-festa.model';
 import { TipoFestaService } from '../service/tipo-festa.service';
+import { TipoFestaFormGroup, TipoFestaFormService } from './tipo-festa-form.service';
 
 @Component({
   selector: 'jhi-tipo-festa-update',
@@ -21,7 +21,7 @@ export class TipoFestaUpdateComponent implements OnInit {
   constructor(
     protected tipoFestaService: TipoFestaService,
     protected tipoFestaFormService: TipoFestaFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

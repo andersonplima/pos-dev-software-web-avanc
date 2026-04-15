@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { sampleWithRequiredData, sampleWithNewData } from '../pedido.test-samples';
+import { sampleWithNewData, sampleWithRequiredData } from '../pedido.test-samples';
 
 import { PedidoFormService } from './pedido-form.service';
 
@@ -22,7 +22,7 @@ describe('Pedido Form Service', () => {
             id: expect.any(Object),
             dataPedido: expect.any(Object),
             valorPedido: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -34,7 +34,7 @@ describe('Pedido Form Service', () => {
             id: expect.any(Object),
             dataPedido: expect.any(Object),
             valorPedido: expect.any(Object),
-          })
+          }),
         );
       });
     });

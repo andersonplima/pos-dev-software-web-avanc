@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { sampleWithRequiredData, sampleWithNewData } from '../festa.test-samples';
+import { sampleWithNewData, sampleWithRequiredData } from '../festa.test-samples';
 
 import { FestaFormService } from './festa-form.service';
 
@@ -25,7 +25,7 @@ describe('Festa Form Service', () => {
             valor: expect.any(Object),
             tipoFesta: expect.any(Object),
             cliente: expect.any(Object),
-          })
+          }),
         );
       });
 
@@ -40,7 +40,7 @@ describe('Festa Form Service', () => {
             valor: expect.any(Object),
             tipoFesta: expect.any(Object),
             cliente: expect.any(Object),
-          })
+          }),
         );
       });
     });

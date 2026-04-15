@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { Observable, combineLatest, filter, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { ParseLinks } from 'app/core/util/parse-links.service';
 import { IItemPedido } from '../item-pedido.model';
 
-import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, ItemPedidoService } from '../service/item-pedido.service';
 import { ItemPedidoDeleteDialogComponent } from '../delete/item-pedido-delete-dialog.component';
-import { ParseLinks } from 'app/core/util/parse-links.service';
 
 @Component({
   selector: 'jhi-item-pedido',
@@ -34,7 +34,7 @@ export class ItemPedidoComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected parseLinks: ParseLinks,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
   ) {}
 
   reset(): void {
@@ -61,7 +61,7 @@ export class ItemPedidoComponent implements OnInit {
     modalRef.closed
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations())
+        switchMap(() => this.loadFromBackendWithRouteInformations()),
       )
       .subscribe({
         next: (res: EntityArrayResponseType) => {
@@ -89,7 +89,7 @@ export class ItemPedidoComponent implements OnInit {
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending))
+      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending)),
     );
   }
 
@@ -156,8 +156,8 @@ export class ItemPedidoComponent implements OnInit {
     const ascendingQueryParam = ascending ? ASC : DESC;
     if (predicate === '') {
       return [];
-    } else {
-      return [predicate + ',' + ascendingQueryParam];
-    }
+    } 
+      return [`${predicate  },${  ascendingQueryParam}`];
+    
   }
 }

@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ItemPedidoFormService, ItemPedidoFormGroup } from './item-pedido-form.service';
-import { IItemPedido } from '../item-pedido.model';
-import { ItemPedidoService } from '../service/item-pedido.service';
 import { IPedido } from 'app/entities/pedido/pedido.model';
 import { PedidoService } from 'app/entities/pedido/service/pedido.service';
+import { IItemPedido } from '../item-pedido.model';
+import { ItemPedidoService } from '../service/item-pedido.service';
+import { ItemPedidoFormGroup, ItemPedidoFormService } from './item-pedido-form.service';
 
 @Component({
   selector: 'jhi-item-pedido-update',
@@ -26,7 +26,7 @@ export class ItemPedidoUpdateComponent implements OnInit {
     protected itemPedidoService: ItemPedidoService,
     protected itemPedidoFormService: ItemPedidoFormService,
     protected pedidoService: PedidoService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   comparePedido = (o1: IPedido | null, o2: IPedido | null): boolean => this.pedidoService.comparePedido(o1, o2);
@@ -81,7 +81,7 @@ export class ItemPedidoUpdateComponent implements OnInit {
 
     this.pedidosSharedCollection = this.pedidoService.addPedidoToCollectionIfMissing<IPedido>(
       this.pedidosSharedCollection,
-      itemPedido.pedido
+      itemPedido.pedido,
     );
   }
 

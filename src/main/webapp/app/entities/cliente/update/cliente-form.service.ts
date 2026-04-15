@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { ICliente, NewCliente } from '../cliente.model';
 
@@ -37,7 +37,7 @@ export class ClienteFormService {
         {
           nonNullable: true,
           validators: [Validators.required],
-        }
+        },
       ),
       nome: new FormControl(clienteRawValue.nome, {
         validators: [Validators.required, Validators.maxLength(100)],
@@ -58,7 +58,7 @@ export class ClienteFormService {
       {
         ...clienteRawValue,
         id: { value: clienteRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */
+      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
     );
   }
 

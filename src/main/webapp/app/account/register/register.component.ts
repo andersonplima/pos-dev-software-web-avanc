@@ -1,6 +1,6 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
@@ -44,7 +44,10 @@ export class RegisterComponent implements AfterViewInit {
     }),
   });
 
-  constructor(private translateService: TranslateService, private registerService: RegisterService) {}
+  constructor(
+    private translateService: TranslateService,
+    private registerService: RegisterService,
+  ) {}
 
   ngAfterViewInit(): void {
     if (this.login) {

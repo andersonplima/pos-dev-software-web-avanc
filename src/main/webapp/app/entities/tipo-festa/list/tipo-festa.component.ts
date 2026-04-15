@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { Observable, combineLatest, filter, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { SortService } from 'app/shared/sort/sort.service';
 import { ITipoFesta } from '../tipo-festa.model';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, TipoFestaService } from '../service/tipo-festa.service';
 import { TipoFestaDeleteDialogComponent } from '../delete/tipo-festa-delete-dialog.component';
-import { SortService } from 'app/shared/sort/sort.service';
 
 @Component({
   selector: 'jhi-tipo-festa',
@@ -25,7 +25,7 @@ export class TipoFestaComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected sortService: SortService,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
   ) {}
 
   trackId = (_index: number, item: ITipoFesta): number => this.tipoFestaService.getTipoFestaIdentifier(item);
@@ -41,7 +41,7 @@ export class TipoFestaComponent implements OnInit {
     modalRef.closed
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations())
+        switchMap(() => this.loadFromBackendWithRouteInformations()),
       )
       .subscribe({
         next: (res: EntityArrayResponseType) => {
@@ -65,7 +65,7 @@ export class TipoFestaComponent implements OnInit {
   protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
     return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
       tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.predicate, this.ascending))
+      switchMap(() => this.queryBackend(this.predicate, this.ascending)),
     );
   }
 
@@ -111,8 +111,8 @@ export class TipoFestaComponent implements OnInit {
     const ascendingQueryParam = ascending ? ASC : DESC;
     if (predicate === '') {
       return [];
-    } else {
-      return [predicate + ',' + ascendingQueryParam];
-    }
+    } 
+      return [`${predicate  },${  ascendingQueryParam}`];
+    
   }
 }

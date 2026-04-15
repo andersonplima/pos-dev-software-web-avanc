@@ -25,15 +25,14 @@ public class MysqlTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == mysqlContainer) {
-            mysqlContainer =
-                new MySQLContainer<>("mysql:8.0.30-debian")
-                    .withDatabaseName("jhipsterapp1")
-                    .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
-                    .withLogConsumer(new Slf4jLogConsumer(log))
-                    .withReuse(true)
-                    .withPrivilegedMode(true)
-                    .withConfigurationOverride("testcontainers/mysql")
-                    .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig().withMemory(memoryInBytes).withMemorySwap(memorySwapInBytes));
+            mysqlContainer = new MySQLContainer<>("mysql:8.0.30-debian")
+                .withDatabaseName("jhipsterapp1")
+                .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
+                .withLogConsumer(new Slf4jLogConsumer(log))
+                .withReuse(true)
+                .withPrivilegedMode(true)
+                .withConfigurationOverride("testcontainers/mysql")
+                .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig().withMemory(memoryInBytes).withMemorySwap(memorySwapInBytes));
         }
         if (!mysqlContainer.isRunning()) {
             mysqlContainer.start();

@@ -16,7 +16,10 @@ export type EntityArrayResponseType = HttpResponse<IItemPedido[]>;
 export class ItemPedidoService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/item-pedidos');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(
+    protected http: HttpClient,
+    protected applicationConfigService: ApplicationConfigService,
+  ) {}
 
   create(itemPedido: NewItemPedido): Observable<EntityResponseType> {
     return this.http.post<IItemPedido>(this.resourceUrl, itemPedido, { observe: 'response' });

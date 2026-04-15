@@ -1,6 +1,5 @@
 package com.anderson.jhipsterapp1;
 
-import com.anderson.jhipsterapp1.Jhipsterapp1App;
 import com.anderson.jhipsterapp1.config.AsyncSyncConfiguration;
 import com.anderson.jhipsterapp1.config.EmbeddedSQL;
 import java.lang.annotation.ElementType;

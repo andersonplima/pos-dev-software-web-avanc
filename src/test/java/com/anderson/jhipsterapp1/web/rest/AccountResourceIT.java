@@ -14,7 +14,6 @@ import com.anderson.jhipsterapp1.security.AuthoritiesConstants;
 import com.anderson.jhipsterapp1.service.UserService;
 import com.anderson.jhipsterapp1.service.dto.AdminUserDTO;
 import com.anderson.jhipsterapp1.service.dto.PasswordChangeDTO;
-import com.anderson.jhipsterapp1.service.dto.UserDTO;
 import com.anderson.jhipsterapp1.web.rest.vm.KeyAndPasswordVM;
 import com.anderson.jhipsterapp1.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

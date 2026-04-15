@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { ASC } from 'app/config/navigation.constants';
 import { FestaComponent } from '../list/festa.component';
 import { FestaDetailComponent } from '../detail/festa-detail.component';
 import { FestaUpdateComponent } from '../update/festa-update.component';
 import { FestaRoutingResolveService } from './festa-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
 
 const festaRoute: Routes = [
   {
     path: '',
     component: FestaComponent,
     data: {
-      defaultSort: 'id,' + ASC,
+      defaultSort: `id,${  ASC}`,
     },
     canActivate: [UserRouteAccessService],
   },

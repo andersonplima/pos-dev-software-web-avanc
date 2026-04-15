@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { ClienteFormService, ClienteFormGroup } from './cliente-form.service';
 import { ICliente } from '../cliente.model';
 import { ClienteService } from '../service/cliente.service';
+import { ClienteFormGroup, ClienteFormService } from './cliente-form.service';
 
 @Component({
   selector: 'jhi-cliente-update',
@@ -21,7 +21,7 @@ export class ClienteUpdateComponent implements OnInit {
   constructor(
     protected clienteService: ClienteService,
     protected clienteFormService: ClienteFormService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

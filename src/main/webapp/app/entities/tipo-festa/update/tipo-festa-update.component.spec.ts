@@ -4,11 +4,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of, Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 
-import { TipoFestaFormService } from './tipo-festa-form.service';
 import { TipoFestaService } from '../service/tipo-festa.service';
 import { ITipoFesta } from '../tipo-festa.model';
+import { TipoFestaFormService } from './tipo-festa-form.service';
 
 import { TipoFestaUpdateComponent } from './tipo-festa-update.component';
 
