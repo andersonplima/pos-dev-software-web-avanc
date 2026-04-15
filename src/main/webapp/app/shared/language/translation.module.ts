@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MissingTranslationHandler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { missingTranslationHandler, translatePartialLoader } from 'app/config/translation.config';
-import { SessionStorageService } from 'ngx-webstorage';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 @NgModule({
   imports: [
@@ -20,13 +20,13 @@ import { SessionStorageService } from 'ngx-webstorage';
   ],
 })
 export class TranslationModule {
-  constructor(
-    private translateService: TranslateService,
-    sessionStorageService: SessionStorageService,
-  ) {
-    translateService.setDefaultLang('pt-br');
-    // if user have changed language and navigates away from the application and back to the application then use previously choosed language
-    const langKey = sessionStorageService.retrieve('locale') ?? 'pt-br';
-    translateService.use(langKey);
+  private readonly translateService = inject(TranslateService);
+  private readonly stateStorageService = inject(StateStorageService);
+
+  constructor() {
+    this.translateService.setDefaultLang('pt-br');
+    // if user have changed language and navigates away from the application and back to the application then use previously chosen language
+    const langKey = this.stateStorageService.getLocale() ?? 'pt-br';
+    this.translateService.use(langKey);
   }
 }

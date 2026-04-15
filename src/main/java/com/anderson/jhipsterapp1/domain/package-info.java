@@ -1,4 +1,4 @@
 /**
- * JPA domain objects.
+ * Domain objects.
  */
 package com.anderson.jhipsterapp1.domain;

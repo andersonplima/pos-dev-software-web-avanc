@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20200215141737"
+  },
   "changelogDate": "20200215141737",
   "clientRootFolder": "",
   "databaseType": "sql",
@@ -28,9 +31,10 @@
       "otherEntityName": "festa",
       "otherEntityRelationshipName": "tipoFesta",
       "relationshipName": "festa",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }
   ],
-  "searchEngine": false,
+  "searchEngine": "no",
   "service": "serviceClass"
 }

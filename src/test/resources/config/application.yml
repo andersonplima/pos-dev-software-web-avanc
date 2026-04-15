@@ -36,11 +36,14 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   messages:
     basename: i18n/messages
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
   task:
     execution:
       thread-name-prefix: jhipsterapp-1-task-
@@ -77,7 +80,7 @@ jhipster:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
   security:
     authentication:
       jwt:
@@ -85,6 +88,7 @@ jhipster:
         base64-secret: OTViY2Q4YjZlNzcwNmI4ZTY4NzFmNTNkOGU0YzFkYjNhZWYzYzUxOGJkNWQzYmI3YjJlMjc2NDRmODdjZDNiNjAwZTlkNWY1ODU1YWNkZjkwYzY5ODk0Y2YzYjdkMWUyOWE3YzBhMTFhZDZhYTg1ZGFjMjBjZWIwZTY4OGVhNTg=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 86400
 
 # ===================================================================
 # Application specific properties

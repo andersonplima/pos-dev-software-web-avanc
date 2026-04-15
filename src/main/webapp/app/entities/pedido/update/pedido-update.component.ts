@@ -1,0 +1,76 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { IPedido } from '../pedido.model';
+import { PedidoService } from '../service/pedido.service';
+import { PedidoFormGroup, PedidoFormService } from './pedido-form.service';
+
+@Component({
+  selector: 'jhi-pedido-update',
+  templateUrl: './pedido-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+})
+export class PedidoUpdateComponent implements OnInit {
+  isSaving = false;
+  pedido: IPedido | null = null;
+
+  protected pedidoService = inject(PedidoService);
+  protected pedidoFormService = inject(PedidoFormService);
+  protected activatedRoute = inject(ActivatedRoute);
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: PedidoFormGroup = this.pedidoFormService.createPedidoFormGroup();
+
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ pedido }) => {
+      this.pedido = pedido;
+      if (pedido) {
+        this.updateForm(pedido);
+      }
+    });
+  }
+
+  previousState(): void {
+    window.history.back();
+  }
+
+  save(): void {
+    this.isSaving = true;
+    const pedido = this.pedidoFormService.getPedido(this.editForm);
+    if (pedido.id !== null) {
+      this.subscribeToSaveResponse(this.pedidoService.update(pedido));
+    } else {
+      this.subscribeToSaveResponse(this.pedidoService.create(pedido));
+    }
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IPedido>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
+
+  protected onSaveSuccess(): void {
+    this.previousState();
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  protected updateForm(pedido: IPedido): void {
+    this.pedido = pedido;
+    this.pedidoFormService.resetForm(this.editForm, pedido);
+  }
+}

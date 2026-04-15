@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Festa.
+    -->
+    <changeSet id="20200215135143-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="tipo_festa_id"
+                                 baseTableName="festa"
+                                 constraintName="fk_festa__tipo_festa_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tipo_festa"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="cliente_id"
+                                 baseTableName="festa"
+                                 constraintName="fk_festa__cliente_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cliente"
+                                 />
+    </changeSet>
+</databaseChangeLog>

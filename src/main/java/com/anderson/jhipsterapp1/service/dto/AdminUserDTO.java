@@ -3,11 +3,11 @@ package com.anderson.jhipsterapp1.service.dto;
 import com.anderson.jhipsterapp1.config.Constants;
 import com.anderson.jhipsterapp1.domain.Authority;
 import com.anderson.jhipsterapp1.domain.User;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.validation.constraints.*;
 
 /**
  * A DTO representing a user, with his authorities.

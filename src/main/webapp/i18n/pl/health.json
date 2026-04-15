@@ -17,8 +17,8 @@
       "hystrix": "Hystrix",
       "diskSpace": "Przestrzeń dyskowa",
       "mail": "Email",
-      "livenessState": "Liveness state",
-      "readinessState": "Readiness state",
+      "livenessState": "Stan żywotności",
+      "readinessState": "Stan gotowości",
       "ping": "Application",
       "db": "Baza danych"
     },
@@ -29,6 +29,7 @@
     "status": {
       "UNKNOWN": "NIEZNANY",
       "UP": "DOSTĘPNA",
+      "OUT_OF_SERVICE": "WYŁĄCZONE Z UŻYTKU",
       "DOWN": "NIEDOSTĘPNA"
     }
   }
