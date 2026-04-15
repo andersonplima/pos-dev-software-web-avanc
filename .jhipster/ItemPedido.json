@@ -1,0 +1,35 @@
+{
+    "name": "ItemPedido",
+    "fields": [
+        {
+            "fieldName": "nomeItem",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "valorItem",
+            "fieldType": "BigDecimal"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "pedido",
+            "otherEntityRelationshipName": "itemPedido",
+            "relationshipName": "pedido",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200215171600",
+    "entityTableName": "item_pedido",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

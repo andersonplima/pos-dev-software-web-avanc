@@ -1,0 +1,24 @@
+{
+  "jhipsterapp1App": {
+    "itemPedido": {
+      "home": {
+        "title": "Item Pedido",
+        "createLabel": "Dodaj Item Pedido",
+        "createOrEditLabel": "Dodaj lub edytuj: Item Pedido",
+        "notFound": "No Item Pedidos found"
+      },
+      "created": "Utworzono nowy obiekt typu Item Pedido z identyfikatorem {{ param }}",
+      "updated": "Uaktualniono obiekt typu Item Pedido z identyfikatorem {{ param }}",
+      "deleted": "Usunięto obiekt typu Item Pedido z identyfikatorem {{ param }}",
+      "delete": {
+        "question": "Czy na pewno chcesz usunąć Item Pedido {{ id }}?"
+      },
+      "detail": {
+        "title": "Item Pedido"
+      },
+      "nomeItem": "Nome Item",
+      "valorItem": "Valor Item",
+      "pedido": "Pedido"
+    }
+  }
+}

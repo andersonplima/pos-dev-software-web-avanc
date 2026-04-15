@@ -1,0 +1,26 @@
+{
+  "jhipsterapp1App": {
+    "festa": {
+      "home": {
+        "title": "Festa",
+        "createLabel": "Dodaj Festa",
+        "createOrEditLabel": "Dodaj lub edytuj: Festa",
+        "notFound": "No Festas found"
+      },
+      "created": "Utworzono nowy obiekt typu Festa z identyfikatorem {{ param }}",
+      "updated": "Uaktualniono obiekt typu Festa z identyfikatorem {{ param }}",
+      "deleted": "Usunięto obiekt typu Festa z identyfikatorem {{ param }}",
+      "delete": {
+        "question": "Czy na pewno chcesz usunąć Festa {{ id }}?"
+      },
+      "detail": {
+        "title": "Festa"
+      },
+      "nome": "Nome",
+      "tema": "Tema",
+      "valor": "Valor",
+      "tipoFesta": "Tipo Festa",
+      "cliente": "Cliente"
+    }
+  }
+}
