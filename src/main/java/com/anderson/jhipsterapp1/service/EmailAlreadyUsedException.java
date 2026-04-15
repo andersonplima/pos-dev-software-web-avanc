@@ -2,10 +2,9 @@ package com.anderson.jhipsterapp1.service;
 
 public class EmailAlreadyUsedException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public EmailAlreadyUsedException() {
-        super("Email is already in use!");
-    }
-
+  public EmailAlreadyUsedException() {
+    super("Email is already in use!");
+  }
 }

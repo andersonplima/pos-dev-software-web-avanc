@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<ITipoFesta[]>;
 
 @Injectable({ providedIn: 'root' })
 export class TipoFestaService {
-  public resourceUrl = SERVER_API_URL + 'api/tipo-festas';
+  public resourceUrl = `${SERVER_API_URL  }api/tipo-festas`;
 
   constructor(protected http: HttpClient) {}
 

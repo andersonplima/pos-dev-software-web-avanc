@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
-import { HttpInterceptor, HttpRequest, HttpErrorResponse, HttpHandler, HttpEvent } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
         if (!(err.status === 401 && (err.message === '' || (err.url && err.url.includes('api/account'))))) {
           this.eventManager.broadcast(new JhiEventWithContent('jhipsterapp1App.httpError', err));
         }
-      })
+      }),
     );
   }
 }

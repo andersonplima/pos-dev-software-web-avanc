@@ -6,12 +6,16 @@ import { ICliente } from 'app/shared/model/cliente.model';
 import { ClienteService } from './cliente.service';
 
 @Component({
-  templateUrl: './cliente-delete-dialog.component.html'
+  templateUrl: './cliente-delete-dialog.component.html',
 })
 export class ClienteDeleteDialogComponent {
   cliente?: ICliente;
 
-  constructor(protected clienteService: ClienteService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected clienteService: ClienteService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

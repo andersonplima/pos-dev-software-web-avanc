@@ -1,4 +1,4 @@
-import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
+import { browser, ExpectedConditions as ec, promise, protractor } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { PedidoComponentsPage, PedidoDeleteDialog, PedidoUpdatePage } from './pedido.page-object';
@@ -41,13 +41,13 @@ describe('Pedido e2e test', () => {
     await pedidoComponentsPage.clickOnCreateButton();
 
     await promise.all([
-      pedidoUpdatePage.setDataPedidoInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
-      pedidoUpdatePage.setValorPedidoInput('5')
+      pedidoUpdatePage.setDataPedidoInput(`01/01/2001${  protractor.Key.TAB  }02:30AM`),
+      pedidoUpdatePage.setValorPedidoInput('5'),
     ]);
 
     expect(await pedidoUpdatePage.getDataPedidoInput()).to.contain(
       '2001-01-01T02:30',
-      'Expected dataPedido value to be equals to 2000-12-31'
+      'Expected dataPedido value to be equals to 2000-12-31',
     );
     expect(await pedidoUpdatePage.getValorPedidoInput()).to.eq('5', 'Expected valorPedido value to be equals to 5');
 

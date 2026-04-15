@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<IFesta[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FestaService {
-  public resourceUrl = SERVER_API_URL + 'api/festas';
+  public resourceUrl = `${SERVER_API_URL  }api/festas`;
 
   constructor(protected http: HttpClient) {}
 

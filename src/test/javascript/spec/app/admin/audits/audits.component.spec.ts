@@ -3,11 +3,11 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { advanceTo } from 'jest-date-mock';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { AuditsComponent } from 'app/admin/audits/audits.component';
 import { AuditsService } from 'app/admin/audits/audits.service';
 import { Audit } from 'app/admin/audits/audit.model';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 function build2DigitsDatePart(datePart: number): string {
   return `0${datePart}`.slice(-2);
@@ -41,7 +41,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [AuditsComponent],
-        providers: [AuditsService]
+        providers: [AuditsService],
       })
         .overrideTemplate(AuditsComponent, '')
         .compileComponents();
@@ -112,9 +112,9 @@ describe('Component Tests', () => {
           of(
             new HttpResponse({
               body: [audit],
-              headers
-            })
-          )
+              headers,
+            }),
+          ),
         );
 
         // WHEN
@@ -145,8 +145,8 @@ describe('Component Tests', () => {
         // THEN
         expect(service.query).toBeCalledWith(
           expect.objectContaining({
-            sort: ['id,desc']
-          })
+            sort: ['id,desc'],
+          }),
         );
       });
 
@@ -161,8 +161,8 @@ describe('Component Tests', () => {
         // THEN
         expect(service.query).toBeCalledWith(
           expect.objectContaining({
-            sort: ['timestamp,asc', 'id']
-          })
+            sort: ['timestamp,asc', 'id'],
+          }),
         );
       });
     });

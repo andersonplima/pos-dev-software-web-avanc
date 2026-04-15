@@ -1,7 +1,6 @@
 package com.anderson.jhipsterapp1.repository;
 
 import com.anderson.jhipsterapp1.domain.ItemPedido;
-
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Long> {
-
-}
+public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Long> {}

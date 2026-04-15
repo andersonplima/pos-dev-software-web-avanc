@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, inject, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { UserManagementUpdateComponent } from 'app/admin/user-management/user-management-update.component';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('User Management Update Component', () => {
     let comp: UserManagementUpdateComponent;
     let fixture: ComponentFixture<UserManagementUpdateComponent>;
     let service: UserService;
-    const route: ActivatedRoute = ({
-      data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin') })
-    } as any) as ActivatedRoute;
+    const route: ActivatedRoute = {
+      data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin') }),
+    } as any as ActivatedRoute;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -26,9 +26,9 @@ describe('Component Tests', () => {
           FormBuilder,
           {
             provide: ActivatedRoute,
-            useValue: route
-          }
-        ]
+            useValue: route,
+          },
+        ],
       })
         .overrideTemplate(UserManagementUpdateComponent, '')
         .compileComponents();
@@ -53,7 +53,7 @@ describe('Component Tests', () => {
           // THEN
           expect(service.authorities).toHaveBeenCalled();
           expect(comp.authorities).toEqual(['USER']);
-        })
+        }),
       ));
     });
 
@@ -66,9 +66,9 @@ describe('Component Tests', () => {
           spyOn(service, 'update').and.returnValue(
             of(
               new HttpResponse({
-                body: entity
-              })
-            )
+                body: entity,
+              }),
+            ),
           );
           comp.user = entity;
           comp.editForm.patchValue({ id: entity.id });
@@ -79,7 +79,7 @@ describe('Component Tests', () => {
           // THEN
           expect(service.update).toHaveBeenCalledWith(entity);
           expect(comp.isSaving).toEqual(false);
-        })
+        }),
       ));
 
       it('Should call create service on save for new user', inject(
@@ -96,7 +96,7 @@ describe('Component Tests', () => {
           // THEN
           expect(service.create).toHaveBeenCalledWith(entity);
           expect(comp.isSaving).toEqual(false);
-        })
+        }),
       ));
     });
   });

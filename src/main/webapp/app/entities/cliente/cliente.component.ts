@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { ClienteDeleteDialogComponent } from './cliente-delete-dialog.component'
 
 @Component({
   selector: 'jhi-cliente',
-  templateUrl: './cliente.component.html'
+  templateUrl: './cliente.component.html',
 })
 export class ClienteComponent implements OnInit, OnDestroy {
   clientes?: ICliente[];
@@ -30,7 +30,7 @@ export class ClienteComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected eventManager: JhiEventManager,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
   ) {}
 
   loadPage(page?: number): void {
@@ -40,11 +40,11 @@ export class ClienteComponent implements OnInit, OnDestroy {
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
       })
       .subscribe(
         (res: HttpResponse<ICliente[]>) => this.onSuccess(res.body, res.headers, pageToLoad),
-        () => this.onError()
+        () => this.onError(),
       );
   }
 
@@ -80,7 +80,7 @@ export class ClienteComponent implements OnInit, OnDestroy {
   }
 
   sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+    const result = [`${this.predicate  },${  this.ascending ? 'asc' : 'desc'}`];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -94,8 +94,8 @@ export class ClienteComponent implements OnInit, OnDestroy {
       queryParams: {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
-      }
+        sort: `${this.predicate  },${  this.ascending ? 'asc' : 'desc'}`,
+      },
     });
     this.clientes = data || [];
   }

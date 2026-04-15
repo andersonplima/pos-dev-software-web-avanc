@@ -1,9 +1,7 @@
 package com.anderson.jhipsterapp1.service.mapper;
 
-
 import com.anderson.jhipsterapp1.domain.*;
 import com.anderson.jhipsterapp1.service.dto.PedidoDTO;
-
 import org.mapstruct.*;
 
 /**
@@ -11,15 +9,12 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {})
 public interface PedidoMapper extends EntityMapper<PedidoDTO, Pedido> {
-
-
-
-    default Pedido fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Pedido pedido = new Pedido();
-        pedido.setId(id);
-        return pedido;
+  default Pedido fromId(Long id) {
+    if (id == null) {
+      return null;
     }
+    Pedido pedido = new Pedido();
+    pedido.setId(id);
+    return pedido;
+  }
 }

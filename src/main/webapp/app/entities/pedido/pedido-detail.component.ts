@@ -5,7 +5,7 @@ import { IPedido } from 'app/shared/model/pedido.model';
 
 @Component({
   selector: 'jhi-pedido-detail',
-  templateUrl: './pedido-detail.component.html'
+  templateUrl: './pedido-detail.component.html',
 })
 export class PedidoDetailComponent implements OnInit {
   pedido: IPedido | null = null;

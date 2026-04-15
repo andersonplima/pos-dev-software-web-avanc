@@ -11,7 +11,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
 
       service = TestBed.get(LogsService);
@@ -27,7 +27,7 @@ describe('Service Tests', () => {
         service.findAll().subscribe();
 
         const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + 'management/loggers';
+        const resourceUrl = `${SERVER_API_URL  }management/loggers`;
         expect(req.request.url).toEqual(resourceUrl);
       });
 
@@ -35,7 +35,7 @@ describe('Service Tests', () => {
         service.changeLevel('main', 'ERROR').subscribe();
 
         const req = httpMock.expectOne({ method: 'POST' });
-        const resourceUrl = SERVER_API_URL + 'management/loggers/main';
+        const resourceUrl = `${SERVER_API_URL  }management/loggers/main`;
         expect(req.request.url).toEqual(resourceUrl);
         expect(req.request.body).toEqual({ configuredLevel: 'ERROR' });
       });

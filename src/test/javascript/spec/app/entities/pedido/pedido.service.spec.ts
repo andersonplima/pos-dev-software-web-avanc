@@ -16,7 +16,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
       expectedResult = null;
       injector = getTestBed();
@@ -29,12 +29,10 @@ describe('Service Tests', () => {
 
     describe('Service methods', () => {
       it('should find an element', () => {
-        const returnedFromService = Object.assign(
-          {
-            dataPedido: currentDate.format(DATE_TIME_FORMAT)
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          dataPedido: currentDate.format(DATE_TIME_FORMAT),
+          ...elemDefault,
+        };
 
         service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -44,20 +42,16 @@ describe('Service Tests', () => {
       });
 
       it('should create a Pedido', () => {
-        const returnedFromService = Object.assign(
-          {
-            id: 0,
-            dataPedido: currentDate.format(DATE_TIME_FORMAT)
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          id: 0,
+            dataPedido: currentDate.format(DATE_TIME_FORMAT),
+          ...elemDefault,
+        };
 
-        const expected = Object.assign(
-          {
-            dataPedido: currentDate
-          },
-          returnedFromService
-        );
+        const expected = {
+          dataPedido: currentDate,
+          ...returnedFromService,
+        };
 
         service.create(new Pedido()).subscribe(resp => (expectedResult = resp.body));
 
@@ -67,20 +61,16 @@ describe('Service Tests', () => {
       });
 
       it('should update a Pedido', () => {
-        const returnedFromService = Object.assign(
-          {
-            dataPedido: currentDate.format(DATE_TIME_FORMAT),
-            valorPedido: 1
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          dataPedido: currentDate.format(DATE_TIME_FORMAT),
+            valorPedido: 1,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign(
-          {
-            dataPedido: currentDate
-          },
-          returnedFromService
-        );
+        const expected = {
+          dataPedido: currentDate,
+          ...returnedFromService,
+        };
 
         service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -90,20 +80,16 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of Pedido', () => {
-        const returnedFromService = Object.assign(
-          {
-            dataPedido: currentDate.format(DATE_TIME_FORMAT),
-            valorPedido: 1
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          dataPedido: currentDate.format(DATE_TIME_FORMAT),
+            valorPedido: 1,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign(
-          {
-            dataPedido: currentDate
-          },
-          returnedFromService
-        );
+        const expected = {
+          dataPedido: currentDate,
+          ...returnedFromService,
+        };
 
         service.query().subscribe(resp => (expectedResult = resp.body));
 

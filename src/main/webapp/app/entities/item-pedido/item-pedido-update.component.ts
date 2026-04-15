@@ -6,13 +6,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IItemPedido, ItemPedido } from 'app/shared/model/item-pedido.model';
-import { ItemPedidoService } from './item-pedido.service';
 import { IPedido } from 'app/shared/model/pedido.model';
 import { PedidoService } from 'app/entities/pedido/pedido.service';
+import { ItemPedidoService } from './item-pedido.service';
 
 @Component({
   selector: 'jhi-item-pedido-update',
-  templateUrl: './item-pedido-update.component.html'
+  templateUrl: './item-pedido-update.component.html',
 })
 export class ItemPedidoUpdateComponent implements OnInit {
   isSaving = false;
@@ -22,14 +22,14 @@ export class ItemPedidoUpdateComponent implements OnInit {
     id: [],
     nomeItem: [null, [Validators.required]],
     valorItem: [],
-    pedidoId: []
+    pedidoId: [],
   });
 
   constructor(
     protected itemPedidoService: ItemPedidoService,
     protected pedidoService: PedidoService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class ItemPedidoUpdateComponent implements OnInit {
       id: itemPedido.id,
       nomeItem: itemPedido.nomeItem,
       valorItem: itemPedido.valorItem,
-      pedidoId: itemPedido.pedidoId
+      pedidoId: itemPedido.pedidoId,
     });
   }
 
@@ -69,14 +69,14 @@ export class ItemPedidoUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       nomeItem: this.editForm.get(['nomeItem'])!.value,
       valorItem: this.editForm.get(['valorItem'])!.value,
-      pedidoId: this.editForm.get(['pedidoId'])!.value
+      pedidoId: this.editForm.get(['pedidoId'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IItemPedido>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => this.onSaveError(),
     );
   }
 

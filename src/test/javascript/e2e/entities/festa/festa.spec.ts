@@ -4,7 +4,7 @@ import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 import {
   FestaComponentsPage,
   /* FestaDeleteDialog, */
-  FestaUpdatePage
+  FestaUpdatePage,
 } from './festa.page-object';
 
 const expect = chai.expect;

@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import { shareReplay, tap, catchError } from 'rxjs/operators';
+import { catchError, shareReplay, tap } from 'rxjs/operators';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -21,11 +21,11 @@ export class AccountService {
     private sessionStorage: SessionStorageService,
     private http: HttpClient,
     private stateStorageService: StateStorageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   save(account: Account): Observable<{}> {
-    return this.http.post(SERVER_API_URL + 'api/account', account);
+    return this.http.post(`${SERVER_API_URL  }api/account`, account);
   }
 
   authenticate(identity: Account | null): void {
@@ -63,7 +63,7 @@ export class AccountService {
             this.navigateToStoredUrl();
           }
         }),
-        shareReplay()
+        shareReplay(),
       );
     }
     return this.accountCache$;
@@ -82,7 +82,7 @@ export class AccountService {
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(SERVER_API_URL + 'api/account');
+    return this.http.get<Account>(`${SERVER_API_URL  }api/account`);
   }
 
   private navigateToStoredUrl(): void {

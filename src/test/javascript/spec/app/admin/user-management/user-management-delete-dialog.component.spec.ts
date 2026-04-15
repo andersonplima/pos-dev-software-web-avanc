@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, inject, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
+import { UserManagementDeleteDialogComponent } from 'app/admin/user-management/user-management-delete-dialog.component';
+import { UserService } from 'app/core/user/user.service';
 import { Jhipsterapp1TestModule } from '../../../test.module';
 import { MockEventManager } from '../../../helpers/mock-event-manager.service';
 import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
-import { UserManagementDeleteDialogComponent } from 'app/admin/user-management/user-management-delete-dialog.component';
-import { UserService } from 'app/core/user/user.service';
 
 describe('Component Tests', () => {
   describe('User Management Delete Component', () => {
@@ -20,7 +20,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
-        declarations: [UserManagementDeleteDialogComponent]
+        declarations: [UserManagementDeleteDialogComponent],
       })
         .overrideTemplate(UserManagementDeleteDialogComponent, '')
         .compileComponents();
@@ -49,7 +49,7 @@ describe('Component Tests', () => {
           expect(service.delete).toHaveBeenCalledWith('user');
           expect(mockActiveModal.closeSpy).toHaveBeenCalled();
           expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
-        })
+        }),
       ));
     });
   });

@@ -5,7 +5,7 @@ import { IFesta } from 'app/shared/model/festa.model';
 
 @Component({
   selector: 'jhi-festa-detail',
-  templateUrl: './festa-detail.component.html'
+  templateUrl: './festa-detail.component.html',
 })
 export class FestaDetailComponent implements OnInit {
   festa: IFesta | null = null;

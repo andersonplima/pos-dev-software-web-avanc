@@ -8,7 +8,7 @@ import { LANGUAGES } from 'app/core/language/language.constants';
 
 @Component({
   selector: 'jhi-settings',
-  templateUrl: './settings.component.html'
+  templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnInit {
   account!: Account;
@@ -18,10 +18,14 @@ export class SettingsComponent implements OnInit {
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    langKey: [undefined]
+    langKey: [undefined],
   });
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, private languageService: JhiLanguageService) {}
+  constructor(
+    private accountService: AccountService,
+    private fb: FormBuilder,
+    private languageService: JhiLanguageService,
+  ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
@@ -30,7 +34,7 @@ export class SettingsComponent implements OnInit {
           firstName: account.firstName,
           lastName: account.lastName,
           email: account.email,
-          langKey: account.langKey
+          langKey: account.langKey,
         });
 
         this.account = account;

@@ -2,17 +2,17 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { UserManagementDetailComponent } from 'app/admin/user-management/user-management-detail.component';
 import { User } from 'app/core/user/user.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('User Management Detail Component', () => {
     let comp: UserManagementDetailComponent;
     let fixture: ComponentFixture<UserManagementDetailComponent>;
-    const route: ActivatedRoute = ({
-      data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin') })
-    } as any) as ActivatedRoute;
+    const route: ActivatedRoute = {
+      data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin') }),
+    } as any as ActivatedRoute;
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
@@ -21,9 +21,9 @@ describe('Component Tests', () => {
         providers: [
           {
             provide: ActivatedRoute,
-            useValue: route
-          }
-        ]
+            useValue: route,
+          },
+        ],
       })
         .overrideTemplate(UserManagementDetailComponent, '')
         .compileComponents();
@@ -52,8 +52,8 @@ describe('Component Tests', () => {
             activated: true,
             langKey: 'en',
             authorities: ['ROLE_USER'],
-            createdBy: 'admin'
-          })
+            createdBy: 'admin',
+          }),
         );
       });
     });

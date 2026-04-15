@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { FestaComponent } from 'app/entities/festa/festa.component';
 import { FestaService } from 'app/entities/festa/festa.service';
 import { Festa } from 'app/shared/model/festa.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Festa Management Component', () => {
@@ -16,7 +16,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
-        declarations: [FestaComponent]
+        declarations: [FestaComponent],
       })
         .overrideTemplate(FestaComponent, '')
         .compileComponents();
@@ -33,9 +33,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Festa(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN

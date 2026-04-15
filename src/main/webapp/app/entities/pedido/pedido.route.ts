@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve, Router, Routes } from '@angular/router';
+import { EMPTY, Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
@@ -13,20 +13,23 @@ import { PedidoUpdateComponent } from './pedido-update.component';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoResolve implements Resolve<IPedido> {
-  constructor(private service: PedidoService, private router: Router) {}
+  constructor(
+    private service: PedidoService,
+    private router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IPedido> | Observable<never> {
-    const id = route.params['id'];
+    const id = route.params.id;
     if (id) {
       return this.service.find(id).pipe(
         flatMap((pedido: HttpResponse<Pedido>) => {
           if (pedido.body) {
             return of(pedido.body);
-          } else {
+          } 
             this.router.navigate(['404']);
             return EMPTY;
-          }
-        })
+          
+        }),
       );
     }
     return of(new Pedido());
@@ -39,44 +42,44 @@ export const pedidoRoute: Routes = [
     component: PedidoComponent,
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.pedido.home.title'
+      pageTitle: 'jhipsterapp1App.pedido.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
     component: PedidoDetailComponent,
     resolve: {
-      pedido: PedidoResolve
+      pedido: PedidoResolve,
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.pedido.home.title'
+      pageTitle: 'jhipsterapp1App.pedido.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
     component: PedidoUpdateComponent,
     resolve: {
-      pedido: PedidoResolve
+      pedido: PedidoResolve,
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.pedido.home.title'
+      pageTitle: 'jhipsterapp1App.pedido.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/edit',
     component: PedidoUpdateComponent,
     resolve: {
-      pedido: PedidoResolve
+      pedido: PedidoResolve,
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.pedido.home.title'
+      pageTitle: 'jhipsterapp1App.pedido.home.title',
     },
-    canActivate: [UserRouteAccessService]
-  }
+    canActivate: [UserRouteAccessService],
+  },
 ];

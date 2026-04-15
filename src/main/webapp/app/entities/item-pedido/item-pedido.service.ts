@@ -11,7 +11,7 @@ type EntityArrayResponseType = HttpResponse<IItemPedido[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ItemPedidoService {
-  public resourceUrl = SERVER_API_URL + 'api/item-pedidos';
+  public resourceUrl = `${SERVER_API_URL  }api/item-pedidos`;
 
   constructor(protected http: HttpClient) {}
 

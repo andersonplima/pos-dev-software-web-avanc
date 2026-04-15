@@ -15,7 +15,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
-        providers: [JhiDateUtils]
+        providers: [JhiDateUtils],
       });
 
       service = TestBed.get(UserService);
@@ -31,7 +31,7 @@ describe('Service Tests', () => {
         service.find('user').subscribe();
 
         const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + 'api/users';
+        const resourceUrl = `${SERVER_API_URL  }api/users`;
         expect(req.request.url).toEqual(`${resourceUrl}/user`);
       });
 
@@ -69,7 +69,7 @@ describe('Service Tests', () => {
         const req = httpMock.expectOne({ method: 'GET' });
         req.flush('Invalid request parameters', {
           status: 404,
-          statusText: 'Bad Request'
+          statusText: 'Bad Request',
         });
         expect(expectedResult).toEqual(404);
       });

@@ -3,10 +3,10 @@ import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { PedidoComponent } from 'app/entities/pedido/pedido.component';
 import { PedidoService } from 'app/entities/pedido/pedido.service';
 import { Pedido } from 'app/shared/model/pedido.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Pedido Management Component', () => {
@@ -28,13 +28,13 @@ describe('Component Tests', () => {
                     pagingParams: {
                       predicate: 'id',
                       reverse: false,
-                      page: 0
-                    }
-                  })
-              }
-            }
-          }
-        ]
+                      page: 0,
+                    },
+                  }),
+              },
+            },
+          },
+        ],
       })
         .overrideTemplate(PedidoComponent, '')
         .compileComponents();
@@ -51,9 +51,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Pedido(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN
@@ -71,9 +71,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Pedido(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN
@@ -91,9 +91,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Pedido(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN

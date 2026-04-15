@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -7,7 +7,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
   selector: 'jhi-password-reset-finish',
-  templateUrl: './password-reset-finish.component.html'
+  templateUrl: './password-reset-finish.component.html',
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   @ViewChild('newPassword', { static: false })
@@ -21,7 +21,7 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
 
   passwordForm = this.fb.group({
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
+    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
   });
 
   constructor(
@@ -29,13 +29,13 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     private loginModalService: LoginModalService,
     private route: ActivatedRoute,
     private renderer: Renderer,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      if (params['key']) {
-        this.key = params['key'];
+      if (params.key) {
+        this.key = params.key;
       }
       this.initialized = true;
     });
@@ -59,7 +59,7 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     } else {
       this.passwordResetFinishService.save(this.key, newPassword).subscribe(
         () => (this.success = true),
-        () => (this.error = true)
+        () => (this.error = true),
       );
     }
   }

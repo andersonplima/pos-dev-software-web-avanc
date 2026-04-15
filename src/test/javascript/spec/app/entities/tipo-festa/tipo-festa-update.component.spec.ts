@@ -3,10 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { TipoFestaUpdateComponent } from 'app/entities/tipo-festa/tipo-festa-update.component';
 import { TipoFestaService } from 'app/entities/tipo-festa/tipo-festa.service';
 import { TipoFesta } from 'app/shared/model/tipo-festa.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('TipoFesta Management Update Component', () => {
@@ -18,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [TipoFestaUpdateComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(TipoFestaUpdateComponent, '')
         .compileComponents();

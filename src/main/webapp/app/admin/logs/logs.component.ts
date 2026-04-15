@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Log, LoggersResponse, Logger, Level } from './log.model';
+import { Level, Log, Logger, LoggersResponse } from './log.model';
 import { LogsService } from './logs.service';
 
 @Component({
   selector: 'jhi-logs',
-  templateUrl: './logs.component.html'
+  templateUrl: './logs.component.html',
 })
 export class LogsComponent implements OnInit {
   loggers?: Log[];
@@ -28,7 +28,7 @@ export class LogsComponent implements OnInit {
       .findAll()
       .subscribe(
         (response: LoggersResponse) =>
-          (this.loggers = Object.entries(response.loggers).map((logger: [string, Logger]) => new Log(logger[0], logger[1].effectiveLevel)))
+          (this.loggers = Object.entries(response.loggers).map((logger: [string, Logger]) => new Log(logger[0], logger[1].effectiveLevel))),
       );
   }
 }

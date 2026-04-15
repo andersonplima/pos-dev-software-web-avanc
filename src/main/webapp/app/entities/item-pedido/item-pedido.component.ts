@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks } from 'ng-jhipster';
@@ -12,7 +12,7 @@ import { ItemPedidoDeleteDialogComponent } from './item-pedido-delete-dialog.com
 
 @Component({
   selector: 'jhi-item-pedido',
-  templateUrl: './item-pedido.component.html'
+  templateUrl: './item-pedido.component.html',
 })
 export class ItemPedidoComponent implements OnInit, OnDestroy {
   itemPedidos: IItemPedido[];
@@ -27,13 +27,13 @@ export class ItemPedidoComponent implements OnInit, OnDestroy {
     protected itemPedidoService: ItemPedidoService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
-    protected parseLinks: JhiParseLinks
+    protected parseLinks: JhiParseLinks,
   ) {
     this.itemPedidos = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.page = 0;
     this.links = {
-      last: 0
+      last: 0,
     };
     this.predicate = 'id';
     this.ascending = true;
@@ -44,7 +44,7 @@ export class ItemPedidoComponent implements OnInit, OnDestroy {
       .query({
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
       })
       .subscribe((res: HttpResponse<IItemPedido[]>) => this.paginateItemPedidos(res.body, res.headers));
   }
@@ -86,7 +86,7 @@ export class ItemPedidoComponent implements OnInit, OnDestroy {
   }
 
   sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+    const result = [`${this.predicate  },${  this.ascending ? 'asc' : 'desc'}`];
     if (this.predicate !== 'id') {
       result.push('id');
     }

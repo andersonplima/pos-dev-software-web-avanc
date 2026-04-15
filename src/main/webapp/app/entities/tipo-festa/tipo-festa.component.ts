@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
@@ -10,13 +10,17 @@ import { TipoFestaDeleteDialogComponent } from './tipo-festa-delete-dialog.compo
 
 @Component({
   selector: 'jhi-tipo-festa',
-  templateUrl: './tipo-festa.component.html'
+  templateUrl: './tipo-festa.component.html',
 })
 export class TipoFestaComponent implements OnInit, OnDestroy {
   tipoFestas?: ITipoFesta[];
   eventSubscriber?: Subscription;
 
-  constructor(protected tipoFestaService: TipoFestaService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
+  constructor(
+    protected tipoFestaService: TipoFestaService,
+    protected eventManager: JhiEventManager,
+    protected modalService: NgbModal,
+  ) {}
 
   loadAll(): void {
     this.tipoFestaService.query().subscribe((res: HttpResponse<ITipoFesta[]>) => (this.tipoFestas = res.body || []));

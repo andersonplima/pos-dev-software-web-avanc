@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { LogsComponent } from 'app/admin/logs/logs.component';
 import { LogsService } from 'app/admin/logs/logs.service';
 import { Log } from 'app/admin/logs/log.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('LogsComponent', () => {
@@ -16,7 +16,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [LogsComponent],
-        providers: [LogsService]
+        providers: [LogsService],
       })
         .overrideTemplate(LogsComponent, '')
         .compileComponents();
@@ -42,10 +42,10 @@ describe('Component Tests', () => {
           of({
             loggers: {
               main: {
-                effectiveLevel: 'WARN'
-              }
-            }
-          })
+                effectiveLevel: 'WARN',
+              },
+            },
+          }),
         );
 
         // WHEN
@@ -66,10 +66,10 @@ describe('Component Tests', () => {
           of({
             loggers: {
               main: {
-                effectiveLevel: 'ERROR'
-              }
-            }
-          })
+                effectiveLevel: 'ERROR',
+              },
+            },
+          }),
         );
 
         // WHEN

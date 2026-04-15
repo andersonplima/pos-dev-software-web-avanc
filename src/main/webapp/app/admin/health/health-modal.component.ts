@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { HealthKey, HealthDetails } from './health.service';
+import { HealthDetails, HealthKey } from './health.service';
 
 @Component({
   selector: 'jhi-health-modal',
-  templateUrl: './health-modal.component.html'
+  templateUrl: './health-modal.component.html',
 })
 export class HealthModalComponent {
   health?: { key: HealthKey; value: HealthDetails };
@@ -18,17 +18,17 @@ export class HealthModalComponent {
       const val = value / 1073741824;
       if (val > 1) {
         // Value
-        return val.toFixed(2) + ' GB';
-      } else {
-        return (value / 1048576).toFixed(2) + ' MB';
-      }
+        return `${val.toFixed(2)  } GB`;
+      } 
+        return `${(value / 1048576).toFixed(2)  } MB`;
+      
     }
 
     if (typeof value === 'object') {
       return JSON.stringify(value);
-    } else {
+    } 
       return value.toString();
-    }
+    
   }
 
   dismiss(): void {

@@ -43,7 +43,7 @@ describe('ItemPedido e2e test', () => {
     await promise.all([
       itemPedidoUpdatePage.setNomeItemInput('nomeItem'),
       itemPedidoUpdatePage.setValorItemInput('5'),
-      itemPedidoUpdatePage.pedidoSelectLastOption()
+      itemPedidoUpdatePage.pedidoSelectLastOption(),
     ]);
 
     expect(await itemPedidoUpdatePage.getNomeItemInput()).to.eq('nomeItem', 'Expected NomeItem value to be equals to nomeItem');

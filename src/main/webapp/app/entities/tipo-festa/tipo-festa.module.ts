@@ -11,6 +11,6 @@ import { tipoFestaRoute } from './tipo-festa.route';
 @NgModule({
   imports: [Jhipsterapp1SharedModule, RouterModule.forChild(tipoFestaRoute)],
   declarations: [TipoFestaComponent, TipoFestaDetailComponent, TipoFestaUpdateComponent, TipoFestaDeleteDialogComponent],
-  entryComponents: [TipoFestaDeleteDialogComponent]
+  entryComponents: [TipoFestaDeleteDialogComponent],
 })
 export class Jhipsterapp1TipoFestaModule {}

@@ -3,9 +3,9 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../../test.module';
 import { PasswordResetInitComponent } from 'app/account/password-reset/init/password-reset-init.component';
 import { PasswordResetInitService } from 'app/account/password-reset/init/password-reset-init.service';
+import { Jhipsterapp1TestModule } from '../../../../test.module';
 
 describe('Component Tests', () => {
   describe('PasswordResetInitComponent', () => {
@@ -16,7 +16,7 @@ describe('Component Tests', () => {
       fixture = TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [PasswordResetInitComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(PasswordResetInitComponent, '')
         .createComponent(PasswordResetInitComponent);
@@ -25,7 +25,7 @@ describe('Component Tests', () => {
 
     it('sets focus after the view has been initialized', () => {
       const node = {
-        focus(): void {}
+        focus(): void {},
       };
       comp.email = new ElementRef(node);
       spyOn(node, 'focus');
@@ -38,7 +38,7 @@ describe('Component Tests', () => {
     it('notifies of success upon successful requestReset', inject([PasswordResetInitService], (service: PasswordResetInitService) => {
       spyOn(service, 'save').and.returnValue(of({}));
       comp.resetRequestForm.patchValue({
-        email: 'user@domain.com'
+        email: 'user@domain.com',
       });
 
       comp.requestReset();
@@ -51,11 +51,11 @@ describe('Component Tests', () => {
       spyOn(service, 'save').and.returnValue(
         throwError({
           status: 503,
-          data: 'something else'
-        })
+          data: 'something else',
+        }),
       );
       comp.resetRequestForm.patchValue({
-        email: 'user@domain.com'
+        email: 'user@domain.com',
       });
       comp.requestReset();
 

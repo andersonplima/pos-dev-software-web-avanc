@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { FestaService } from 'app/entities/festa/festa.service';
-import { IFesta, Festa } from 'app/shared/model/festa.model';
+import { Festa, IFesta } from 'app/shared/model/festa.model';
 
 describe('Service Tests', () => {
   describe('Festa Service', () => {
@@ -13,7 +13,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
       expectedResult = null;
       injector = getTestBed();
@@ -25,7 +25,7 @@ describe('Service Tests', () => {
 
     describe('Service methods', () => {
       it('should find an element', () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = { ...elemDefault};
 
         service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -35,14 +35,12 @@ describe('Service Tests', () => {
       });
 
       it('should create a Festa', () => {
-        const returnedFromService = Object.assign(
-          {
-            id: 0
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          id: 0,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.create(new Festa()).subscribe(resp => (expectedResult = resp.body));
 
@@ -52,16 +50,14 @@ describe('Service Tests', () => {
       });
 
       it('should update a Festa', () => {
-        const returnedFromService = Object.assign(
-          {
-            nome: 'BBBBBB',
+        const returnedFromService = {
+          nome: 'BBBBBB',
             tema: 'BBBBBB',
-            valor: 1
-          },
-          elemDefault
-        );
+            valor: 1,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -71,16 +67,14 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of Festa', () => {
-        const returnedFromService = Object.assign(
-          {
-            nome: 'BBBBBB',
+        const returnedFromService = {
+          nome: 'BBBBBB',
             tema: 'BBBBBB',
-            valor: 1
-          },
-          elemDefault
-        );
+            valor: 1,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.query().subscribe(resp => (expectedResult = resp.body));
 

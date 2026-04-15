@@ -13,7 +13,11 @@ type JwtToken = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(private http: HttpClient, private $localStorage: LocalStorageService, private $sessionStorage: SessionStorageService) {}
+  constructor(
+    private http: HttpClient,
+    private $localStorage: LocalStorageService,
+    private $sessionStorage: SessionStorageService,
+  ) {}
 
   getToken(): string {
     return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken') || '';
@@ -21,7 +25,7 @@ export class AuthServerProvider {
 
   login(credentials: Login): Observable<void> {
     return this.http
-      .post<JwtToken>(SERVER_API_URL + 'api/authenticate', credentials)
+      .post<JwtToken>(`${SERVER_API_URL  }api/authenticate`, credentials)
       .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
   }
 

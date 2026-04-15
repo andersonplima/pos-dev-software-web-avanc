@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { JhiAlertService, JhiAlert } from 'ng-jhipster';
+import { JhiAlert, JhiAlertService } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-alert',
@@ -11,7 +11,7 @@ import { JhiAlertService, JhiAlert } from 'ng-jhipster';
         </ngb-alert>
       </div>
     </div>
-  `
+  `,
 })
 export class AlertComponent implements OnInit, OnDestroy {
   alerts: JhiAlert[] = [];

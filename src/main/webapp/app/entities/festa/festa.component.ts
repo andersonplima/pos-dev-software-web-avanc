@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
@@ -10,13 +10,17 @@ import { FestaDeleteDialogComponent } from './festa-delete-dialog.component';
 
 @Component({
   selector: 'jhi-festa',
-  templateUrl: './festa.component.html'
+  templateUrl: './festa.component.html',
 })
 export class FestaComponent implements OnInit, OnDestroy {
   festas?: IFesta[];
   eventSubscriber?: Subscription;
 
-  constructor(protected festaService: FestaService, protected eventManager: JhiEventManager, protected modalService: NgbModal) {}
+  constructor(
+    protected festaService: FestaService,
+    protected eventManager: JhiEventManager,
+    protected modalService: NgbModal,
+  ) {}
 
   loadAll(): void {
     this.festaService.query().subscribe((res: HttpResponse<IFesta[]>) => (this.festas = res.body || []));

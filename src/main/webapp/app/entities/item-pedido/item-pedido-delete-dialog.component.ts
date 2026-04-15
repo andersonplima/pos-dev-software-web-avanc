@@ -6,7 +6,7 @@ import { IItemPedido } from 'app/shared/model/item-pedido.model';
 import { ItemPedidoService } from './item-pedido.service';
 
 @Component({
-  templateUrl: './item-pedido-delete-dialog.component.html'
+  templateUrl: './item-pedido-delete-dialog.component.html',
 })
 export class ItemPedidoDeleteDialogComponent {
   itemPedido?: IItemPedido;
@@ -14,7 +14,7 @@ export class ItemPedidoDeleteDialogComponent {
   constructor(
     protected itemPedidoService: ItemPedidoService,
     public activeModal: NgbActiveModal,
-    protected eventManager: JhiEventManager
+    protected eventManager: JhiEventManager,
   ) {}
 
   cancel(): void {
