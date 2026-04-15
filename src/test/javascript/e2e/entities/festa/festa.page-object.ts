@@ -1,4 +1,4 @@
-import { element, by, ElementFinder } from 'protractor';
+import { ElementFinder, by, element } from 'protractor';
 
 export class FestaComponentsPage {
   createButton = element(by.id('jh-create-entity'));
@@ -65,10 +65,7 @@ export class FestaUpdatePage {
   }
 
   async tipoFestaSelectLastOption(): Promise<void> {
-    await this.tipoFestaSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
+    await this.tipoFestaSelect.all(by.tagName('option')).last().click();
   }
 
   async tipoFestaSelectOption(option: string): Promise<void> {
@@ -84,10 +81,7 @@ export class FestaUpdatePage {
   }
 
   async clienteSelectLastOption(): Promise<void> {
-    await this.clienteSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
+    await this.clienteSelect.all(by.tagName('option')).last().click();
   }
 
   async clienteSelectOption(option: string): Promise<void> {

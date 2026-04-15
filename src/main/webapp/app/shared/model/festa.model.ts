@@ -18,6 +18,6 @@ export class Festa implements IFesta {
     public tipoFestaNome?: string,
     public tipoFestaId?: number,
     public clienteCpf?: string,
-    public clienteId?: number
+    public clienteId?: number,
   ) {}
 }

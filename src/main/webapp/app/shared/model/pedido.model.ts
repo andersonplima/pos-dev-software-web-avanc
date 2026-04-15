@@ -7,5 +7,9 @@ export interface IPedido {
 }
 
 export class Pedido implements IPedido {
-  constructor(public id?: number, public dataPedido?: Moment, public valorPedido?: number) {}
+  constructor(
+    public id?: number,
+    public dataPedido?: Moment,
+    public valorPedido?: number,
+  ) {}
 }

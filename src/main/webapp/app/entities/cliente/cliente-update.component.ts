@@ -5,12 +5,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { ICliente, Cliente } from 'app/shared/model/cliente.model';
+import { Cliente, ICliente } from 'app/shared/model/cliente.model';
 import { ClienteService } from './cliente.service';
 
 @Component({
   selector: 'jhi-cliente-update',
-  templateUrl: './cliente-update.component.html'
+  templateUrl: './cliente-update.component.html',
 })
 export class ClienteUpdateComponent implements OnInit {
   isSaving = false;
@@ -18,10 +18,14 @@ export class ClienteUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     nome: [null, [Validators.required, Validators.maxLength(100)]],
-    cpf: [null, [Validators.required, Validators.pattern('[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}')]]
+    cpf: [null, [Validators.required, Validators.pattern('[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}')]],
   });
 
-  constructor(protected clienteService: ClienteService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected clienteService: ClienteService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ cliente }) => {
@@ -33,7 +37,7 @@ export class ClienteUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: cliente.id,
       nome: cliente.nome,
-      cpf: cliente.cpf
+      cpf: cliente.cpf,
     });
   }
 
@@ -56,14 +60,14 @@ export class ClienteUpdateComponent implements OnInit {
       ...new Cliente(),
       id: this.editForm.get(['id'])!.value,
       nome: this.editForm.get(['nome'])!.value,
-      cpf: this.editForm.get(['cpf'])!.value
+      cpf: this.editForm.get(['cpf'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICliente>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => this.onSaveError(),
     );
   }
 

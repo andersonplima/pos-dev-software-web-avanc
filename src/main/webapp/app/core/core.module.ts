@@ -1,12 +1,12 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { DatePipe, registerLocaleData } from '@angular/common';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { CookieModule } from 'ngx-cookie';
-import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NgxWebstorageModule } from 'ngx-webstorage';
-import { NgJhipsterModule, translatePartialLoader, missingTranslationHandler, JhiConfigService, JhiLanguageService } from 'ng-jhipster';
+import { JhiConfigService, JhiLanguageService, NgJhipsterModule, missingTranslationHandler, translatePartialLoader } from 'ng-jhipster';
 import locale from '@angular/common/locales/pt';
 
 import * as moment from 'moment';
@@ -30,50 +30,50 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
       alertAsToast: false,
       alertTimeout: 5000,
       i18nEnabled: true,
-      defaultI18nLang: 'pt-br'
+      defaultI18nLang: 'pt-br',
     }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: translatePartialLoader,
-        deps: [HttpClient]
+        deps: [HttpClient],
       },
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useFactory: missingTranslationHandler,
-        deps: [JhiConfigService]
-      }
-    })
+        deps: [JhiConfigService],
+      },
+    }),
   ],
   providers: [
     Title,
     {
       provide: LOCALE_ID,
-      useValue: 'pt'
+      useValue: 'pt',
     },
     { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
     DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthExpiredInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorHandlerInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: NotificationInterceptor,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class Jhipsterapp1CoreModule {
   constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig, languageService: JhiLanguageService) {

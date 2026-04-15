@@ -3,10 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { ClienteUpdateComponent } from 'app/entities/cliente/cliente-update.component';
 import { ClienteService } from 'app/entities/cliente/cliente.service';
 import { Cliente } from 'app/shared/model/cliente.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Cliente Management Update Component', () => {
@@ -18,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [ClienteUpdateComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(ClienteUpdateComponent, '')
         .compileComponents();

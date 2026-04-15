@@ -3,10 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { PedidoUpdateComponent } from 'app/entities/pedido/pedido-update.component';
 import { PedidoService } from 'app/entities/pedido/pedido.service';
 import { Pedido } from 'app/shared/model/pedido.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Pedido Management Update Component', () => {
@@ -18,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [PedidoUpdateComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(PedidoUpdateComponent, '')
         .compileComponents();

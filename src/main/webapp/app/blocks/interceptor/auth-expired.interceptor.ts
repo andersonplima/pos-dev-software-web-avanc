@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
     private loginService: LoginService,
     private loginModalService: LoginModalService,
     private stateStorageService: StateStorageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -26,7 +26,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
           this.router.navigate(['']);
           this.loginModalService.open();
         }
-      })
+      }),
     );
   }
 }

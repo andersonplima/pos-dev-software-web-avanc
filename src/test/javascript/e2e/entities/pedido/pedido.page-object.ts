@@ -1,4 +1,4 @@
-import { element, by, ElementFinder } from 'protractor';
+import { ElementFinder, by, element } from 'protractor';
 
 export class PedidoComponentsPage {
   createButton = element(by.id('jh-create-entity'));

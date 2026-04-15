@@ -3,10 +3,10 @@ import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Data } from '@angular/router';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { ClienteComponent } from 'app/entities/cliente/cliente.component';
 import { ClienteService } from 'app/entities/cliente/cliente.service';
 import { Cliente } from 'app/shared/model/cliente.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Cliente Management Component', () => {
@@ -28,13 +28,13 @@ describe('Component Tests', () => {
                     pagingParams: {
                       predicate: 'id',
                       reverse: false,
-                      page: 0
-                    }
-                  })
-              }
-            }
-          }
-        ]
+                      page: 0,
+                    },
+                  }),
+              },
+            },
+          },
+        ],
       })
         .overrideTemplate(ClienteComponent, '')
         .compileComponents();
@@ -51,9 +51,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Cliente(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN
@@ -71,9 +71,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new Cliente(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN

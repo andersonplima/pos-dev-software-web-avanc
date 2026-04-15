@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
-import { JhiEventManager, JhiAlert, JhiAlertService, JhiEventWithContent } from 'ng-jhipster';
+import { JhiAlert, JhiAlertService, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
 
 import { AlertError } from './alert-error.model';
@@ -16,14 +16,18 @@ import { AlertError } from './alert-error.model';
         </ngb-alert>
       </div>
     </div>
-  `
+  `,
 })
 export class AlertErrorComponent implements OnDestroy {
   alerts: JhiAlert[] = [];
   errorListener: Subscription;
   httpErrorListener: Subscription;
 
-  constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager, translateService: TranslateService) {
+  constructor(
+    private alertService: JhiAlertService,
+    private eventManager: JhiEventManager,
+    translateService: TranslateService,
+  ) {
     this.errorListener = eventManager.subscribe('jhipsterapp1App.error', (response: JhiEventWithContent<AlertError>) => {
       const errorResponse = response.content;
       this.addErrorAlert(errorResponse.message, errorResponse.key, errorResponse.params);
@@ -49,7 +53,7 @@ export class AlertErrorComponent implements OnDestroy {
             }
           });
           if (errorHeader) {
-            const entityName = translateService.instant('global.menu.entities.' + entityKey);
+            const entityName = translateService.instant(`global.menu.entities.${  entityKey}`);
             this.addErrorAlert(errorHeader, errorHeader, { entityName });
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
             const fieldErrors = httpErrorResponse.error.fieldErrors;
@@ -59,8 +63,8 @@ export class AlertErrorComponent implements OnDestroy {
               }
               // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
               const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-              const fieldName = translateService.instant('jhipsterapp1App.' + fieldError.objectName + '.' + convertedField);
-              this.addErrorAlert('Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
+              const fieldName = translateService.instant(`jhipsterapp1App.${  fieldError.objectName  }.${  convertedField}`);
+              this.addErrorAlert(`Error on field "${  fieldName  }"`, `error.${  fieldError.message}`, { fieldName });
             }
           } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
             this.addErrorAlert(httpErrorResponse.error.message, httpErrorResponse.error.message, httpErrorResponse.error.params);
@@ -110,7 +114,7 @@ export class AlertErrorComponent implements OnDestroy {
       params: data,
       timeout: 5000,
       toast: this.alertService.isToast(),
-      scoped: true
+      scoped: true,
     };
 
     this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));

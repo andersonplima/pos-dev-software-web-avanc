@@ -12,7 +12,7 @@ import { PedidoService } from './pedido.service';
 
 @Component({
   selector: 'jhi-pedido-update',
-  templateUrl: './pedido-update.component.html'
+  templateUrl: './pedido-update.component.html',
 })
 export class PedidoUpdateComponent implements OnInit {
   isSaving = false;
@@ -20,10 +20,14 @@ export class PedidoUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     dataPedido: [],
-    valorPedido: [null, [Validators.required]]
+    valorPedido: [null, [Validators.required]],
   });
 
-  constructor(protected pedidoService: PedidoService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected pedidoService: PedidoService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ pedido }) => {
@@ -40,7 +44,7 @@ export class PedidoUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: pedido.id,
       dataPedido: pedido.dataPedido ? pedido.dataPedido.format(DATE_TIME_FORMAT) : null,
-      valorPedido: pedido.valorPedido
+      valorPedido: pedido.valorPedido,
     });
   }
 
@@ -63,14 +67,14 @@ export class PedidoUpdateComponent implements OnInit {
       ...new Pedido(),
       id: this.editForm.get(['id'])!.value,
       dataPedido: this.editForm.get(['dataPedido'])!.value ? moment(this.editForm.get(['dataPedido'])!.value, DATE_TIME_FORMAT) : undefined,
-      valorPedido: this.editForm.get(['valorPedido'])!.value
+      valorPedido: this.editForm.get(['valorPedido'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPedido>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => this.onSaveError(),
     );
   }
 

@@ -8,5 +8,10 @@ export interface ITipoFesta {
 }
 
 export class TipoFesta implements ITipoFesta {
-  constructor(public id?: number, public nome?: string, public descricao?: string, public festas?: IFesta[]) {}
+  constructor(
+    public id?: number,
+    public nome?: string,
+    public descricao?: string,
+    public festas?: IFesta[],
+  ) {}
 }

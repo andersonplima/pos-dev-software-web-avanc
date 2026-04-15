@@ -6,12 +6,16 @@ import { IFesta } from 'app/shared/model/festa.model';
 import { FestaService } from './festa.service';
 
 @Component({
-  templateUrl: './festa-delete-dialog.component.html'
+  templateUrl: './festa-delete-dialog.component.html',
 })
 export class FestaDeleteDialogComponent {
   festa?: IFesta;
 
-  constructor(protected festaService: FestaService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected festaService: FestaService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

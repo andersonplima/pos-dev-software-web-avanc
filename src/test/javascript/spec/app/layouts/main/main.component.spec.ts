@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, RouterEvent, NavigationEnd } from '@angular/router';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { Subject, of } from 'rxjs';
-import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { MainComponent } from 'app/layouts/main/main.component';
 import { Jhipsterapp1TestModule } from '../../../test.module';
@@ -21,7 +21,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule, TranslateModule.forRoot()],
         declarations: [MainComponent],
-        providers: [Title]
+        providers: [Title],
       })
         .overrideTemplate(MainComponent, '')
         .compileComponents();
@@ -48,7 +48,7 @@ describe('Component Tests', () => {
         routerState = { snapshot: { root: {} } };
         router.setRouterState(routerState);
         spyOn(translateService, 'get').and.callFake((key: string) => {
-          return of(key + ' translated');
+          return of(`${key  } translated`);
         });
         translateService.currentLang = 'pt-br';
         spyOn(titleService, 'setTitle');
@@ -62,7 +62,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(defaultPageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(defaultPageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${defaultPageTitle  } translated`);
         });
 
         it('should set page title to root route pageTitle if there is no child routes', () => {
@@ -74,7 +74,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${parentRoutePageTitle  } translated`);
         });
 
         it('should set page title to child route pageTitle if child routes exist and pageTitle is set for child route', () => {
@@ -87,7 +87,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(childRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(childRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${childRoutePageTitle  } translated`);
         });
 
         it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', () => {
@@ -100,7 +100,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${parentRoutePageTitle  } translated`);
         });
 
         it('should set page title to parent route pageTitle if child routes exists but data is not set for child route', () => {
@@ -113,7 +113,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${parentRoutePageTitle  } translated`);
         });
       });
 
@@ -124,7 +124,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(defaultPageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(defaultPageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${defaultPageTitle  } translated`);
         });
 
         it('should set page title to root route pageTitle if there is no child routes', () => {
@@ -136,7 +136,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${parentRoutePageTitle  } translated`);
         });
 
         it('should set page title to child route pageTitle if child routes exist and pageTitle is set for child route', () => {
@@ -149,7 +149,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(childRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(childRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${childRoutePageTitle  } translated`);
         });
 
         it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', () => {
@@ -162,7 +162,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${parentRoutePageTitle  } translated`);
         });
 
         it('should set page title to parent route pageTitle if child routes exists but data is not set for child route', () => {
@@ -175,7 +175,7 @@ describe('Component Tests', () => {
 
           // THEN
           expect(translateService.get).toHaveBeenCalledWith(parentRoutePageTitle);
-          expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle + ' translated');
+          expect(titleService.setTitle).toHaveBeenCalledWith(`${parentRoutePageTitle  } translated`);
         });
       });
     });

@@ -1,7 +1,7 @@
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ClienteService } from 'app/entities/cliente/cliente.service';
-import { ICliente, Cliente } from 'app/shared/model/cliente.model';
+import { Cliente, ICliente } from 'app/shared/model/cliente.model';
 
 describe('Service Tests', () => {
   describe('Cliente Service', () => {
@@ -13,7 +13,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
       expectedResult = null;
       injector = getTestBed();
@@ -25,7 +25,7 @@ describe('Service Tests', () => {
 
     describe('Service methods', () => {
       it('should find an element', () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = { ...elemDefault};
 
         service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -35,14 +35,12 @@ describe('Service Tests', () => {
       });
 
       it('should create a Cliente', () => {
-        const returnedFromService = Object.assign(
-          {
-            id: 0
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          id: 0,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.create(new Cliente()).subscribe(resp => (expectedResult = resp.body));
 
@@ -52,15 +50,13 @@ describe('Service Tests', () => {
       });
 
       it('should update a Cliente', () => {
-        const returnedFromService = Object.assign(
-          {
-            nome: 'BBBBBB',
-            cpf: 'BBBBBB'
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          nome: 'BBBBBB',
+            cpf: 'BBBBBB',
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -70,15 +66,13 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of Cliente', () => {
-        const returnedFromService = Object.assign(
-          {
-            nome: 'BBBBBB',
-            cpf: 'BBBBBB'
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          nome: 'BBBBBB',
+            cpf: 'BBBBBB',
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.query().subscribe(resp => (expectedResult = resp.body));
 

@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 
+import { ItemPedidoDeleteDialogComponent } from 'app/entities/item-pedido/item-pedido-delete-dialog.component';
+import { ItemPedidoService } from 'app/entities/item-pedido/item-pedido.service';
 import { Jhipsterapp1TestModule } from '../../../test.module';
 import { MockEventManager } from '../../../helpers/mock-event-manager.service';
 import { MockActiveModal } from '../../../helpers/mock-active-modal.service';
-import { ItemPedidoDeleteDialogComponent } from 'app/entities/item-pedido/item-pedido-delete-dialog.component';
-import { ItemPedidoService } from 'app/entities/item-pedido/item-pedido.service';
 
 describe('Component Tests', () => {
   describe('ItemPedido Management Delete Component', () => {
@@ -20,7 +20,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
-        declarations: [ItemPedidoDeleteDialogComponent]
+        declarations: [ItemPedidoDeleteDialogComponent],
       })
         .overrideTemplate(ItemPedidoDeleteDialogComponent, '')
         .compileComponents();
@@ -46,7 +46,7 @@ describe('Component Tests', () => {
           expect(service.delete).toHaveBeenCalledWith(123);
           expect(mockActiveModal.closeSpy).toHaveBeenCalled();
           expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
-        })
+        }),
       ));
 
       it('Should not call delete service on clear', () => {

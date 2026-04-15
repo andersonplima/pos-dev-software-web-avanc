@@ -8,5 +8,10 @@ export interface ICliente {
 }
 
 export class Cliente implements ICliente {
-  constructor(public id?: number, public nome?: string, public cpf?: string, public festas?: IFesta[]) {}
+  constructor(
+    public id?: number,
+    public nome?: string,
+    public cpf?: string,
+    public festas?: IFesta[],
+  ) {}
 }

@@ -6,5 +6,10 @@ export interface IItemPedido {
 }
 
 export class ItemPedido implements IItemPedido {
-  constructor(public id?: number, public nomeItem?: string, public valorItem?: number, public pedidoId?: number) {}
+  constructor(
+    public id?: number,
+    public nomeItem?: string,
+    public valorItem?: number,
+    public pedidoId?: number,
+  ) {}
 }

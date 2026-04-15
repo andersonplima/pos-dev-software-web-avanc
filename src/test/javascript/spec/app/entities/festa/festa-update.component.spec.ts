@@ -3,10 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { FestaUpdateComponent } from 'app/entities/festa/festa-update.component';
 import { FestaService } from 'app/entities/festa/festa.service';
 import { Festa } from 'app/shared/model/festa.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Festa Management Update Component', () => {
@@ -18,7 +18,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [FestaUpdateComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(FestaUpdateComponent, '')
         .compileComponents();

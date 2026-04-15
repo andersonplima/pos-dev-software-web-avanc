@@ -6,12 +6,16 @@ import { ITipoFesta } from 'app/shared/model/tipo-festa.model';
 import { TipoFestaService } from './tipo-festa.service';
 
 @Component({
-  templateUrl: './tipo-festa-delete-dialog.component.html'
+  templateUrl: './tipo-festa-delete-dialog.component.html',
 })
 export class TipoFestaDeleteDialogComponent {
   tipoFesta?: ITipoFesta;
 
-  constructor(protected tipoFestaService: TipoFestaService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected tipoFestaService: TipoFestaService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

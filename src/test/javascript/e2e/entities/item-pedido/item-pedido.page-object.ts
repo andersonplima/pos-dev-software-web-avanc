@@ -1,4 +1,4 @@
-import { element, by, ElementFinder } from 'protractor';
+import { ElementFinder, by, element } from 'protractor';
 
 export class ItemPedidoComponentsPage {
   createButton = element(by.id('jh-create-entity'));
@@ -55,10 +55,7 @@ export class ItemPedidoUpdatePage {
   }
 
   async pedidoSelectLastOption(): Promise<void> {
-    await this.pedidoSelect
-      .all(by.tagName('option'))
-      .last()
-      .click();
+    await this.pedidoSelect.all(by.tagName('option')).last().click();
   }
 
   async pedidoSelectOption(option: string): Promise<void> {

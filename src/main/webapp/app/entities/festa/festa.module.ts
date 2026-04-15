@@ -11,6 +11,6 @@ import { festaRoute } from './festa.route';
 @NgModule({
   imports: [Jhipsterapp1SharedModule, RouterModule.forChild(festaRoute)],
   declarations: [FestaComponent, FestaDetailComponent, FestaUpdateComponent, FestaDeleteDialogComponent],
-  entryComponents: [FestaDeleteDialogComponent]
+  entryComponents: [FestaDeleteDialogComponent],
 })
 export class Jhipsterapp1FestaModule {}

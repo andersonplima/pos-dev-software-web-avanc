@@ -6,12 +6,16 @@ import { IPedido } from 'app/shared/model/pedido.model';
 import { PedidoService } from './pedido.service';
 
 @Component({
-  templateUrl: './pedido-delete-dialog.component.html'
+  templateUrl: './pedido-delete-dialog.component.html',
 })
 export class PedidoDeleteDialogComponent {
   pedido?: IPedido;
 
-  constructor(protected pedidoService: PedidoService, public activeModal: NgbActiveModal, protected eventManager: JhiEventManager) {}
+  constructor(
+    protected pedidoService: PedidoService,
+    public activeModal: NgbActiveModal,
+    protected eventManager: JhiEventManager,
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();

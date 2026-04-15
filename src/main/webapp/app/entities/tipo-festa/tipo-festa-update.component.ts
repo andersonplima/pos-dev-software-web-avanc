@@ -10,7 +10,7 @@ import { TipoFestaService } from './tipo-festa.service';
 
 @Component({
   selector: 'jhi-tipo-festa-update',
-  templateUrl: './tipo-festa-update.component.html'
+  templateUrl: './tipo-festa-update.component.html',
 })
 export class TipoFestaUpdateComponent implements OnInit {
   isSaving = false;
@@ -18,10 +18,14 @@ export class TipoFestaUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     nome: [null, [Validators.required, Validators.maxLength(50)]],
-    descricao: [null, [Validators.required, Validators.maxLength(100)]]
+    descricao: [null, [Validators.required, Validators.maxLength(100)]],
   });
 
-  constructor(protected tipoFestaService: TipoFestaService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected tipoFestaService: TipoFestaService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tipoFesta }) => {
@@ -33,7 +37,7 @@ export class TipoFestaUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: tipoFesta.id,
       nome: tipoFesta.nome,
-      descricao: tipoFesta.descricao
+      descricao: tipoFesta.descricao,
     });
   }
 
@@ -56,14 +60,14 @@ export class TipoFestaUpdateComponent implements OnInit {
       ...new TipoFesta(),
       id: this.editForm.get(['id'])!.value,
       nome: this.editForm.get(['nome'])!.value,
-      descricao: this.editForm.get(['descricao'])!.value
+      descricao: this.editForm.get(['descricao'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITipoFesta>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => this.onSaveError(),
     );
   }
 

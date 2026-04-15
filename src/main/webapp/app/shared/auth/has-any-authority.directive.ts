@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Directive, Input, OnDestroy, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -15,13 +15,17 @@ import { AccountService } from 'app/core/auth/account.service';
  * ```
  */
 @Directive({
-  selector: '[jhiHasAnyAuthority]'
+  selector: '[jhiHasAnyAuthority]',
 })
 export class HasAnyAuthorityDirective implements OnDestroy {
   private authorities: string[] = [];
   private authenticationSubscription?: Subscription;
 
-  constructor(private accountService: AccountService, private templateRef: TemplateRef<any>, private viewContainerRef: ViewContainerRef) {}
+  constructor(
+    private accountService: AccountService,
+    private templateRef: TemplateRef<any>,
+    private viewContainerRef: ViewContainerRef,
+  ) {}
 
   @Input()
   set jhiHasAnyAuthority(value: string | string[]) {

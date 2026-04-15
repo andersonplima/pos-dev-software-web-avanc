@@ -13,7 +13,7 @@ type EntityArrayResponseType = HttpResponse<IPedido[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
-  public resourceUrl = SERVER_API_URL + 'api/pedidos';
+  public resourceUrl = `${SERVER_API_URL  }api/pedidos`;
 
   constructor(protected http: HttpClient) {}
 
@@ -49,9 +49,7 @@ export class PedidoService {
   }
 
   protected convertDateFromClient(pedido: IPedido): IPedido {
-    const copy: IPedido = Object.assign({}, pedido, {
-      dataPedido: pedido.dataPedido && pedido.dataPedido.isValid() ? pedido.dataPedido.toJSON() : undefined
-    });
+    const copy: IPedido = { ...pedido, dataPedido: pedido.dataPedido && pedido.dataPedido.isValid() ? pedido.dataPedido.toJSON() : undefined,};
     return copy;
   }
 

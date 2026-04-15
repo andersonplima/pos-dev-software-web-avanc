@@ -4,32 +4,32 @@ package com.anderson.jhipsterapp1.service.dto;
  * A DTO representing a password change required data - current and new password.
  */
 public class PasswordChangeDTO {
-    private String currentPassword;
-    private String newPassword;
 
-    public PasswordChangeDTO() {
-        // Empty constructor needed for Jackson.
-    }
+  private String currentPassword;
+  private String newPassword;
 
-    public PasswordChangeDTO(String currentPassword, String newPassword) {
-        this.currentPassword = currentPassword;
-        this.newPassword = newPassword;
-    }
+  public PasswordChangeDTO() {
+    // Empty constructor needed for Jackson.
+  }
 
-    public String getCurrentPassword() {
+  public PasswordChangeDTO(String currentPassword, String newPassword) {
+    this.currentPassword = currentPassword;
+    this.newPassword = newPassword;
+  }
 
-        return currentPassword;
-    }
+  public String getCurrentPassword() {
+    return currentPassword;
+  }
 
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
-    }
+  public void setCurrentPassword(String currentPassword) {
+    this.currentPassword = currentPassword;
+  }
 
-    public String getNewPassword() {
-        return newPassword;
-    }
+  public String getNewPassword() {
+    return newPassword;
+  }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
+  public void setNewPassword(String newPassword) {
+    this.newPassword = newPassword;
+  }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router';
-import { Observable, of, EMPTY } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve, Router, Routes } from '@angular/router';
+import { EMPTY, Observable, of } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
@@ -13,20 +13,23 @@ import { TipoFestaUpdateComponent } from './tipo-festa-update.component';
 
 @Injectable({ providedIn: 'root' })
 export class TipoFestaResolve implements Resolve<ITipoFesta> {
-  constructor(private service: TipoFestaService, private router: Router) {}
+  constructor(
+    private service: TipoFestaService,
+    private router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ITipoFesta> | Observable<never> {
-    const id = route.params['id'];
+    const id = route.params.id;
     if (id) {
       return this.service.find(id).pipe(
         flatMap((tipoFesta: HttpResponse<TipoFesta>) => {
           if (tipoFesta.body) {
             return of(tipoFesta.body);
-          } else {
+          } 
             this.router.navigate(['404']);
             return EMPTY;
-          }
-        })
+          
+        }),
       );
     }
     return of(new TipoFesta());
@@ -39,44 +42,44 @@ export const tipoFestaRoute: Routes = [
     component: TipoFestaComponent,
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.tipoFesta.home.title'
+      pageTitle: 'jhipsterapp1App.tipoFesta.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/view',
     component: TipoFestaDetailComponent,
     resolve: {
-      tipoFesta: TipoFestaResolve
+      tipoFesta: TipoFestaResolve,
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.tipoFesta.home.title'
+      pageTitle: 'jhipsterapp1App.tipoFesta.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
     component: TipoFestaUpdateComponent,
     resolve: {
-      tipoFesta: TipoFestaResolve
+      tipoFesta: TipoFestaResolve,
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.tipoFesta.home.title'
+      pageTitle: 'jhipsterapp1App.tipoFesta.home.title',
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
     path: ':id/edit',
     component: TipoFestaUpdateComponent,
     resolve: {
-      tipoFesta: TipoFestaResolve
+      tipoFesta: TipoFestaResolve,
     },
     data: {
       authorities: ['ROLE_USER'],
-      pageTitle: 'jhipsterapp1App.tipoFesta.home.title'
+      pageTitle: 'jhipsterapp1App.tipoFesta.home.title',
     },
-    canActivate: [UserRouteAccessService]
-  }
+    canActivate: [UserRouteAccessService],
+  },
 ];

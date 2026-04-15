@@ -2,21 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { ClienteDetailComponent } from 'app/entities/cliente/cliente-detail.component';
 import { Cliente } from 'app/shared/model/cliente.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Cliente Management Detail Component', () => {
     let comp: ClienteDetailComponent;
     let fixture: ComponentFixture<ClienteDetailComponent>;
-    const route = ({ data: of({ cliente: new Cliente(123) }) } as any) as ActivatedRoute;
+    const route = { data: of({ cliente: new Cliente(123) }) } as any as ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [ClienteDetailComponent],
-        providers: [{ provide: ActivatedRoute, useValue: route }]
+        providers: [{ provide: ActivatedRoute, useValue: route }],
       })
         .overrideTemplate(ClienteDetailComponent, '')
         .compileComponents();

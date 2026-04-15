@@ -13,11 +13,11 @@ export class UserRouteAccessService implements CanActivate {
     private router: Router,
     private loginModalService: LoginModalService,
     private accountService: AccountService,
-    private stateStorageService: StateStorageService
+    private stateStorageService: StateStorageService,
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const authorities = route.data['authorities'];
+    const authorities = route.data.authorities;
     // We need to call the checkLogin / and so the accountService.identity() function, to ensure,
     // that the client has a principal too, if they already logged in by the server.
     // This could happen on a page refresh.
@@ -47,7 +47,7 @@ export class UserRouteAccessService implements CanActivate {
         this.router.navigate(['']);
         this.loginModalService.open();
         return false;
-      })
+      }),
     );
   }
 }

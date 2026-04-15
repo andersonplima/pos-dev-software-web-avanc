@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ConfigurationService, ConfigProps, Env, Bean, PropertySource } from 'app/admin/configuration/configuration.service';
+import { Bean, ConfigProps, ConfigurationService, Env, PropertySource } from 'app/admin/configuration/configuration.service';
 import { SERVER_API_URL } from 'app/app.constants';
 
 describe('Service Tests', () => {
@@ -12,7 +12,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
 
       expectedResult = null;
@@ -29,7 +29,7 @@ describe('Service Tests', () => {
         service.getBeans().subscribe();
 
         const req = httpMock.expectOne({ method: 'GET' });
-        const resourceUrl = SERVER_API_URL + 'management/configprops';
+        const resourceUrl = `${SERVER_API_URL  }management/configprops`;
         expect(req.request.url).toEqual(resourceUrl);
       });
 
@@ -38,18 +38,18 @@ describe('Service Tests', () => {
           prefix: 'jhipster',
           properties: {
             clientApp: {
-              name: 'jhipsterApp'
-            }
-          }
+              name: 'jhipsterApp',
+            },
+          },
         };
         const configProps: ConfigProps = {
           contexts: {
             jhipster: {
               beans: {
-                'io.github.jhipster.config.JHipsterProperties': bean
-              }
-            }
-          }
+                'io.github.jhipster.config.JHipsterProperties': bean,
+              },
+            },
+          },
         };
         service.getBeans().subscribe(received => (expectedResult = received));
 
@@ -64,10 +64,10 @@ describe('Service Tests', () => {
             name: 'server.ports',
             properties: {
               'local.server.port': {
-                value: '8080'
-              }
-            }
-          }
+                value: '8080',
+              },
+            },
+          },
         ];
         const env: Env = { propertySources };
         service.getPropertySources().subscribe(received => (expectedResult = received));

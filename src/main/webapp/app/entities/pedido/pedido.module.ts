@@ -11,6 +11,6 @@ import { pedidoRoute } from './pedido.route';
 @NgModule({
   imports: [Jhipsterapp1SharedModule, RouterModule.forChild(pedidoRoute)],
   declarations: [PedidoComponent, PedidoDetailComponent, PedidoUpdateComponent, PedidoDeleteDialogComponent],
-  entryComponents: [PedidoDeleteDialogComponent]
+  entryComponents: [PedidoDeleteDialogComponent],
 })
 export class Jhipsterapp1PedidoModule {}

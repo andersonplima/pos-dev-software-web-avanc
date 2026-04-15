@@ -5,18 +5,18 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IFesta, Festa } from 'app/shared/model/festa.model';
-import { FestaService } from './festa.service';
+import { Festa, IFesta } from 'app/shared/model/festa.model';
 import { ITipoFesta } from 'app/shared/model/tipo-festa.model';
 import { TipoFestaService } from 'app/entities/tipo-festa/tipo-festa.service';
 import { ICliente } from 'app/shared/model/cliente.model';
 import { ClienteService } from 'app/entities/cliente/cliente.service';
+import { FestaService } from './festa.service';
 
 type SelectableEntity = ITipoFesta | ICliente;
 
 @Component({
   selector: 'jhi-festa-update',
-  templateUrl: './festa-update.component.html'
+  templateUrl: './festa-update.component.html',
 })
 export class FestaUpdateComponent implements OnInit {
   isSaving = false;
@@ -29,7 +29,7 @@ export class FestaUpdateComponent implements OnInit {
     tema: [null, [Validators.required, Validators.maxLength(50)]],
     valor: [null, [Validators.required, Validators.min(0)]],
     tipoFestaId: [null, Validators.required],
-    clienteId: [null, Validators.required]
+    clienteId: [null, Validators.required],
   });
 
   constructor(
@@ -37,7 +37,7 @@ export class FestaUpdateComponent implements OnInit {
     protected tipoFestaService: TipoFestaService,
     protected clienteService: ClienteService,
     protected activatedRoute: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +57,7 @@ export class FestaUpdateComponent implements OnInit {
       tema: festa.tema,
       valor: festa.valor,
       tipoFestaId: festa.tipoFestaId,
-      clienteId: festa.clienteId
+      clienteId: festa.clienteId,
     });
   }
 
@@ -83,14 +83,14 @@ export class FestaUpdateComponent implements OnInit {
       tema: this.editForm.get(['tema'])!.value,
       valor: this.editForm.get(['valor'])!.value,
       tipoFestaId: this.editForm.get(['tipoFestaId'])!.value,
-      clienteId: this.editForm.get(['clienteId'])!.value
+      clienteId: this.editForm.get(['clienteId'])!.value,
     };
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IFesta>>): void {
     result.subscribe(
       () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => this.onSaveError(),
     );
   }
 

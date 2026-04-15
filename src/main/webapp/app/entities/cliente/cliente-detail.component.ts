@@ -5,7 +5,7 @@ import { ICliente } from 'app/shared/model/cliente.model';
 
 @Component({
   selector: 'jhi-cliente-detail',
-  templateUrl: './cliente-detail.component.html'
+  templateUrl: './cliente-detail.component.html',
 })
 export class ClienteDetailComponent implements OnInit {
   cliente: ICliente | null = null;

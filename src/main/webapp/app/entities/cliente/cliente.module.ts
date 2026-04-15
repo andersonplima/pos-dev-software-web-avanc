@@ -11,6 +11,6 @@ import { clienteRoute } from './cliente.route';
 @NgModule({
   imports: [Jhipsterapp1SharedModule, RouterModule.forChild(clienteRoute)],
   declarations: [ClienteComponent, ClienteDetailComponent, ClienteUpdateComponent, ClienteDeleteDialogComponent],
-  entryComponents: [ClienteDeleteDialogComponent]
+  entryComponents: [ClienteDeleteDialogComponent],
 })
 export class Jhipsterapp1ClienteModule {}

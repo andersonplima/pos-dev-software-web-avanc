@@ -8,7 +8,7 @@ import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-user-mgmt-update',
-  templateUrl: './user-management-update.component.html'
+  templateUrl: './user-management-update.component.html',
 })
 export class UserManagementUpdateComponent implements OnInit {
   user!: User;
@@ -24,10 +24,14 @@ export class UserManagementUpdateComponent implements OnInit {
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     activated: [],
     langKey: [],
-    authorities: []
+    authorities: [],
   });
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe(({ user }) => {
@@ -54,12 +58,12 @@ export class UserManagementUpdateComponent implements OnInit {
     if (this.user.id !== undefined) {
       this.userService.update(this.user).subscribe(
         () => this.onSaveSuccess(),
-        () => this.onSaveError()
+        () => this.onSaveError(),
       );
     } else {
       this.userService.create(this.user).subscribe(
         () => this.onSaveSuccess(),
-        () => this.onSaveError()
+        () => this.onSaveError(),
       );
     }
   }
@@ -73,7 +77,7 @@ export class UserManagementUpdateComponent implements OnInit {
       email: user.email,
       activated: user.activated,
       langKey: user.langKey,
-      authorities: user.authorities
+      authorities: user.authorities,
     });
   }
 

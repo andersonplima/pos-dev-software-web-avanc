@@ -25,6 +25,6 @@ export class HealthService {
   constructor(private http: HttpClient) {}
 
   checkHealth(): Observable<Health> {
-    return this.http.get<Health>(SERVER_API_URL + 'management/health');
+    return this.http.get<Health>(`${SERVER_API_URL  }management/health`);
   }
 }

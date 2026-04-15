@@ -2,21 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { PedidoDetailComponent } from 'app/entities/pedido/pedido-detail.component';
 import { Pedido } from 'app/shared/model/pedido.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('Pedido Management Detail Component', () => {
     let comp: PedidoDetailComponent;
     let fixture: ComponentFixture<PedidoDetailComponent>;
-    const route = ({ data: of({ pedido: new Pedido(123) }) } as any) as ActivatedRoute;
+    const route = { data: of({ pedido: new Pedido(123) }) } as any as ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [PedidoDetailComponent],
-        providers: [{ provide: ActivatedRoute, useValue: route }]
+        providers: [{ provide: ActivatedRoute, useValue: route }],
       })
         .overrideTemplate(PedidoDetailComponent, '')
         .compileComponents();

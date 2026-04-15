@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpHeaders } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { UserManagementDeleteDialogComponent } from './user-management-delete-di
 
 @Component({
   selector: 'jhi-user-mgmt',
-  templateUrl: './user-management.component.html'
+  templateUrl: './user-management.component.html',
 })
 export class UserManagementComponent implements OnInit, OnDestroy {
   currentAccount: Account | null = null;
@@ -34,7 +34,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private eventManager: JhiEventManager,
-    private modalService: NgbModal
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -50,8 +50,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
             this.currentAccount = account;
             this.loadAll();
             this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
-          }
-        )
+          },
+        ),
       )
       .subscribe();
   }
@@ -82,8 +82,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       relativeTo: this.activatedRoute.parent,
       queryParams: {
         page: this.page,
-        sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
-      }
+        sort: `${this.predicate  },${  this.ascending ? 'asc' : 'desc'}`,
+      },
     });
     this.loadAll();
   }
@@ -98,13 +98,13 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       .query({
         page: this.page - 1,
         size: this.itemsPerPage,
-        sort: this.sort()
+        sort: this.sort(),
       })
       .subscribe((res: HttpResponse<User[]>) => this.onSuccess(res.body, res.headers));
   }
 
   private sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+    const result = [`${this.predicate  },${  this.ascending ? 'asc' : 'desc'}`];
     if (this.predicate !== 'id') {
       result.push('id');
     }

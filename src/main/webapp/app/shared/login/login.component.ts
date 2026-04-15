@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Renderer, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { LoginService } from 'app/core/login/login.service';
 
 @Component({
   selector: 'jhi-login-modal',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
 })
 export class LoginModalComponent implements AfterViewInit {
   @ViewChild('username', { static: false })
@@ -18,7 +18,7 @@ export class LoginModalComponent implements AfterViewInit {
   loginForm = this.fb.group({
     username: [''],
     password: [''],
-    rememberMe: [false]
+    rememberMe: [false],
   });
 
   constructor(
@@ -26,7 +26,7 @@ export class LoginModalComponent implements AfterViewInit {
     private renderer: Renderer,
     private router: Router,
     public activeModal: NgbActiveModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngAfterViewInit(): void {
@@ -39,7 +39,7 @@ export class LoginModalComponent implements AfterViewInit {
     this.authenticationError = false;
     this.loginForm.patchValue({
       username: '',
-      password: ''
+      password: '',
     });
     this.activeModal.dismiss('cancel');
   }
@@ -49,7 +49,7 @@ export class LoginModalComponent implements AfterViewInit {
       .login({
         username: this.loginForm.get('username')!.value,
         password: this.loginForm.get('password')!.value,
-        rememberMe: this.loginForm.get('rememberMe')!.value
+        rememberMe: this.loginForm.get('rememberMe')!.value,
       })
       .subscribe(
         () => {
@@ -63,7 +63,7 @@ export class LoginModalComponent implements AfterViewInit {
             this.router.navigate(['']);
           }
         },
-        () => (this.authenticationError = true)
+        () => (this.authenticationError = true),
       );
   }
 

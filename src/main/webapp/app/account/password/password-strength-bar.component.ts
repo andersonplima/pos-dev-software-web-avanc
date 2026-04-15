@@ -14,12 +14,15 @@ import { Component, ElementRef, Input, Renderer } from '@angular/core';
       </ul>
     </div>
   `,
-  styleUrls: ['password-strength-bar.scss']
+  styleUrls: ['password-strength-bar.scss'],
 })
 export class PasswordStrengthBarComponent {
   colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0'];
 
-  constructor(private renderer: Renderer, private elementRef: ElementRef) {}
+  constructor(
+    private renderer: Renderer,
+    private elementRef: ElementRef,
+  ) {}
 
   measureStrength(p: string): number {
     let force = 0;

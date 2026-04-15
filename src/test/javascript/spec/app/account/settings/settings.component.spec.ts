@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { throwError, of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { SettingsComponent } from 'app/account/settings/settings.component';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 import { MockAccountService } from '../../../helpers/mock-account.service';
 
 describe('Component Tests', () => {
@@ -21,14 +21,14 @@ describe('Component Tests', () => {
       langKey: 'pt-br',
       login: 'john',
       authorities: [],
-      imageUrl: ''
+      imageUrl: '',
     };
 
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
         declarations: [SettingsComponent],
-        providers: [FormBuilder]
+        providers: [FormBuilder],
       })
         .overrideTemplate(SettingsComponent, '')
         .compileComponents();
@@ -48,7 +48,7 @@ describe('Component Tests', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john.doe@mail.com',
-        langKey: 'pt-br'
+        langKey: 'pt-br',
       };
 
       // WHEN

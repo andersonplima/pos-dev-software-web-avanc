@@ -2,7 +2,6 @@ package com.anderson.jhipsterapp1.config;
 
 import com.anderson.jhipsterapp1.security.*;
 import com.anderson.jhipsterapp1.security.jwt.*;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
@@ -24,37 +23,38 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
+  private final TokenProvider tokenProvider;
 
-    private final CorsFilter corsFilter;
-    private final SecurityProblemSupport problemSupport;
+  private final CorsFilter corsFilter;
+  private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
-        this.tokenProvider = tokenProvider;
-        this.corsFilter = corsFilter;
-        this.problemSupport = problemSupport;
-    }
+  public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter, SecurityProblemSupport problemSupport) {
+    this.tokenProvider = tokenProvider;
+    this.corsFilter = corsFilter;
+    this.problemSupport = problemSupport;
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
-            .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/i18n/**")
-            .antMatchers("/content/**")
-            .antMatchers("/h2-console/**")
-            .antMatchers("/swagger-ui/index.html")
-            .antMatchers("/test/**");
-    }
+  @Override
+  public void configure(WebSecurity web) {
+    web
+      .ignoring()
+      .antMatchers(HttpMethod.OPTIONS, "/**")
+      .antMatchers("/app/**/*.{js,html}")
+      .antMatchers("/i18n/**")
+      .antMatchers("/content/**")
+      .antMatchers("/h2-console/**")
+      .antMatchers("/swagger-ui/index.html")
+      .antMatchers("/test/**");
+  }
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
+  @Override
+  public void configure(HttpSecurity http) throws Exception {
+    // @formatter:off
         http
             .csrf()
             .disable()
@@ -91,10 +91,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .httpBasic()
         .and()
             .apply(securityConfigurerAdapter());
-        // @formatter:on
-    }
+    // @formatter:on
+  }
 
-    private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
-    }
+  private JWTConfigurer securityConfigurerAdapter() {
+    return new JWTConfigurer(tokenProvider);
+  }
 }

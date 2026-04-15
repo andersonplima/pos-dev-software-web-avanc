@@ -4,11 +4,11 @@ import { map, shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
-import { ProfileInfo, InfoResponse } from './profile-info.model';
+import { InfoResponse, ProfileInfo } from './profile-info.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
-  private infoUrl = SERVER_API_URL + 'management/info';
+  private infoUrl = `${SERVER_API_URL  }management/info`;
   private profileInfo$!: Observable<ProfileInfo>;
 
   constructor(private http: HttpClient) {}
@@ -23,12 +23,12 @@ export class ProfileService {
         const profileInfo: ProfileInfo = {
           activeProfiles: response.activeProfiles,
           inProduction: response.activeProfiles && response.activeProfiles.includes('prod'),
-          swaggerEnabled: response.activeProfiles && response.activeProfiles.includes('swagger')
+          swaggerEnabled: response.activeProfiles && response.activeProfiles.includes('swagger'),
         };
         if (response.activeProfiles && response['display-ribbon-on-profiles']) {
           const displayRibbonOnProfiles = response['display-ribbon-on-profiles'].split(',');
           const ribbonProfiles = displayRibbonOnProfiles.filter(
-            profile => response.activeProfiles && response.activeProfiles.includes(profile)
+            profile => response.activeProfiles && response.activeProfiles.includes(profile),
           );
           if (ribbonProfiles.length > 0) {
             profileInfo.ribbonEnv = ribbonProfiles[0];
@@ -36,7 +36,7 @@ export class ProfileService {
         }
         return profileInfo;
       }),
-      shareReplay()
+      shareReplay(),
     );
     return this.profileInfo$;
   }

@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { TipoFestaComponent } from 'app/entities/tipo-festa/tipo-festa.component';
 import { TipoFestaService } from 'app/entities/tipo-festa/tipo-festa.service';
 import { TipoFesta } from 'app/shared/model/tipo-festa.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('TipoFesta Management Component', () => {
@@ -16,7 +16,7 @@ describe('Component Tests', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
-        declarations: [TipoFestaComponent]
+        declarations: [TipoFestaComponent],
       })
         .overrideTemplate(TipoFestaComponent, '')
         .compileComponents();
@@ -33,9 +33,9 @@ describe('Component Tests', () => {
         of(
           new HttpResponse({
             body: [new TipoFesta(123)],
-            headers
-          })
-        )
+            headers,
+          }),
+        ),
       );
 
       // WHEN

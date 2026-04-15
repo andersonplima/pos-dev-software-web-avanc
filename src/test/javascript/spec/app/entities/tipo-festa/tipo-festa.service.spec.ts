@@ -13,7 +13,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule]
+        imports: [HttpClientTestingModule],
       });
       expectedResult = null;
       injector = getTestBed();
@@ -25,7 +25,7 @@ describe('Service Tests', () => {
 
     describe('Service methods', () => {
       it('should find an element', () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = { ...elemDefault};
 
         service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -35,14 +35,12 @@ describe('Service Tests', () => {
       });
 
       it('should create a TipoFesta', () => {
-        const returnedFromService = Object.assign(
-          {
-            id: 0
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          id: 0,
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.create(new TipoFesta()).subscribe(resp => (expectedResult = resp.body));
 
@@ -52,15 +50,13 @@ describe('Service Tests', () => {
       });
 
       it('should update a TipoFesta', () => {
-        const returnedFromService = Object.assign(
-          {
-            nome: 'BBBBBB',
-            descricao: 'BBBBBB'
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          nome: 'BBBBBB',
+            descricao: 'BBBBBB',
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -70,15 +66,13 @@ describe('Service Tests', () => {
       });
 
       it('should return a list of TipoFesta', () => {
-        const returnedFromService = Object.assign(
-          {
-            nome: 'BBBBBB',
-            descricao: 'BBBBBB'
-          },
-          elemDefault
-        );
+        const returnedFromService = {
+          nome: 'BBBBBB',
+            descricao: 'BBBBBB',
+          ...elemDefault,
+        };
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = { ...returnedFromService};
 
         service.query().subscribe(resp => (expectedResult = resp.body));
 

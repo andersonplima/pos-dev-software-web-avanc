@@ -1,11 +1,11 @@
-import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async, fakeAsync, inject, tick } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 
-import { Jhipsterapp1TestModule } from '../../../test.module';
 import { UserManagementComponent } from 'app/admin/user-management/user-management.component';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
+import { Jhipsterapp1TestModule } from '../../../test.module';
 
 describe('Component Tests', () => {
   describe('User Management Component', () => {
@@ -16,7 +16,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [Jhipsterapp1TestModule],
-        declarations: [UserManagementComponent]
+        declarations: [UserManagementComponent],
       })
         .overrideTemplate(UserManagementComponent, '')
         .compileComponents();
@@ -38,9 +38,9 @@ describe('Component Tests', () => {
             of(
               new HttpResponse({
                 body: [new User(123)],
-                headers
-              })
-            )
+                headers,
+              }),
+            ),
           );
 
           // WHEN
@@ -50,7 +50,7 @@ describe('Component Tests', () => {
           // THEN
           expect(service.query).toHaveBeenCalled();
           expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({ id: 123 }));
-        })
+        }),
       ));
     });
 
@@ -65,9 +65,9 @@ describe('Component Tests', () => {
             of(
               new HttpResponse({
                 body: [user],
-                headers
-              })
-            )
+                headers,
+              }),
+            ),
           );
           spyOn(service, 'update').and.returnValue(of(new HttpResponse({ status: 200 })));
 
@@ -79,7 +79,7 @@ describe('Component Tests', () => {
           expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
           expect(service.query).toHaveBeenCalled();
           expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({ id: 123 }));
-        })
+        }),
       ));
     });
   });

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Renderer, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
@@ -9,7 +9,7 @@ import { RegisterService } from './register.service';
 
 @Component({
   selector: 'jhi-register',
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent implements AfterViewInit {
   @ViewChild('login', { static: false })
@@ -25,7 +25,7 @@ export class RegisterComponent implements AfterViewInit {
     login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*$')]],
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]]
+    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
   });
 
   constructor(
@@ -33,7 +33,7 @@ export class RegisterComponent implements AfterViewInit {
     private loginModalService: LoginModalService,
     private registerService: RegisterService,
     private renderer: Renderer,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {}
 
   ngAfterViewInit(): void {
@@ -56,7 +56,7 @@ export class RegisterComponent implements AfterViewInit {
       const email = this.registerForm.get(['email'])!.value;
       this.registerService.save({ login, email, password, langKey: this.languageService.getCurrentLanguage() }).subscribe(
         () => (this.success = true),
-        response => this.processError(response)
+        response => this.processError(response),
       );
     }
   }
