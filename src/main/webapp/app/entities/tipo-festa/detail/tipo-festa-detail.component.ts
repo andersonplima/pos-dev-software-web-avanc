@@ -1,22 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+import SharedModule from 'app/shared/shared.module';
 import { ITipoFesta } from '../tipo-festa.model';
 
 @Component({
   selector: 'jhi-tipo-festa-detail',
   templateUrl: './tipo-festa-detail.component.html',
+  imports: [SharedModule, RouterModule],
 })
-export class TipoFestaDetailComponent implements OnInit {
-  tipoFesta: ITipoFesta | null = null;
-
-  constructor(protected activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ tipoFesta }) => {
-      this.tipoFesta = tipoFesta;
-    });
-  }
+export class TipoFestaDetailComponent {
+  tipoFesta = input<ITipoFesta | null>(null);
 
   previousState(): void {
     window.history.back();

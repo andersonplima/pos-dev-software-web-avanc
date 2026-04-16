@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link TipoFesta}.
+ * Service Implementation for managing {@link com.anderson.jhipsterapp1.domain.TipoFesta}.
  */
 @Service
 @Transactional
 public class TipoFestaService {
 
-    private final Logger log = LoggerFactory.getLogger(TipoFestaService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TipoFestaService.class);
 
     private final TipoFestaRepository tipoFestaRepository;
 
@@ -38,7 +38,7 @@ public class TipoFestaService {
      * @return the persisted entity.
      */
     public TipoFestaDTO save(TipoFestaDTO tipoFestaDTO) {
-        log.debug("Request to save TipoFesta : {}", tipoFestaDTO);
+        LOG.debug("Request to save TipoFesta : {}", tipoFestaDTO);
         TipoFesta tipoFesta = tipoFestaMapper.toEntity(tipoFestaDTO);
         tipoFesta = tipoFestaRepository.save(tipoFesta);
         return tipoFestaMapper.toDto(tipoFesta);
@@ -51,7 +51,7 @@ public class TipoFestaService {
      * @return the persisted entity.
      */
     public TipoFestaDTO update(TipoFestaDTO tipoFestaDTO) {
-        log.debug("Request to update TipoFesta : {}", tipoFestaDTO);
+        LOG.debug("Request to update TipoFesta : {}", tipoFestaDTO);
         TipoFesta tipoFesta = tipoFestaMapper.toEntity(tipoFestaDTO);
         tipoFesta = tipoFestaRepository.save(tipoFesta);
         return tipoFestaMapper.toDto(tipoFesta);
@@ -64,7 +64,7 @@ public class TipoFestaService {
      * @return the persisted entity.
      */
     public Optional<TipoFestaDTO> partialUpdate(TipoFestaDTO tipoFestaDTO) {
-        log.debug("Request to partially update TipoFesta : {}", tipoFestaDTO);
+        LOG.debug("Request to partially update TipoFesta : {}", tipoFestaDTO);
 
         return tipoFestaRepository
             .findById(tipoFestaDTO.getId())
@@ -84,7 +84,7 @@ public class TipoFestaService {
      */
     @Transactional(readOnly = true)
     public List<TipoFestaDTO> findAll() {
-        log.debug("Request to get all TipoFestas");
+        LOG.debug("Request to get all TipoFestas");
         return tipoFestaRepository.findAll().stream().map(tipoFestaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -96,7 +96,7 @@ public class TipoFestaService {
      */
     @Transactional(readOnly = true)
     public Optional<TipoFestaDTO> findOne(Long id) {
-        log.debug("Request to get TipoFesta : {}", id);
+        LOG.debug("Request to get TipoFesta : {}", id);
         return tipoFestaRepository.findById(id).map(tipoFestaMapper::toDto);
     }
 
@@ -106,7 +106,7 @@ public class TipoFestaService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete TipoFesta : {}", id);
+        LOG.debug("Request to delete TipoFesta : {}", id);
         tipoFestaRepository.deleteById(id);
     }
 }

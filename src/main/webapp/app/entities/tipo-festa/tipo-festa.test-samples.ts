@@ -1,26 +1,26 @@
 import { ITipoFesta, NewTipoFesta } from './tipo-festa.model';
 
 export const sampleWithRequiredData: ITipoFesta = {
-  id: 51205,
-  nome: 'auxiliary',
-  descricao: 'interactive',
+  id: 27946,
+  nome: 'scope openly by',
+  descricao: 'unibody gadzooks',
 };
 
 export const sampleWithPartialData: ITipoFesta = {
-  id: 20392,
-  nome: 'channels',
-  descricao: 'backing',
+  id: 2277,
+  nome: 'afraid',
+  descricao: 'tabulate murky boo',
 };
 
 export const sampleWithFullData: ITipoFesta = {
-  id: 31219,
-  nome: 'transmitting heuristic',
-  descricao: 'Mônaco Lustroso Account',
+  id: 4561,
+  nome: 'kowtow geez',
+  descricao: 'mispronounce critical than',
 };
 
 export const sampleWithNewData: NewTipoFesta = {
-  nome: 'Account Mercearia',
-  descricao: 'synthesizing',
+  nome: 'pfft',
+  descricao: 'beyond less grounded',
   id: null,
 };
 

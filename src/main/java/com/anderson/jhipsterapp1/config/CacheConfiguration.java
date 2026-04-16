@@ -56,6 +56,7 @@ public class CacheConfiguration {
             createCache(cm, com.anderson.jhipsterapp1.domain.Cliente.class.getName());
             createCache(cm, com.anderson.jhipsterapp1.domain.Cliente.class.getName() + ".festas");
             createCache(cm, com.anderson.jhipsterapp1.domain.Pedido.class.getName());
+            createCache(cm, com.anderson.jhipsterapp1.domain.Pedido.class.getName() + ".itemPedidos");
             createCache(cm, com.anderson.jhipsterapp1.domain.ItemPedido.class.getName());
             // jhipster-needle-ehcache-add-entry
         };

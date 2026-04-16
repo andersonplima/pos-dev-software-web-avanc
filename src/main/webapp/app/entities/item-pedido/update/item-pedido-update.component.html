@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2
         id="jhi-item-pedido-heading"
         data-cy="ItemPedidoCreateUpdateHeading"
@@ -10,34 +10,35 @@
       </h2>
 
       <div>
-        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error />
 
-        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.itemPedido.nomeItem" for="field_nomeItem">Nome Item</label>
-          <input type="text" class="form-control" name="nomeItem" id="field_nomeItem" data-cy="nomeItem" formControlName="nomeItem" />
-          <div *ngIf="editForm.get('nomeItem')!.invalid && (editForm.get('nomeItem')!.dirty || editForm.get('nomeItem')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('nomeItem')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              O campo é obrigatório.
-            </small>
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="jhipsterapp1App.itemPedido.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
           </div>
+        }
+
+        @let nomeItemRef = editForm.get('nomeItem')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nomeItem" jhiTranslate="jhipsterapp1App.itemPedido.nomeItem">Nome Item</label>
+          <input type="text" class="form-control" name="nomeItem" id="field_nomeItem" data-cy="nomeItem" formControlName="nomeItem" />
+          @if (nomeItemRef.invalid && (nomeItemRef.dirty || nomeItemRef.touched)) {
+            <div>
+              @if (editForm.get('nomeItem')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+              }
+            </div>
+          }
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.itemPedido.valorItem" for="field_valorItem">Valor Item</label>
+        <div class="mb-3">
+          <label class="form-label" for="field_valorItem" jhiTranslate="jhipsterapp1App.itemPedido.valorItem">Valor Item</label>
           <input type="number" class="form-control" name="valorItem" id="field_valorItem" data-cy="valorItem" formControlName="valorItem" />
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.itemPedido.pedido" for="field_pedido">Pedido</label>
+        <div class="mb-3">
+          <label class="form-label" for="field_pedido" jhiTranslate="jhipsterapp1App.itemPedido.pedido">Pedido</label>
           <select
             class="form-control"
             id="field_pedido"
@@ -47,7 +48,9 @@
             [compareWith]="comparePedido"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="pedidoOption" *ngFor="let pedidoOption of pedidosSharedCollection">{{ pedidoOption.id }}</option>
+            @for (pedidoOption of pedidosSharedCollection; track $index) {
+              <option [ngValue]="pedidoOption">{{ pedidoOption.id }}</option>
+            }
           </select>
         </div>
       </div>

@@ -4,7 +4,7 @@
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
         <span jhiTranslate="jhipsterapp1App.festa.home.refreshListLabel">Atualizar lista</span>
       </button>
 
@@ -15,100 +15,112 @@
         [routerLink]="['/festa/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="jhipsterapp1App.festa.home.createLabel"> Criar novo Festa </span>
+        <span jhiTranslate="jhipsterapp1App.festa.home.createLabel">Criar novo Festa</span>
       </button>
     </div>
   </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+  <jhi-alert-error />
 
-  <jhi-alert></jhi-alert>
+  <jhi-alert />
 
-  <div class="alert alert-warning" id="no-result" *ngIf="festas?.length === 0">
-    <span jhiTranslate="jhipsterapp1App.festa.home.notFound">Nenhum Festa encontrado</span>
-  </div>
+  @if (festas().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="jhipsterapp1App.festa.home.notFound">Nenhum Festa encontrado</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">Código</span>
 
-  <div class="table-responsive table-entities" id="entities" *ngIf="festas && festas.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-          <th scope="col" jhiSortBy="id">
-            <div class="d-flex">
-              <span jhiTranslate="global.field.id">Código</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="nome">
-            <div class="d-flex">
-              <span jhiTranslate="jhipsterapp1App.festa.nome">Nome</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="tema">
-            <div class="d-flex">
-              <span jhiTranslate="jhipsterapp1App.festa.tema">Tema</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="valor">
-            <div class="d-flex">
-              <span jhiTranslate="jhipsterapp1App.festa.valor">Valor</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="tipoFesta.nome">
-            <div class="d-flex">
-              <span jhiTranslate="jhipsterapp1App.festa.tipoFesta">Tipo Festa</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="cliente.cpf">
-            <div class="d-flex">
-              <span jhiTranslate="jhipsterapp1App.festa.cliente">Cliente</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let festa of festas; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/festa', festa.id, 'view']">{{ festa.id }}</a>
-          </td>
-          <td>{{ festa.nome }}</td>
-          <td>{{ festa.tema }}</td>
-          <td>{{ festa.valor }}</td>
-          <td>
-            <div *ngIf="festa.tipoFesta">
-              <a [routerLink]="['/tipo-festa', festa.tipoFesta.id, 'view']">{{ festa.tipoFesta.nome }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="festa.cliente">
-              <a [routerLink]="['/cliente', festa.cliente.id, 'view']">{{ festa.cliente.cpf }}</a>
-            </div>
-          </td>
-          <td class="text-end">
-            <div class="btn-group">
-              <button type="submit" [routerLink]="['/festa', festa.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizar</span>
-              </button>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nome">
+              <div class="d-flex">
+                <span jhiTranslate="jhipsterapp1App.festa.nome">Nome</span>
 
-              <button type="submit" [routerLink]="['/festa', festa.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editar</span>
-              </button>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tema">
+              <div class="d-flex">
+                <span jhiTranslate="jhipsterapp1App.festa.tema">Tema</span>
 
-              <button type="submit" (click)="delete(festa)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Excluir</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="valor">
+              <div class="d-flex">
+                <span jhiTranslate="jhipsterapp1App.festa.valor">Valor</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tipoFesta.nome">
+              <div class="d-flex">
+                <span jhiTranslate="jhipsterapp1App.festa.tipoFesta">Tipo Festa</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cliente.cpf">
+              <div class="d-flex">
+                <span jhiTranslate="jhipsterapp1App.festa.cliente">Cliente</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (festa of festas(); track trackId(festa)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/festa', festa.id, 'view']">{{ festa.id }}</a>
+              </td>
+              <td>{{ festa.nome }}</td>
+              <td>{{ festa.tema }}</td>
+              <td>{{ festa.valor }}</td>
+              <td>
+                @if (festa.tipoFesta) {
+                  <div>
+                    <a [routerLink]="['/tipo-festa', festa.tipoFesta.id, 'view']">{{ festa.tipoFesta.nome }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (festa.cliente) {
+                  <div>
+                    <a [routerLink]="['/cliente', festa.cliente.id, 'view']">{{ festa.cliente.cpf }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/festa', festa.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizar</span>
+                  </a>
+
+                  <a [routerLink]="['/festa', festa.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editar</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(festa)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Excluir</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

@@ -1,9 +1,10 @@
 package com.anderson.jhipsterapp1.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -30,7 +31,8 @@ public class ItemPedido implements Serializable {
     @Column(name = "valor_item", precision = 21, scale = 2)
     private BigDecimal valorItem;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "itemPedidos" }, allowSetters = true)
     private Pedido pedido;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -97,7 +99,7 @@ public class ItemPedido implements Serializable {
         if (!(o instanceof ItemPedido)) {
             return false;
         }
-        return id != null && id.equals(((ItemPedido) o).id);
+        return getId() != null && getId().equals(((ItemPedido) o).getId());
     }
 
     @Override

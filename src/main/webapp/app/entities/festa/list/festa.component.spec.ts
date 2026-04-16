@@ -1,24 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed, fakeAsync, inject, tick } from '@angular/core/testing';
+import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
+import { Subject, of } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { sampleWithRequiredData } from '../festa.test-samples';
 import { FestaService } from '../service/festa.service';
 
 import { FestaComponent } from './festa.component';
+import SpyInstance = jest.SpyInstance;
 
 describe('Festa Management Component', () => {
   let comp: FestaComponent;
   let fixture: ComponentFixture<FestaComponent>;
   let service: FestaService;
+  let routerNavigateSpy: SpyInstance<Promise<boolean>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([{ path: 'festa', component: FestaComponent }]), HttpClientTestingModule],
-      declarations: [FestaComponent],
+      imports: [FestaComponent],
       providers: [
+        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -32,7 +34,14 @@ describe('Festa Management Component', () => {
                 sort: 'id,desc',
               }),
             ),
-            snapshot: { queryParams: {} },
+            snapshot: {
+              queryParams: {},
+              queryParamMap: jest.requireActual('@angular/router').convertToParamMap({
+                page: '1',
+                size: '1',
+                sort: 'id,desc',
+              }),
+            },
           },
         },
       ],
@@ -43,34 +52,118 @@ describe('Festa Management Component', () => {
     fixture = TestBed.createComponent(FestaComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(FestaService);
+    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
 
-    const headers = new HttpHeaders();
-    jest.spyOn(service, 'query').mockReturnValue(
-      of(
-        new HttpResponse({
-          body: [{ id: 123 }],
-          headers,
-        }),
-      ),
-    );
+    jest
+      .spyOn(service, 'query')
+      .mockReturnValueOnce(
+        of(
+          new HttpResponse({
+            body: [{ id: 19278 }],
+            headers: new HttpHeaders({
+              link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+            }),
+          }),
+        ),
+      )
+      .mockReturnValueOnce(
+        of(
+          new HttpResponse({
+            body: [{ id: 4333 }],
+            headers: new HttpHeaders({
+              link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"',
+            }),
+          }),
+        ),
+      );
   });
 
-  it('Should call load all on init', () => {
+  it('should call load all on init', () => {
     // WHEN
     comp.ngOnInit();
 
     // THEN
     expect(service.query).toHaveBeenCalled();
-    expect(comp.festas?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(comp.festas()[0]).toEqual(expect.objectContaining({ id: 19278 }));
   });
 
   describe('trackId', () => {
-    it('Should forward to festaService', () => {
-      const entity = { id: 123 };
+    it('should forward to festaService', () => {
+      const entity = { id: 19278 };
       jest.spyOn(service, 'getFestaIdentifier');
-      const id = comp.trackId(0, entity);
+      const id = comp.trackId(entity);
       expect(service.getFestaIdentifier).toHaveBeenCalledWith(entity);
       expect(id).toBe(entity.id);
     });
+  });
+
+  it('should calculate the sort attribute for a non-id attribute', () => {
+    // WHEN
+    comp.navigateToWithComponentValues({ predicate: 'non-existing-column', order: 'asc' });
+
+    // THEN
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({
+          sort: ['non-existing-column,asc'],
+        }),
+      }),
+    );
+  });
+
+  it('should calculate the sort attribute for an id', () => {
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
+  });
+
+  describe('delete', () => {
+    let ngbModal: NgbModal;
+    let deleteModalMock: any;
+
+    beforeEach(() => {
+      deleteModalMock = { componentInstance: {}, closed: new Subject() };
+      // NgbModal is not a singleton using TestBed.inject.
+      // ngbModal = TestBed.inject(NgbModal);
+      ngbModal = (comp as any).modalService;
+      jest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+    });
+
+    it('on confirm should call load', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        jest.spyOn(comp, 'load');
+
+        // WHEN
+        comp.delete(sampleWithRequiredData);
+        deleteModalMock.closed.next('deleted');
+        tick();
+
+        // THEN
+        expect(ngbModal.open).toHaveBeenCalled();
+        expect(comp.load).toHaveBeenCalled();
+      }),
+    ));
+
+    it('on dismiss should call load', inject(
+      [],
+      fakeAsync(() => {
+        // GIVEN
+        jest.spyOn(comp, 'load');
+
+        // WHEN
+        comp.delete(sampleWithRequiredData);
+        deleteModalMock.closed.next();
+        tick();
+
+        // THEN
+        expect(ngbModal.open).toHaveBeenCalled();
+        expect(comp.load).not.toHaveBeenCalled();
+      }),
+    ));
   });
 });

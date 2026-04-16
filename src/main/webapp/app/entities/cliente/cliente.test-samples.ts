@@ -1,26 +1,26 @@
 import { ICliente, NewCliente } from './cliente.model';
 
 export const sampleWithRequiredData: ICliente = {
-  id: 45820,
-  nome: 'Pará',
-  cpf: '049.341.439-08',
+  id: 2897,
+  nome: 'wherever alongside per',
+  cpf: '733.962.047-33',
 };
 
 export const sampleWithPartialData: ICliente = {
-  id: 59224,
-  nome: 'Accounts',
-  cpf: '001.937.530-39',
+  id: 29421,
+  nome: 'finding',
+  cpf: '310.096.158-03',
 };
 
 export const sampleWithFullData: ICliente = {
-  id: 62348,
-  nome: 'Agent wireless Qatari',
-  cpf: '357.611.633-40',
+  id: 17129,
+  nome: 'circumference',
+  cpf: '454.282.310-20',
 };
 
 export const sampleWithNewData: NewCliente = {
-  nome: 'haptic',
-  cpf: '430.948.304-07',
+  nome: 'under',
+  cpf: '080.416.431-33',
   id: null,
 };
 

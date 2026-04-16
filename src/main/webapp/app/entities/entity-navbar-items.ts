@@ -1,27 +1,29 @@
-export const EntityNavbarItems = [
+import NavbarItem from 'app/layouts/navbar/navbar-item.model';
+
+export const EntityNavbarItems: NavbarItem[] = [
   {
     name: 'Festa',
-    route: 'festa',
+    route: '/festa',
     translationKey: 'global.menu.entities.festa',
   },
   {
     name: 'TipoFesta',
-    route: 'tipo-festa',
+    route: '/tipo-festa',
     translationKey: 'global.menu.entities.tipoFesta',
   },
   {
     name: 'Cliente',
-    route: 'cliente',
+    route: '/cliente',
     translationKey: 'global.menu.entities.cliente',
   },
   {
     name: 'Pedido',
-    route: 'pedido',
+    route: '/pedido',
     translationKey: 'global.menu.entities.pedido',
   },
   {
     name: 'ItemPedido',
-    route: 'item-pedido',
+    route: '/item-pedido',
     translationKey: 'global.menu.entities.itemPedido',
   },
 ];

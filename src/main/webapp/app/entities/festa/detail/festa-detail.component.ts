@@ -1,22 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+import SharedModule from 'app/shared/shared.module';
 import { IFesta } from '../festa.model';
 
 @Component({
   selector: 'jhi-festa-detail',
   templateUrl: './festa-detail.component.html',
+  imports: [SharedModule, RouterModule],
 })
-export class FestaDetailComponent implements OnInit {
-  festa: IFesta | null = null;
-
-  constructor(protected activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ festa }) => {
-      this.festa = festa;
-    });
-  }
+export class FestaDetailComponent {
+  festa = input<IFesta | null>(null);
 
   previousState(): void {
     window.history.back();

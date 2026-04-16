@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -14,12 +14,10 @@ export type EntityArrayResponseType = HttpResponse<ICliente[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ClienteService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/clientes');
+  protected readonly http = inject(HttpClient);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-  ) {}
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/clientes');
 
   create(cliente: NewCliente): Observable<EntityResponseType> {
     return this.http.post<ICliente>(this.resourceUrl, cliente, { observe: 'response' });
@@ -60,7 +58,7 @@ export class ClienteService {
   ): Type[] {
     const clientes: Type[] = clientesToCheck.filter(isPresent);
     if (clientes.length > 0) {
-      const clienteCollectionIdentifiers = clienteCollection.map(clienteItem => this.getClienteIdentifier(clienteItem)!);
+      const clienteCollectionIdentifiers = clienteCollection.map(clienteItem => this.getClienteIdentifier(clienteItem));
       const clientesToAdd = clientes.filter(clienteItem => {
         const clienteIdentifier = this.getClienteIdentifier(clienteItem);
         if (clienteCollectionIdentifiers.includes(clienteIdentifier)) {

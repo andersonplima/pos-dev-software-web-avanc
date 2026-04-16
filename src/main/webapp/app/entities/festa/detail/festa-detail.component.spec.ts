@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { FestaDetailComponent } from './festa-detail.component';
@@ -8,29 +9,46 @@ describe('Festa Management Detail Component', () => {
   let comp: FestaDetailComponent;
   let fixture: ComponentFixture<FestaDetailComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [FestaDetailComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [FestaDetailComponent],
       providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: { data: of({ festa: { id: 123 } }) },
-        },
+        provideRouter(
+          [
+            {
+              path: '**',
+              loadComponent: () => import('./festa-detail.component').then(m => m.FestaDetailComponent),
+              resolve: { festa: () => of({ id: 19278 }) },
+            },
+          ],
+          withComponentInputBinding(),
+        ),
       ],
     })
       .overrideTemplate(FestaDetailComponent, '')
       .compileComponents();
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(FestaDetailComponent);
     comp = fixture.componentInstance;
   });
 
   describe('OnInit', () => {
-    it('Should load festa on init', () => {
-      // WHEN
-      comp.ngOnInit();
+    it('should load festa on init', async () => {
+      const harness = await RouterTestingHarness.create();
+      const instance = await harness.navigateByUrl('/', FestaDetailComponent);
 
       // THEN
-      expect(comp.festa).toEqual(expect.objectContaining({ id: 123 }));
+      expect(instance.festa()).toEqual(expect.objectContaining({ id: 19278 }));
+    });
+  });
+
+  describe('PreviousState', () => {
+    it('should navigate to previous state', () => {
+      jest.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(window.history.back).toHaveBeenCalled();
     });
   });
 });

@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20200215171600"
+  },
   "applications": "*",
   "changelogDate": "20200215171600",
   "clientRootFolder": "",
@@ -26,8 +29,10 @@
       "otherEntityName": "pedido",
       "otherEntityRelationshipName": "itemPedido",
       "relationshipName": "pedido",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],
+  "searchEngine": "no",
   "service": "serviceImpl"
 }

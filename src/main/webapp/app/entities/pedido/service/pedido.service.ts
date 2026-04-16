@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, map } from 'rxjs';
+
 import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
@@ -26,12 +26,10 @@ export type EntityArrayResponseType = HttpResponse<IPedido[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pedidos');
+  protected readonly http = inject(HttpClient);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-  ) {}
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pedidos');
 
   create(pedido: NewPedido): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(pedido);
@@ -85,7 +83,7 @@ export class PedidoService {
   ): Type[] {
     const pedidos: Type[] = pedidosToCheck.filter(isPresent);
     if (pedidos.length > 0) {
-      const pedidoCollectionIdentifiers = pedidoCollection.map(pedidoItem => this.getPedidoIdentifier(pedidoItem)!);
+      const pedidoCollectionIdentifiers = pedidoCollection.map(pedidoItem => this.getPedidoIdentifier(pedidoItem));
       const pedidosToAdd = pedidos.filter(pedidoItem => {
         const pedidoIdentifier = this.getPedidoIdentifier(pedidoItem);
         if (pedidoCollectionIdentifiers.includes(pedidoIdentifier)) {

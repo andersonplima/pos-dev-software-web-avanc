@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IPedido } from 'app/entities/pedido/pedido.model';
 import { PedidoService } from 'app/entities/pedido/service/pedido.service';
@@ -13,6 +16,7 @@ import { ItemPedidoFormGroup, ItemPedidoFormService } from './item-pedido-form.s
 @Component({
   selector: 'jhi-item-pedido-update',
   templateUrl: './item-pedido-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class ItemPedidoUpdateComponent implements OnInit {
   isSaving = false;
@@ -20,14 +24,13 @@ export class ItemPedidoUpdateComponent implements OnInit {
 
   pedidosSharedCollection: IPedido[] = [];
 
-  editForm: ItemPedidoFormGroup = this.itemPedidoFormService.createItemPedidoFormGroup();
+  protected itemPedidoService = inject(ItemPedidoService);
+  protected itemPedidoFormService = inject(ItemPedidoFormService);
+  protected pedidoService = inject(PedidoService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    protected itemPedidoService: ItemPedidoService,
-    protected itemPedidoFormService: ItemPedidoFormService,
-    protected pedidoService: PedidoService,
-    protected activatedRoute: ActivatedRoute,
-  ) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: ItemPedidoFormGroup = this.itemPedidoFormService.createItemPedidoFormGroup();
 
   comparePedido = (o1: IPedido | null, o2: IPedido | null): boolean => this.pedidoService.comparePedido(o1, o2);
 

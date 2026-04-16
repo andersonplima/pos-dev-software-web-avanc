@@ -41,7 +41,6 @@ describe('TipoFesta Form Service', () => {
 
     describe('getTipoFesta', () => {
       it('should return NewTipoFesta for default TipoFesta initial value', () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const formGroup = service.createTipoFestaFormGroup(sampleWithNewData);
 
         const tipoFesta = service.getTipoFesta(formGroup) as any;

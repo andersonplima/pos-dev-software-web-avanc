@@ -1,4 +1,4 @@
 /**
- * Spring Data JPA repositories.
+ * Repository layer.
  */
 package com.anderson.jhipsterapp1.repository;

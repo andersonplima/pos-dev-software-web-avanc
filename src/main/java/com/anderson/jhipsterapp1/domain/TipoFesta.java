@@ -1,11 +1,11 @@
 package com.anderson.jhipsterapp1.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -35,7 +35,7 @@ public class TipoFesta implements Serializable {
     @Column(name = "descricao", length = 100, nullable = false)
     private String descricao;
 
-    @OneToMany(mappedBy = "tipoFesta")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tipoFesta")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "tipoFesta", "cliente" }, allowSetters = true)
     private Set<Festa> festas = new HashSet<>();
@@ -122,7 +122,7 @@ public class TipoFesta implements Serializable {
         if (!(o instanceof TipoFesta)) {
             return false;
         }
-        return id != null && id.equals(((TipoFesta) o).id);
+        return getId() != null && getId().equals(((TipoFesta) o).getId());
     }
 
     @Override

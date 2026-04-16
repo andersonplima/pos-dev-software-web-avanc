@@ -19,7 +19,8 @@
       },
       "id": "ID",
       "dataPedido": "Data Pedido",
-      "valorPedido": "Valor Pedido"
+      "valorPedido": "Valor Pedido",
+      "itemPedido": "Item Pedido"
     }
   }
 }

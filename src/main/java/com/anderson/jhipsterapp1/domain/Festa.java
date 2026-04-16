@@ -1,9 +1,9 @@
 package com.anderson.jhipsterapp1.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -138,7 +138,7 @@ public class Festa implements Serializable {
         if (!(o instanceof Festa)) {
             return false;
         }
-        return id != null && id.equals(((Festa) o).id);
+        return getId() != null && getId().equals(((Festa) o).getId());
     }
 
     @Override

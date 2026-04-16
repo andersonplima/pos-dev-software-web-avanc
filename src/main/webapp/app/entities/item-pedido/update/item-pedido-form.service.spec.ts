@@ -43,7 +43,6 @@ describe('ItemPedido Form Service', () => {
 
     describe('getItemPedido', () => {
       it('should return NewItemPedido for default ItemPedido initial value', () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const formGroup = service.createItemPedidoFormGroup(sampleWithNewData);
 
         const itemPedido = service.getItemPedido(formGroup) as any;

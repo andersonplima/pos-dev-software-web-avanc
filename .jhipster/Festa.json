@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20200215135143"
+  },
   "changelogDate": "20200215135143",
   "clientRootFolder": "",
   "databaseType": "sql",
@@ -35,6 +38,7 @@
       "otherEntityName": "tipoFesta",
       "otherEntityRelationshipName": "festa",
       "relationshipName": "tipoFesta",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"]
     },
@@ -43,10 +47,11 @@
       "otherEntityName": "cliente",
       "otherEntityRelationshipName": "festa",
       "relationshipName": "cliente",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"]
     }
   ],
-  "searchEngine": false,
+  "searchEngine": "no",
   "service": "serviceClass"
 }

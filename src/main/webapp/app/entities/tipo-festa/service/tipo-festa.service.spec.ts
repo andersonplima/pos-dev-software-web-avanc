@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 import { ITipoFesta } from '../tipo-festa.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../tipo-festa.test-samples';
@@ -17,7 +18,7 @@ describe('TipoFesta Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
     expectedResult = null;
     service = TestBed.inject(TipoFestaService);
@@ -37,7 +38,6 @@ describe('TipoFesta Service', () => {
     });
 
     it('should create a TipoFesta', () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const tipoFesta = { ...sampleWithNewData };
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
@@ -155,7 +155,7 @@ describe('TipoFesta Service', () => {
     });
 
     describe('compareTipoFesta', () => {
-      it('Should return true if both entities are null', () => {
+      it('should return true if both entities are null', () => {
         const entity1 = null;
         const entity2 = null;
 
@@ -164,8 +164,8 @@ describe('TipoFesta Service', () => {
         expect(compareResult).toEqual(true);
       });
 
-      it('Should return false if one entity is null', () => {
-        const entity1 = { id: 123 };
+      it('should return false if one entity is null', () => {
+        const entity1 = { id: 12172 };
         const entity2 = null;
 
         const compareResult1 = service.compareTipoFesta(entity1, entity2);
@@ -175,9 +175,9 @@ describe('TipoFesta Service', () => {
         expect(compareResult2).toEqual(false);
       });
 
-      it('Should return false if primaryKey differs', () => {
-        const entity1 = { id: 123 };
-        const entity2 = { id: 456 };
+      it('should return false if primaryKey differs', () => {
+        const entity1 = { id: 12172 };
+        const entity2 = { id: 10605 };
 
         const compareResult1 = service.compareTipoFesta(entity1, entity2);
         const compareResult2 = service.compareTipoFesta(entity2, entity1);
@@ -186,9 +186,9 @@ describe('TipoFesta Service', () => {
         expect(compareResult2).toEqual(false);
       });
 
-      it('Should return false if primaryKey matches', () => {
-        const entity1 = { id: 123 };
-        const entity2 = { id: 123 };
+      it('should return false if primaryKey matches', () => {
+        const entity1 = { id: 12172 };
+        const entity2 = { id: 12172 };
 
         const compareResult1 = service.compareTipoFesta(entity1, entity2);
         const compareResult2 = service.compareTipoFesta(entity2, entity1);

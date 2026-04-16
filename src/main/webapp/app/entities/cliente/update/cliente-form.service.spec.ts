@@ -41,7 +41,6 @@ describe('Cliente Form Service', () => {
 
     describe('getCliente', () => {
       it('should return NewCliente for default Cliente initial value', () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const formGroup = service.createClienteFormGroup(sampleWithNewData);
 
         const cliente = service.getCliente(formGroup) as any;

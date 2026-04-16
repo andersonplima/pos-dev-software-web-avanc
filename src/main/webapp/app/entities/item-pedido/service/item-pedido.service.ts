@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -14,12 +14,10 @@ export type EntityArrayResponseType = HttpResponse<IItemPedido[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ItemPedidoService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/item-pedidos');
+  protected readonly http = inject(HttpClient);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-  ) {}
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/item-pedidos');
 
   create(itemPedido: NewItemPedido): Observable<EntityResponseType> {
     return this.http.post<IItemPedido>(this.resourceUrl, itemPedido, { observe: 'response' });
@@ -64,7 +62,7 @@ export class ItemPedidoService {
   ): Type[] {
     const itemPedidos: Type[] = itemPedidosToCheck.filter(isPresent);
     if (itemPedidos.length > 0) {
-      const itemPedidoCollectionIdentifiers = itemPedidoCollection.map(itemPedidoItem => this.getItemPedidoIdentifier(itemPedidoItem)!);
+      const itemPedidoCollectionIdentifiers = itemPedidoCollection.map(itemPedidoItem => this.getItemPedidoIdentifier(itemPedidoItem));
       const itemPedidosToAdd = itemPedidos.filter(itemPedidoItem => {
         const itemPedidoIdentifier = this.getItemPedidoIdentifier(itemPedidoItem);
         if (itemPedidoCollectionIdentifiers.includes(itemPedidoIdentifier)) {

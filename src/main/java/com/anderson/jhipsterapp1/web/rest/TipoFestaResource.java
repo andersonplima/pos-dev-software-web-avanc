@@ -4,13 +4,13 @@ import com.anderson.jhipsterapp1.repository.TipoFestaRepository;
 import com.anderson.jhipsterapp1.service.TipoFestaService;
 import com.anderson.jhipsterapp1.service.dto.TipoFestaDTO;
 import com.anderson.jhipsterapp1.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +23,10 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link com.anderson.jhipsterapp1.domain.TipoFesta}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/tipo-festas")
 public class TipoFestaResource {
 
-    private final Logger log = LoggerFactory.getLogger(TipoFestaResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TipoFestaResource.class);
 
     private static final String ENTITY_NAME = "tipoFesta";
 
@@ -49,16 +49,16 @@ public class TipoFestaResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new tipoFestaDTO, or with status {@code 400 (Bad Request)} if the tipoFesta has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/tipo-festas")
+    @PostMapping("")
     public ResponseEntity<TipoFestaDTO> createTipoFesta(@Valid @RequestBody TipoFestaDTO tipoFestaDTO) throws URISyntaxException {
-        log.debug("REST request to save TipoFesta : {}", tipoFestaDTO);
+        LOG.debug("REST request to save TipoFesta : {}", tipoFestaDTO);
         if (tipoFestaDTO.getId() != null) {
             throw new BadRequestAlertException("A new tipoFesta cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        TipoFestaDTO result = tipoFestaService.save(tipoFestaDTO);
-        return ResponseEntity.created(new URI("/api/tipo-festas/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        tipoFestaDTO = tipoFestaService.save(tipoFestaDTO);
+        return ResponseEntity.created(new URI("/api/tipo-festas/" + tipoFestaDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, tipoFestaDTO.getId().toString()))
+            .body(tipoFestaDTO);
     }
 
     /**
@@ -71,12 +71,12 @@ public class TipoFestaResource {
      * or with status {@code 500 (Internal Server Error)} if the tipoFestaDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/tipo-festas/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TipoFestaDTO> updateTipoFesta(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody TipoFestaDTO tipoFestaDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update TipoFesta : {}, {}", id, tipoFestaDTO);
+        LOG.debug("REST request to update TipoFesta : {}, {}", id, tipoFestaDTO);
         if (tipoFestaDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -88,10 +88,10 @@ public class TipoFestaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        TipoFestaDTO result = tipoFestaService.update(tipoFestaDTO);
+        tipoFestaDTO = tipoFestaService.update(tipoFestaDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, tipoFestaDTO.getId().toString()))
-            .body(result);
+            .body(tipoFestaDTO);
     }
 
     /**
@@ -105,12 +105,12 @@ public class TipoFestaResource {
      * or with status {@code 500 (Internal Server Error)} if the tipoFestaDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/tipo-festas/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<TipoFestaDTO> partialUpdateTipoFesta(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody TipoFestaDTO tipoFestaDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update TipoFesta partially : {}, {}", id, tipoFestaDTO);
+        LOG.debug("REST request to partial update TipoFesta partially : {}, {}", id, tipoFestaDTO);
         if (tipoFestaDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -135,9 +135,9 @@ public class TipoFestaResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tipoFestas in body.
      */
-    @GetMapping("/tipo-festas")
+    @GetMapping("")
     public List<TipoFestaDTO> getAllTipoFestas() {
-        log.debug("REST request to get all TipoFestas");
+        LOG.debug("REST request to get all TipoFestas");
         return tipoFestaService.findAll();
     }
 
@@ -147,9 +147,9 @@ public class TipoFestaResource {
      * @param id the id of the tipoFestaDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the tipoFestaDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/tipo-festas/{id}")
-    public ResponseEntity<TipoFestaDTO> getTipoFesta(@PathVariable Long id) {
-        log.debug("REST request to get TipoFesta : {}", id);
+    @GetMapping("/{id}")
+    public ResponseEntity<TipoFestaDTO> getTipoFesta(@PathVariable("id") Long id) {
+        LOG.debug("REST request to get TipoFesta : {}", id);
         Optional<TipoFestaDTO> tipoFestaDTO = tipoFestaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(tipoFestaDTO);
     }
@@ -160,9 +160,9 @@ public class TipoFestaResource {
      * @param id the id of the tipoFestaDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/tipo-festas/{id}")
-    public ResponseEntity<Void> deleteTipoFesta(@PathVariable Long id) {
-        log.debug("REST request to delete TipoFesta : {}", id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTipoFesta(@PathVariable("id") Long id) {
+        LOG.debug("REST request to delete TipoFesta : {}", id);
         tipoFestaService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

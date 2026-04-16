@@ -4,13 +4,13 @@ import com.anderson.jhipsterapp1.repository.PedidoRepository;
 import com.anderson.jhipsterapp1.service.PedidoService;
 import com.anderson.jhipsterapp1.service.dto.PedidoDTO;
 import com.anderson.jhipsterapp1.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,10 +28,10 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link com.anderson.jhipsterapp1.domain.Pedido}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/pedidos")
 public class PedidoResource {
 
-    private final Logger log = LoggerFactory.getLogger(PedidoResource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PedidoResource.class);
 
     private static final String ENTITY_NAME = "pedido";
 
@@ -54,16 +54,16 @@ public class PedidoResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new pedidoDTO, or with status {@code 400 (Bad Request)} if the pedido has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/pedidos")
+    @PostMapping("")
     public ResponseEntity<PedidoDTO> createPedido(@Valid @RequestBody PedidoDTO pedidoDTO) throws URISyntaxException {
-        log.debug("REST request to save Pedido : {}", pedidoDTO);
+        LOG.debug("REST request to save Pedido : {}", pedidoDTO);
         if (pedidoDTO.getId() != null) {
             throw new BadRequestAlertException("A new pedido cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PedidoDTO result = pedidoService.save(pedidoDTO);
-        return ResponseEntity.created(new URI("/api/pedidos/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        pedidoDTO = pedidoService.save(pedidoDTO);
+        return ResponseEntity.created(new URI("/api/pedidos/" + pedidoDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, pedidoDTO.getId().toString()))
+            .body(pedidoDTO);
     }
 
     /**
@@ -76,12 +76,12 @@ public class PedidoResource {
      * or with status {@code 500 (Internal Server Error)} if the pedidoDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/pedidos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<PedidoDTO> updatePedido(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody PedidoDTO pedidoDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Pedido : {}, {}", id, pedidoDTO);
+        LOG.debug("REST request to update Pedido : {}, {}", id, pedidoDTO);
         if (pedidoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -93,10 +93,10 @@ public class PedidoResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        PedidoDTO result = pedidoService.update(pedidoDTO);
+        pedidoDTO = pedidoService.update(pedidoDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, pedidoDTO.getId().toString()))
-            .body(result);
+            .body(pedidoDTO);
     }
 
     /**
@@ -110,12 +110,12 @@ public class PedidoResource {
      * or with status {@code 500 (Internal Server Error)} if the pedidoDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/pedidos/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<PedidoDTO> partialUpdatePedido(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody PedidoDTO pedidoDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Pedido partially : {}, {}", id, pedidoDTO);
+        LOG.debug("REST request to partial update Pedido partially : {}, {}", id, pedidoDTO);
         if (pedidoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
@@ -141,9 +141,9 @@ public class PedidoResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of pedidos in body.
      */
-    @GetMapping("/pedidos")
-    public ResponseEntity<List<PedidoDTO>> getAllPedidos(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
-        log.debug("REST request to get a page of Pedidos");
+    @GetMapping("")
+    public ResponseEntity<List<PedidoDTO>> getAllPedidos(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        LOG.debug("REST request to get a page of Pedidos");
         Page<PedidoDTO> page = pedidoService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -155,9 +155,9 @@ public class PedidoResource {
      * @param id the id of the pedidoDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the pedidoDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/pedidos/{id}")
-    public ResponseEntity<PedidoDTO> getPedido(@PathVariable Long id) {
-        log.debug("REST request to get Pedido : {}", id);
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoDTO> getPedido(@PathVariable("id") Long id) {
+        LOG.debug("REST request to get Pedido : {}", id);
         Optional<PedidoDTO> pedidoDTO = pedidoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(pedidoDTO);
     }
@@ -168,9 +168,9 @@ public class PedidoResource {
      * @param id the id of the pedidoDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/pedidos/{id}")
-    public ResponseEntity<Void> deletePedido(@PathVariable Long id) {
-        log.debug("REST request to delete Pedido : {}", id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePedido(@PathVariable("id") Long id) {
+        LOG.debug("REST request to delete Pedido : {}", id);
         pedidoService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))

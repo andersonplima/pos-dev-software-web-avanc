@@ -1,22 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+import SharedModule from 'app/shared/shared.module';
 import { IItemPedido } from '../item-pedido.model';
 
 @Component({
   selector: 'jhi-item-pedido-detail',
   templateUrl: './item-pedido-detail.component.html',
+  imports: [SharedModule, RouterModule],
 })
-export class ItemPedidoDetailComponent implements OnInit {
-  itemPedido: IItemPedido | null = null;
-
-  constructor(protected activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ itemPedido }) => {
-      this.itemPedido = itemPedido;
-    });
-  }
+export class ItemPedidoDetailComponent {
+  itemPedido = input<IItemPedido | null>(null);
 
   previousState(): void {
     window.history.back();

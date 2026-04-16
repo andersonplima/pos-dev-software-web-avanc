@@ -1,26 +1,23 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, convertToParamMap } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { ITipoFesta } from '../tipo-festa.model';
 import { TipoFestaService } from '../service/tipo-festa.service';
 
-import { TipoFestaRoutingResolveService } from './tipo-festa-routing-resolve.service';
+import tipoFestaResolve from './tipo-festa-routing-resolve.service';
 
 describe('TipoFesta routing resolve service', () => {
   let mockRouter: Router;
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
-  let routingResolveService: TipoFestaRoutingResolveService;
   let service: TipoFestaService;
   let resultTipoFesta: ITipoFesta | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
+        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -34,7 +31,6 @@ describe('TipoFesta routing resolve service', () => {
     mockRouter = TestBed.inject(Router);
     jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
-    routingResolveService = TestBed.inject(TipoFestaRoutingResolveService);
     service = TestBed.inject(TipoFestaService);
     resultTipoFesta = undefined;
   });
@@ -46,12 +42,16 @@ describe('TipoFesta routing resolve service', () => {
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultTipoFesta = result;
+      TestBed.runInInjectionContext(() => {
+        tipoFestaResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultTipoFesta = result;
+          },
+        });
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
+      expect(service.find).toHaveBeenCalledWith(123);
       expect(resultTipoFesta).toEqual({ id: 123 });
     });
 
@@ -61,12 +61,16 @@ describe('TipoFesta routing resolve service', () => {
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultTipoFesta = result;
+      TestBed.runInInjectionContext(() => {
+        tipoFestaResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultTipoFesta = result;
+          },
+        });
       });
 
       // THEN
-      expect(service.find).not.toBeCalled();
+      expect(service.find).not.toHaveBeenCalled();
       expect(resultTipoFesta).toEqual(null);
     });
 
@@ -76,12 +80,16 @@ describe('TipoFesta routing resolve service', () => {
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultTipoFesta = result;
+      TestBed.runInInjectionContext(() => {
+        tipoFestaResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultTipoFesta = result;
+          },
+        });
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
+      expect(service.find).toHaveBeenCalledWith(123);
       expect(resultTipoFesta).toEqual(undefined);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });

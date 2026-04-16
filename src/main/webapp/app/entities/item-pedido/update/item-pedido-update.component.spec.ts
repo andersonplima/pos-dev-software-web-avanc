@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Subject, from, of } from 'rxjs';
 
 import { IPedido } from 'app/entities/pedido/pedido.model';
@@ -24,9 +22,9 @@ describe('ItemPedido Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [ItemPedidoUpdateComponent],
+      imports: [ItemPedidoUpdateComponent],
       providers: [
+        provideHttpClient(),
         FormBuilder,
         {
           provide: ActivatedRoute,
@@ -49,12 +47,12 @@ describe('ItemPedido Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should call Pedido query and add missing value', () => {
-      const itemPedido: IItemPedido = { id: 456 };
-      const pedido: IPedido = { id: 609 };
+    it('should call Pedido query and add missing value', () => {
+      const itemPedido: IItemPedido = { id: 30572 };
+      const pedido: IPedido = { id: 24162 };
       itemPedido.pedido = pedido;
 
-      const pedidoCollection: IPedido[] = [{ id: 94546 }];
+      const pedidoCollection: IPedido[] = [{ id: 24162 }];
       jest.spyOn(pedidoService, 'query').mockReturnValue(of(new HttpResponse({ body: pedidoCollection })));
       const additionalPedidos = [pedido];
       const expectedCollection: IPedido[] = [...additionalPedidos, ...pedidoCollection];
@@ -71,24 +69,24 @@ describe('ItemPedido Management Update Component', () => {
       expect(comp.pedidosSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should update editForm', () => {
-      const itemPedido: IItemPedido = { id: 456 };
-      const pedido: IPedido = { id: 20604 };
+    it('should update editForm', () => {
+      const itemPedido: IItemPedido = { id: 30572 };
+      const pedido: IPedido = { id: 24162 };
       itemPedido.pedido = pedido;
 
       activatedRoute.data = of({ itemPedido });
       comp.ngOnInit();
 
-      expect(comp.pedidosSharedCollection).toContain(pedido);
+      expect(comp.pedidosSharedCollection).toContainEqual(pedido);
       expect(comp.itemPedido).toEqual(itemPedido);
     });
   });
 
   describe('save', () => {
-    it('Should call update service on save for existing entity', () => {
+    it('should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<IItemPedido>>();
-      const itemPedido = { id: 123 };
+      const itemPedido = { id: 14110 };
       jest.spyOn(itemPedidoFormService, 'getItemPedido').mockReturnValue(itemPedido);
       jest.spyOn(itemPedidoService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -108,10 +106,10 @@ describe('ItemPedido Management Update Component', () => {
       expect(comp.isSaving).toEqual(false);
     });
 
-    it('Should call create service on save for new entity', () => {
+    it('should call create service on save for new entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<IItemPedido>>();
-      const itemPedido = { id: 123 };
+      const itemPedido = { id: 14110 };
       jest.spyOn(itemPedidoFormService, 'getItemPedido').mockReturnValue({ id: null });
       jest.spyOn(itemPedidoService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -131,10 +129,10 @@ describe('ItemPedido Management Update Component', () => {
       expect(comp.previousState).toHaveBeenCalled();
     });
 
-    it('Should set isSaving to false on error', () => {
+    it('should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<IItemPedido>>();
-      const itemPedido = { id: 123 };
+      const itemPedido = { id: 14110 };
       jest.spyOn(itemPedidoService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ itemPedido });
@@ -154,9 +152,9 @@ describe('ItemPedido Management Update Component', () => {
 
   describe('Compare relationships', () => {
     describe('comparePedido', () => {
-      it('Should forward to pedidoService', () => {
-        const entity = { id: 123 };
-        const entity2 = { id: 456 };
+      it('should forward to pedidoService', () => {
+        const entity = { id: 24162 };
+        const entity2 = { id: 19016 };
         jest.spyOn(pedidoService, 'comparePedido');
         comp.comparePedido(entity, entity2);
         expect(pedidoService.comparePedido).toHaveBeenCalledWith(entity, entity2);

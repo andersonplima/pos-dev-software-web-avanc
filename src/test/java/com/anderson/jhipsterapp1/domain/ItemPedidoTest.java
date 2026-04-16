@@ -1,5 +1,7 @@
 package com.anderson.jhipsterapp1.domain;
 
+import static com.anderson.jhipsterapp1.domain.ItemPedidoTestSamples.*;
+import static com.anderson.jhipsterapp1.domain.PedidoTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.anderson.jhipsterapp1.web.rest.TestUtil;
@@ -10,14 +12,26 @@ class ItemPedidoTest {
     @Test
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(ItemPedido.class);
-        ItemPedido itemPedido1 = new ItemPedido();
-        itemPedido1.setId(1L);
+        ItemPedido itemPedido1 = getItemPedidoSample1();
         ItemPedido itemPedido2 = new ItemPedido();
+        assertThat(itemPedido1).isNotEqualTo(itemPedido2);
+
         itemPedido2.setId(itemPedido1.getId());
         assertThat(itemPedido1).isEqualTo(itemPedido2);
-        itemPedido2.setId(2L);
+
+        itemPedido2 = getItemPedidoSample2();
         assertThat(itemPedido1).isNotEqualTo(itemPedido2);
-        itemPedido1.setId(null);
-        assertThat(itemPedido1).isNotEqualTo(itemPedido2);
+    }
+
+    @Test
+    void pedidoTest() {
+        ItemPedido itemPedido = getItemPedidoRandomSampleGenerator();
+        Pedido pedidoBack = getPedidoRandomSampleGenerator();
+
+        itemPedido.setPedido(pedidoBack);
+        assertThat(itemPedido.getPedido()).isEqualTo(pedidoBack);
+
+        itemPedido.pedido(null);
+        assertThat(itemPedido.getPedido()).isNull();
     }
 }

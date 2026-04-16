@@ -1,22 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+import SharedModule from 'app/shared/shared.module';
 import { ICliente } from '../cliente.model';
 
 @Component({
   selector: 'jhi-cliente-detail',
   templateUrl: './cliente-detail.component.html',
+  imports: [SharedModule, RouterModule],
 })
-export class ClienteDetailComponent implements OnInit {
-  cliente: ICliente | null = null;
-
-  constructor(protected activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ cliente }) => {
-      this.cliente = cliente;
-    });
-  }
+export class ClienteDetailComponent {
+  cliente = input<ICliente | null>(null);
 
   previousState(): void {
     window.history.back();

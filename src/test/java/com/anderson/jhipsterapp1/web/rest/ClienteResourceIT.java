@@ -1,5 +1,7 @@
 package com.anderson.jhipsterapp1.web.rest;
 
+import static com.anderson.jhipsterapp1.domain.ClienteAsserts.*;
+import static com.anderson.jhipsterapp1.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -10,10 +12,11 @@ import com.anderson.jhipsterapp1.domain.Cliente;
 import com.anderson.jhipsterapp1.repository.ClienteRepository;
 import com.anderson.jhipsterapp1.service.dto.ClienteDTO;
 import com.anderson.jhipsterapp1.service.mapper.ClienteMapper;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +37,17 @@ class ClienteResourceIT {
     private static final String DEFAULT_NOME = "AAAAAAAAAA";
     private static final String UPDATED_NOME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CPF = "392.230.979-96";
-    private static final String UPDATED_CPF = "129.123.886-21";
+    private static final String DEFAULT_CPF = "837.929.489-19";
+    private static final String UPDATED_CPF = "651.817.944-82";
 
     private static final String ENTITY_API_URL = "/api/clientes";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+
+    @Autowired
+    private ObjectMapper om;
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -57,15 +63,16 @@ class ClienteResourceIT {
 
     private Cliente cliente;
 
+    private Cliente insertedCliente;
+
     /**
      * Create an entity for this test.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Cliente createEntity(EntityManager em) {
-        Cliente cliente = new Cliente().nome(DEFAULT_NOME).cpf(DEFAULT_CPF);
-        return cliente;
+    public static Cliente createEntity() {
+        return new Cliente().nome(DEFAULT_NOME).cpf(DEFAULT_CPF);
     }
 
     /**
@@ -74,32 +81,45 @@ class ClienteResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Cliente createUpdatedEntity(EntityManager em) {
-        Cliente cliente = new Cliente().nome(UPDATED_NOME).cpf(UPDATED_CPF);
-        return cliente;
+    public static Cliente createUpdatedEntity() {
+        return new Cliente().nome(UPDATED_NOME).cpf(UPDATED_CPF);
     }
 
     @BeforeEach
-    public void initTest() {
-        cliente = createEntity(em);
+    void initTest() {
+        cliente = createEntity();
+    }
+
+    @AfterEach
+    void cleanup() {
+        if (insertedCliente != null) {
+            clienteRepository.delete(insertedCliente);
+            insertedCliente = null;
+        }
     }
 
     @Test
     @Transactional
     void createCliente() throws Exception {
-        int databaseSizeBeforeCreate = clienteRepository.findAll().size();
+        long databaseSizeBeforeCreate = getRepositoryCount();
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
-        restClienteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
-            .andExpect(status().isCreated());
+        var returnedClienteDTO = om.readValue(
+            restClienteMockMvc
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO)))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString(),
+            ClienteDTO.class
+        );
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeCreate + 1);
-        Cliente testCliente = clienteList.get(clienteList.size() - 1);
-        assertThat(testCliente.getNome()).isEqualTo(DEFAULT_NOME);
-        assertThat(testCliente.getCpf()).isEqualTo(DEFAULT_CPF);
+        assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+        var returnedCliente = clienteMapper.toEntity(returnedClienteDTO);
+        assertClienteUpdatableFieldsEquals(returnedCliente, getPersistedCliente(returnedCliente));
+
+        insertedCliente = returnedCliente;
     }
 
     @Test
@@ -109,22 +129,21 @@ class ClienteResourceIT {
         cliente.setId(1L);
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
-        int databaseSizeBeforeCreate = clienteRepository.findAll().size();
+        long databaseSizeBeforeCreate = getRepositoryCount();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restClienteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeCreate);
+        assertSameRepositoryCount(databaseSizeBeforeCreate);
     }
 
     @Test
     @Transactional
     void checkNomeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = clienteRepository.findAll().size();
+        long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
         cliente.setNome(null);
 
@@ -132,17 +151,16 @@ class ClienteResourceIT {
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
         restClienteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO)))
             .andExpect(status().isBadRequest());
 
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeTest);
+        assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     void checkCpfIsRequired() throws Exception {
-        int databaseSizeBeforeTest = clienteRepository.findAll().size();
+        long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
         cliente.setCpf(null);
 
@@ -150,18 +168,17 @@ class ClienteResourceIT {
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
         restClienteMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO)))
             .andExpect(status().isBadRequest());
 
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeTest);
+        assertSameRepositoryCount(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     void getAllClientes() throws Exception {
         // Initialize the database
-        clienteRepository.saveAndFlush(cliente);
+        insertedCliente = clienteRepository.saveAndFlush(cliente);
 
         // Get all the clienteList
         restClienteMockMvc
@@ -177,7 +194,7 @@ class ClienteResourceIT {
     @Transactional
     void getCliente() throws Exception {
         // Initialize the database
-        clienteRepository.saveAndFlush(cliente);
+        insertedCliente = clienteRepository.saveAndFlush(cliente);
 
         // Get the cliente
         restClienteMockMvc
@@ -200,12 +217,12 @@ class ClienteResourceIT {
     @Transactional
     void putExistingCliente() throws Exception {
         // Initialize the database
-        clienteRepository.saveAndFlush(cliente);
+        insertedCliente = clienteRepository.saveAndFlush(cliente);
 
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the cliente
-        Cliente updatedCliente = clienteRepository.findById(cliente.getId()).get();
+        Cliente updatedCliente = clienteRepository.findById(cliente.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedCliente are not directly saved in db
         em.detach(updatedCliente);
         updatedCliente.nome(UPDATED_NOME).cpf(UPDATED_CPF);
@@ -213,25 +230,20 @@ class ClienteResourceIT {
 
         restClienteMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, clienteDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+                put(ENTITY_API_URL_ID, clienteDTO.getId()).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO))
             )
             .andExpect(status().isOk());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
-        Cliente testCliente = clienteList.get(clienteList.size() - 1);
-        assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
-        assertThat(testCliente.getCpf()).isEqualTo(UPDATED_CPF);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assertPersistedClienteToMatchAllProperties(updatedCliente);
     }
 
     @Test
     @Transactional
     void putNonExistingCliente() throws Exception {
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
-        cliente.setId(count.incrementAndGet());
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        cliente.setId(longCount.incrementAndGet());
 
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
@@ -239,22 +251,19 @@ class ClienteResourceIT {
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restClienteMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, clienteDTO.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+                put(ENTITY_API_URL_ID, clienteDTO.getId()).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO))
             )
             .andExpect(status().isBadRequest());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void putWithIdMismatchCliente() throws Exception {
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
-        cliente.setId(count.incrementAndGet());
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        cliente.setId(longCount.incrementAndGet());
 
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
@@ -262,73 +271,69 @@ class ClienteResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restClienteMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+                    .content(om.writeValueAsBytes(clienteDTO))
             )
             .andExpect(status().isBadRequest());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void putWithMissingIdPathParamCliente() throws Exception {
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
-        cliente.setId(count.incrementAndGet());
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        cliente.setId(longCount.incrementAndGet());
 
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restClienteMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(clienteDTO)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(clienteDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void partialUpdateClienteWithPatch() throws Exception {
         // Initialize the database
-        clienteRepository.saveAndFlush(cliente);
+        insertedCliente = clienteRepository.saveAndFlush(cliente);
 
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the cliente using partial update
         Cliente partialUpdatedCliente = new Cliente();
         partialUpdatedCliente.setId(cliente.getId());
 
-        partialUpdatedCliente.nome(UPDATED_NOME);
+        partialUpdatedCliente.cpf(UPDATED_CPF);
 
         restClienteMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedCliente.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedCliente))
+                    .content(om.writeValueAsBytes(partialUpdatedCliente))
             )
             .andExpect(status().isOk());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
-        Cliente testCliente = clienteList.get(clienteList.size() - 1);
-        assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
-        assertThat(testCliente.getCpf()).isEqualTo(DEFAULT_CPF);
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assertClienteUpdatableFieldsEquals(createUpdateProxyForBean(partialUpdatedCliente, cliente), getPersistedCliente(cliente));
     }
 
     @Test
     @Transactional
     void fullUpdateClienteWithPatch() throws Exception {
         // Initialize the database
-        clienteRepository.saveAndFlush(cliente);
+        insertedCliente = clienteRepository.saveAndFlush(cliente);
 
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
+        long databaseSizeBeforeUpdate = getRepositoryCount();
 
         // Update the cliente using partial update
         Cliente partialUpdatedCliente = new Cliente();
@@ -340,23 +345,21 @@ class ClienteResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedCliente.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedCliente))
+                    .content(om.writeValueAsBytes(partialUpdatedCliente))
             )
             .andExpect(status().isOk());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
-        Cliente testCliente = clienteList.get(clienteList.size() - 1);
-        assertThat(testCliente.getNome()).isEqualTo(UPDATED_NOME);
-        assertThat(testCliente.getCpf()).isEqualTo(UPDATED_CPF);
+
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
+        assertClienteUpdatableFieldsEquals(partialUpdatedCliente, getPersistedCliente(partialUpdatedCliente));
     }
 
     @Test
     @Transactional
     void patchNonExistingCliente() throws Exception {
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
-        cliente.setId(count.incrementAndGet());
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        cliente.setId(longCount.incrementAndGet());
 
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
@@ -366,20 +369,19 @@ class ClienteResourceIT {
             .perform(
                 patch(ENTITY_API_URL_ID, clienteDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+                    .content(om.writeValueAsBytes(clienteDTO))
             )
             .andExpect(status().isBadRequest());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void patchWithIdMismatchCliente() throws Exception {
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
-        cliente.setId(count.incrementAndGet());
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        cliente.setId(longCount.incrementAndGet());
 
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
@@ -387,45 +389,41 @@ class ClienteResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restClienteMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(clienteDTO))
+                    .content(om.writeValueAsBytes(clienteDTO))
             )
             .andExpect(status().isBadRequest());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void patchWithMissingIdPathParamCliente() throws Exception {
-        int databaseSizeBeforeUpdate = clienteRepository.findAll().size();
-        cliente.setId(count.incrementAndGet());
+        long databaseSizeBeforeUpdate = getRepositoryCount();
+        cliente.setId(longCount.incrementAndGet());
 
         // Create the Cliente
         ClienteDTO clienteDTO = clienteMapper.toDto(cliente);
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restClienteMockMvc
-            .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(clienteDTO))
-            )
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(om.writeValueAsBytes(clienteDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Cliente in the database
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeUpdate);
+        assertSameRepositoryCount(databaseSizeBeforeUpdate);
     }
 
     @Test
     @Transactional
     void deleteCliente() throws Exception {
         // Initialize the database
-        clienteRepository.saveAndFlush(cliente);
+        insertedCliente = clienteRepository.saveAndFlush(cliente);
 
-        int databaseSizeBeforeDelete = clienteRepository.findAll().size();
+        long databaseSizeBeforeDelete = getRepositoryCount();
 
         // Delete the cliente
         restClienteMockMvc
@@ -433,7 +431,34 @@ class ClienteResourceIT {
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<Cliente> clienteList = clienteRepository.findAll();
-        assertThat(clienteList).hasSize(databaseSizeBeforeDelete - 1);
+        assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
+    }
+
+    protected long getRepositoryCount() {
+        return clienteRepository.count();
+    }
+
+    protected void assertIncrementedRepositoryCount(long countBefore) {
+        assertThat(countBefore + 1).isEqualTo(getRepositoryCount());
+    }
+
+    protected void assertDecrementedRepositoryCount(long countBefore) {
+        assertThat(countBefore - 1).isEqualTo(getRepositoryCount());
+    }
+
+    protected void assertSameRepositoryCount(long countBefore) {
+        assertThat(countBefore).isEqualTo(getRepositoryCount());
+    }
+
+    protected Cliente getPersistedCliente(Cliente cliente) {
+        return clienteRepository.findById(cliente.getId()).orElseThrow();
+    }
+
+    protected void assertPersistedClienteToMatchAllProperties(Cliente expectedCliente) {
+        assertClienteAllPropertiesEquals(expectedCliente, getPersistedCliente(expectedCliente));
+    }
+
+    protected void assertPersistedClienteToMatchUpdatableProperties(Cliente expectedCliente) {
+        assertClienteAllUpdatablePropertiesEquals(expectedCliente, getPersistedCliente(expectedCliente));
     }
 }

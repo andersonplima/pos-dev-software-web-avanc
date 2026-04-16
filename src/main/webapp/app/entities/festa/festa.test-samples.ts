@@ -1,30 +1,30 @@
 import { IFesta, NewFesta } from './festa.model';
 
 export const sampleWithRequiredData: IFesta = {
-  id: 86994,
-  nome: 'Consultant Pequeno',
-  tema: 'Future-proofed calculating',
-  valor: 72933,
+  id: 7683,
+  nome: 'chainstay',
+  tema: 'intensely terrible',
+  valor: 29551.97,
 };
 
 export const sampleWithPartialData: IFesta = {
-  id: 62713,
-  nome: 'synthesize Paraíba',
-  tema: 'Intranet Sapatos',
-  valor: 5131,
+  id: 1948,
+  nome: 'owlishly',
+  tema: 'through generally but',
+  valor: 29661.18,
 };
 
 export const sampleWithFullData: IFesta = {
-  id: 86931,
-  nome: 'circuit deposit Lead',
-  tema: 'Janeiro',
-  valor: 36922,
+  id: 2187,
+  nome: 'yahoo modulo',
+  tema: 'yahoo beneath',
+  valor: 10193.13,
 };
 
 export const sampleWithNewData: NewFesta = {
-  nome: 'payment',
-  tema: 'Automotivo',
-  valor: 77624,
+  nome: 'pip pace',
+  tema: 'finally lest warmly',
+  valor: 9284.04,
   id: null,
 };
 

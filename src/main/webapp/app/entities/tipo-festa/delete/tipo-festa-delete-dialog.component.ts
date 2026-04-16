@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import SharedModule from 'app/shared/shared.module';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { ITipoFesta } from '../tipo-festa.model';
 import { TipoFestaService } from '../service/tipo-festa.service';
 
 @Component({
   templateUrl: './tipo-festa-delete-dialog.component.html',
+  imports: [SharedModule, FormsModule],
 })
 export class TipoFestaDeleteDialogComponent {
   tipoFesta?: ITipoFesta;
 
-  constructor(
-    protected tipoFestaService: TipoFestaService,
-    protected activeModal: NgbActiveModal,
-  ) {}
+  protected tipoFestaService = inject(TipoFestaService);
+  protected activeModal = inject(NgbActiveModal);
 
   cancel(): void {
     this.activeModal.dismiss();

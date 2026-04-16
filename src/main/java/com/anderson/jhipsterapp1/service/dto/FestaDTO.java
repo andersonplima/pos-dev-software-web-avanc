@@ -1,8 +1,8 @@
 package com.anderson.jhipsterapp1.service.dto;
 
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link com.anderson.jhipsterapp1.domain.Festa} entity.
@@ -24,8 +24,10 @@ public class FestaDTO implements Serializable {
     @DecimalMin(value = "0")
     private Float valor;
 
+    @NotNull
     private TipoFestaDTO tipoFesta;
 
+    @NotNull
     private ClienteDTO cliente;
 
     public Long getId() {

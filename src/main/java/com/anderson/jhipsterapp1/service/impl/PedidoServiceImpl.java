@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link Pedido}.
+ * Service Implementation for managing {@link com.anderson.jhipsterapp1.domain.Pedido}.
  */
 @Service
 @Transactional
 public class PedidoServiceImpl implements PedidoService {
 
-    private final Logger log = LoggerFactory.getLogger(PedidoServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PedidoServiceImpl.class);
 
     private final PedidoRepository pedidoRepository;
 
@@ -33,7 +33,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoDTO save(PedidoDTO pedidoDTO) {
-        log.debug("Request to save Pedido : {}", pedidoDTO);
+        LOG.debug("Request to save Pedido : {}", pedidoDTO);
         Pedido pedido = pedidoMapper.toEntity(pedidoDTO);
         pedido = pedidoRepository.save(pedido);
         return pedidoMapper.toDto(pedido);
@@ -41,7 +41,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoDTO update(PedidoDTO pedidoDTO) {
-        log.debug("Request to update Pedido : {}", pedidoDTO);
+        LOG.debug("Request to update Pedido : {}", pedidoDTO);
         Pedido pedido = pedidoMapper.toEntity(pedidoDTO);
         pedido = pedidoRepository.save(pedido);
         return pedidoMapper.toDto(pedido);
@@ -49,7 +49,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Optional<PedidoDTO> partialUpdate(PedidoDTO pedidoDTO) {
-        log.debug("Request to partially update Pedido : {}", pedidoDTO);
+        LOG.debug("Request to partially update Pedido : {}", pedidoDTO);
 
         return pedidoRepository
             .findById(pedidoDTO.getId())
@@ -65,20 +65,20 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     @Transactional(readOnly = true)
     public Page<PedidoDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all Pedidos");
+        LOG.debug("Request to get all Pedidos");
         return pedidoRepository.findAll(pageable).map(pedidoMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<PedidoDTO> findOne(Long id) {
-        log.debug("Request to get Pedido : {}", id);
+        LOG.debug("Request to get Pedido : {}", id);
         return pedidoRepository.findById(id).map(pedidoMapper::toDto);
     }
 
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Pedido : {}", id);
+        LOG.debug("Request to delete Pedido : {}", id);
         pedidoRepository.deleteById(id);
     }
 }

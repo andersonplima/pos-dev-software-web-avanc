@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link ItemPedido}.
+ * Service Implementation for managing {@link com.anderson.jhipsterapp1.domain.ItemPedido}.
  */
 @Service
 @Transactional
 public class ItemPedidoServiceImpl implements ItemPedidoService {
 
-    private final Logger log = LoggerFactory.getLogger(ItemPedidoServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ItemPedidoServiceImpl.class);
 
     private final ItemPedidoRepository itemPedidoRepository;
 
@@ -33,7 +33,7 @@ public class ItemPedidoServiceImpl implements ItemPedidoService {
 
     @Override
     public ItemPedidoDTO save(ItemPedidoDTO itemPedidoDTO) {
-        log.debug("Request to save ItemPedido : {}", itemPedidoDTO);
+        LOG.debug("Request to save ItemPedido : {}", itemPedidoDTO);
         ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
         itemPedido = itemPedidoRepository.save(itemPedido);
         return itemPedidoMapper.toDto(itemPedido);
@@ -41,7 +41,7 @@ public class ItemPedidoServiceImpl implements ItemPedidoService {
 
     @Override
     public ItemPedidoDTO update(ItemPedidoDTO itemPedidoDTO) {
-        log.debug("Request to update ItemPedido : {}", itemPedidoDTO);
+        LOG.debug("Request to update ItemPedido : {}", itemPedidoDTO);
         ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
         itemPedido = itemPedidoRepository.save(itemPedido);
         return itemPedidoMapper.toDto(itemPedido);
@@ -49,7 +49,7 @@ public class ItemPedidoServiceImpl implements ItemPedidoService {
 
     @Override
     public Optional<ItemPedidoDTO> partialUpdate(ItemPedidoDTO itemPedidoDTO) {
-        log.debug("Request to partially update ItemPedido : {}", itemPedidoDTO);
+        LOG.debug("Request to partially update ItemPedido : {}", itemPedidoDTO);
 
         return itemPedidoRepository
             .findById(itemPedidoDTO.getId())
@@ -65,20 +65,20 @@ public class ItemPedidoServiceImpl implements ItemPedidoService {
     @Override
     @Transactional(readOnly = true)
     public Page<ItemPedidoDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all ItemPedidos");
+        LOG.debug("Request to get all ItemPedidos");
         return itemPedidoRepository.findAll(pageable).map(itemPedidoMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<ItemPedidoDTO> findOne(Long id) {
-        log.debug("Request to get ItemPedido : {}", id);
+        LOG.debug("Request to get ItemPedido : {}", id);
         return itemPedidoRepository.findById(id).map(itemPedidoMapper::toDto);
     }
 
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete ItemPedido : {}", id);
+        LOG.debug("Request to delete ItemPedido : {}", id);
         itemPedidoRepository.deleteById(id);
     }
 }

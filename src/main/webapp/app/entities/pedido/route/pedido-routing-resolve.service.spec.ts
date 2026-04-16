@@ -1,26 +1,23 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router, convertToParamMap } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { IPedido } from '../pedido.model';
 import { PedidoService } from '../service/pedido.service';
 
-import { PedidoRoutingResolveService } from './pedido-routing-resolve.service';
+import pedidoResolve from './pedido-routing-resolve.service';
 
 describe('Pedido routing resolve service', () => {
   let mockRouter: Router;
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
-  let routingResolveService: PedidoRoutingResolveService;
   let service: PedidoService;
   let resultPedido: IPedido | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       providers: [
+        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -34,7 +31,6 @@ describe('Pedido routing resolve service', () => {
     mockRouter = TestBed.inject(Router);
     jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
-    routingResolveService = TestBed.inject(PedidoRoutingResolveService);
     service = TestBed.inject(PedidoService);
     resultPedido = undefined;
   });
@@ -46,12 +42,16 @@ describe('Pedido routing resolve service', () => {
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultPedido = result;
+      TestBed.runInInjectionContext(() => {
+        pedidoResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultPedido = result;
+          },
+        });
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
+      expect(service.find).toHaveBeenCalledWith(123);
       expect(resultPedido).toEqual({ id: 123 });
     });
 
@@ -61,12 +61,16 @@ describe('Pedido routing resolve service', () => {
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultPedido = result;
+      TestBed.runInInjectionContext(() => {
+        pedidoResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultPedido = result;
+          },
+        });
       });
 
       // THEN
-      expect(service.find).not.toBeCalled();
+      expect(service.find).not.toHaveBeenCalled();
       expect(resultPedido).toEqual(null);
     });
 
@@ -76,12 +80,16 @@ describe('Pedido routing resolve service', () => {
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
-      routingResolveService.resolve(mockActivatedRouteSnapshot).subscribe(result => {
-        resultPedido = result;
+      TestBed.runInInjectionContext(() => {
+        pedidoResolve(mockActivatedRouteSnapshot).subscribe({
+          next(result) {
+            resultPedido = result;
+          },
+        });
       });
 
       // THEN
-      expect(service.find).toBeCalledWith(123);
+      expect(service.find).toHaveBeenCalledWith(123);
       expect(resultPedido).toEqual(undefined);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
     });

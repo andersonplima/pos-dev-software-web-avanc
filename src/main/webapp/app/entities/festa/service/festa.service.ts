@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -14,12 +14,10 @@ export type EntityArrayResponseType = HttpResponse<IFesta[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FestaService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/festas');
+  protected readonly http = inject(HttpClient);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-  ) {}
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/festas');
 
   create(festa: NewFesta): Observable<EntityResponseType> {
     return this.http.post<IFesta>(this.resourceUrl, festa, { observe: 'response' });
@@ -60,7 +58,7 @@ export class FestaService {
   ): Type[] {
     const festas: Type[] = festasToCheck.filter(isPresent);
     if (festas.length > 0) {
-      const festaCollectionIdentifiers = festaCollection.map(festaItem => this.getFestaIdentifier(festaItem)!);
+      const festaCollectionIdentifiers = festaCollection.map(festaItem => this.getFestaIdentifier(festaItem));
       const festasToAdd = festas.filter(festaItem => {
         const festaIdentifier = this.getFestaIdentifier(festaItem);
         if (festaCollectionIdentifiers.includes(festaIdentifier)) {

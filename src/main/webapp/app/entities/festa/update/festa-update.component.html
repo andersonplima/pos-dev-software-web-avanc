@@ -1,77 +1,79 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-festa-heading" data-cy="FestaCreateUpdateHeading" jhiTranslate="jhipsterapp1App.festa.home.createOrEditLabel">
         Criar ou editar Festa
       </h2>
 
       <div>
-        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error />
 
-        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="jhipsterapp1App.festa.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.festa.nome" for="field_nome">Nome</label>
+        @let nomeRef = editForm.get('nome')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nome" jhiTranslate="jhipsterapp1App.festa.nome">Nome</label>
           <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
-          <div *ngIf="editForm.get('nome')!.invalid && (editForm.get('nome')!.dirty || editForm.get('nome')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('nome')?.errors?.required" jhiTranslate="entity.validation.required">
-              O campo é obrigatório.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('nome')?.errors?.maxlength"
-              jhiTranslate="entity.validation.maxlength"
-              [translateValues]="{ max: 100 }"
-            >
-              Este campo não pode ter mais de 100 caracteres.
-            </small>
-          </div>
+          @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
+            <div>
+              @if (editForm.get('nome')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+              }
+              @if (editForm.get('nome')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
+                  >Este campo não pode ter mais de 100 caracteres.</small
+                >
+              }
+            </div>
+          }
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.festa.tema" for="field_tema">Tema</label>
+        @let temaRef = editForm.get('tema')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_tema" jhiTranslate="jhipsterapp1App.festa.tema">Tema</label>
           <input type="text" class="form-control" name="tema" id="field_tema" data-cy="tema" formControlName="tema" />
-          <div *ngIf="editForm.get('tema')!.invalid && (editForm.get('tema')!.dirty || editForm.get('tema')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('tema')?.errors?.required" jhiTranslate="entity.validation.required">
-              O campo é obrigatório.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('tema')?.errors?.maxlength"
-              jhiTranslate="entity.validation.maxlength"
-              [translateValues]="{ max: 50 }"
-            >
-              Este campo não pode ter mais de 50 caracteres.
-            </small>
-          </div>
+          @if (temaRef.invalid && (temaRef.dirty || temaRef.touched)) {
+            <div>
+              @if (editForm.get('tema')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+              }
+              @if (editForm.get('tema')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
+                  >Este campo não pode ter mais de 50 caracteres.</small
+                >
+              }
+            </div>
+          }
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.festa.valor" for="field_valor">Valor</label>
+        @let valorRef = editForm.get('valor')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_valor" jhiTranslate="jhipsterapp1App.festa.valor">Valor</label>
           <input type="number" class="form-control" name="valor" id="field_valor" data-cy="valor" formControlName="valor" />
-          <div *ngIf="editForm.get('valor')!.invalid && (editForm.get('valor')!.dirty || editForm.get('valor')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('valor')?.errors?.required" jhiTranslate="entity.validation.required">
-              O campo é obrigatório.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('valor')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              Este campo deve ser maior que 0.
-            </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('valor')?.errors?.number" jhiTranslate="entity.validation.number">
-              Este campo é do tipo numérico.
-            </small>
-          </div>
+          @if (valorRef.invalid && (valorRef.dirty || valorRef.touched)) {
+            <div>
+              @if (editForm.get('valor')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+              }
+              @if (editForm.get('valor')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Este campo deve ser maior que 0.</small
+                >
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('valor')?.errors?.number" jhiTranslate="entity.validation.number"
+                >Este campo é do tipo numérico.</small
+              >
+            </div>
+          }
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.festa.tipoFesta" for="field_tipoFesta">Tipo Festa</label>
+        <div class="mb-3">
+          <label class="form-label" for="field_tipoFesta" jhiTranslate="jhipsterapp1App.festa.tipoFesta">Tipo Festa</label>
           <select
             class="form-control"
             id="field_tipoFesta"
@@ -80,24 +82,24 @@
             formControlName="tipoFesta"
             [compareWith]="compareTipoFesta"
           >
-            <option *ngIf="editForm.get(['tipoFesta'])!.value == null" [ngValue]="null" selected></option>
-            <option [ngValue]="tipoFestaOption" *ngFor="let tipoFestaOption of tipoFestasSharedCollection">
-              {{ tipoFestaOption.nome }}
-            </option>
+            @if (editForm.get(['tipoFesta'])!.value === null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (tipoFestaOption of tipoFestasSharedCollection; track $index) {
+              <option [ngValue]="tipoFestaOption">{{ tipoFestaOption.nome }}</option>
+            }
           </select>
         </div>
-        <div *ngIf="editForm.get(['tipoFesta'])!.invalid && (editForm.get(['tipoFesta'])!.dirty || editForm.get(['tipoFesta'])!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get(['tipoFesta'])?.errors?.required"
-            jhiTranslate="entity.validation.required"
-          >
-            O campo é obrigatório.
-          </small>
-        </div>
+        @if (editForm.get(['tipoFesta'])!.invalid && (editForm.get(['tipoFesta'])!.dirty || editForm.get(['tipoFesta'])!.touched)) {
+          <div>
+            @if (editForm.get(['tipoFesta'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+            }
+          </div>
+        }
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.festa.cliente" for="field_cliente">Cliente</label>
+        <div class="mb-3">
+          <label class="form-label" for="field_cliente" jhiTranslate="jhipsterapp1App.festa.cliente">Cliente</label>
           <select
             class="form-control"
             id="field_cliente"
@@ -106,19 +108,21 @@
             formControlName="cliente"
             [compareWith]="compareCliente"
           >
-            <option *ngIf="editForm.get(['cliente'])!.value == null" [ngValue]="null" selected></option>
-            <option [ngValue]="clienteOption" *ngFor="let clienteOption of clientesSharedCollection">{{ clienteOption.cpf }}</option>
+            @if (editForm.get(['cliente'])!.value === null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (clienteOption of clientesSharedCollection; track $index) {
+              <option [ngValue]="clienteOption">{{ clienteOption.cpf }}</option>
+            }
           </select>
         </div>
-        <div *ngIf="editForm.get(['cliente'])!.invalid && (editForm.get(['cliente'])!.dirty || editForm.get(['cliente'])!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get(['cliente'])?.errors?.required"
-            jhiTranslate="entity.validation.required"
-          >
-            O campo é obrigatório.
-          </small>
-        </div>
+        @if (editForm.get(['cliente'])!.invalid && (editForm.get(['cliente'])!.dirty || editForm.get(['cliente'])!.touched)) {
+          <div>
+            @if (editForm.get(['cliente'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+            }
+          </div>
+        }
       </div>
 
       <div>

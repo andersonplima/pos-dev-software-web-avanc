@@ -7,12 +7,13 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Encje",
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "adminAuthority": "Authority",
         "festa": "Festa",
         "tipoFesta": "Tipo Festa",
         "cliente": "Cliente",
         "pedido": "Pedido",
-        "itemPedido": "Item Pedido",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "itemPedido": "Item Pedido"
       },
       "account": {
         "main": "Konto",
@@ -103,7 +104,7 @@
       "open": "Otwórz",
       "save": "Zapisz",
       "view": "Widok",
-      "show": "Show {{otherEntity}}"
+      "show": "Wyświetl {{otherEntity}}"
     },
     "detail": {
       "field": "Pole",
@@ -125,9 +126,9 @@
       "datetimelocal": "Wartość powinna zawierać datę i czas."
     },
     "filters": {
-      "set": "Following filters are set",
-      "clear": "Clear filter",
-      "clearAll": "Clear all filters"
+      "set": "Ustawiono wymienione filtry",
+      "clear": "Wyczyść filtr",
+      "clearAll": "Wyczyść wszystkie filtry"
     }
   },
   "error": {
@@ -139,12 +140,12 @@
     "userexists": "Użytkownik o takiej nazwie już istnieje!",
     "emailexists": "Użytkownik z takim adresem email już istnieje!",
     "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID",
-    "idnull": "Błędne ID",
-    "idinvalid": "Invalid Id",
-    "idnotfound": "ID cannot be found",
+    "idnull": "Brakujące ID",
+    "idinvalid": "Niepoprawne ID",
+    "idnotfound": "ID nie może zostać znalezione",
     "file": {
-      "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+      "could.not.extract": "Nie można wypakować pliku.",
+      "not.image": "Oczekiwany format pliku to zdjęcie, obecny format pliku to \"{{ fileType }}\""
     }
   },
   "footer": "To jest stopka"

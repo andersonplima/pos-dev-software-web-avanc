@@ -1,56 +1,63 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, WritableSignal, computed, inject, signal } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { Observable, combineLatest, filter, switchMap, tap } from 'rxjs';
+import { ActivatedRoute, Data, ParamMap, Router, RouterModule } from '@angular/router';
+import { Observable, Subscription, combineLatest, filter, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
-import { ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
-import { ParseLinks } from 'app/core/util/parse-links.service';
-import { IItemPedido } from '../item-pedido.model';
+import SharedModule from 'app/shared/shared.module';
+import { SortByDirective, SortDirective, SortService, type SortState, sortStateSignal } from 'app/shared/sort';
+import { FormsModule } from '@angular/forms';
 
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { ParseLinks } from 'app/core/util/parse-links.service';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { EntityArrayResponseType, ItemPedidoService } from '../service/item-pedido.service';
 import { ItemPedidoDeleteDialogComponent } from '../delete/item-pedido-delete-dialog.component';
+import { IItemPedido } from '../item-pedido.model';
 
 @Component({
   selector: 'jhi-item-pedido',
   templateUrl: './item-pedido.component.html',
+  imports: [RouterModule, FormsModule, SharedModule, SortDirective, SortByDirective, InfiniteScrollDirective],
 })
 export class ItemPedidoComponent implements OnInit {
-  itemPedidos?: IItemPedido[];
+  subscription: Subscription | null = null;
+  itemPedidos = signal<IItemPedido[]>([]);
   isLoading = false;
 
-  predicate = 'id';
-  ascending = true;
+  sortState = sortStateSignal({});
 
   itemsPerPage = ITEMS_PER_PAGE;
-  links: { [key: string]: number } = {
-    last: 0,
-  };
-  page = 1;
+  links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
+  hasMorePage = computed(() => !!this.links().next);
+  isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 
-  constructor(
-    protected itemPedidoService: ItemPedidoService,
-    protected activatedRoute: ActivatedRoute,
-    public router: Router,
-    protected parseLinks: ParseLinks,
-    protected modalService: NgbModal,
-  ) {}
+  public readonly router = inject(Router);
+  protected readonly itemPedidoService = inject(ItemPedidoService);
+  protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly sortService = inject(SortService);
+  protected parseLinks = inject(ParseLinks);
+  protected modalService = inject(NgbModal);
+  protected ngZone = inject(NgZone);
 
-  reset(): void {
-    this.page = 1;
-    this.itemPedidos = [];
-    this.load();
-  }
-
-  loadPage(page: number): void {
-    this.page = page;
-    this.load();
-  }
-
-  trackId = (_index: number, item: IItemPedido): number => this.itemPedidoService.getItemPedidoIdentifier(item);
+  trackId = (item: IItemPedido): number => this.itemPedidoService.getItemPedidoIdentifier(item);
 
   ngOnInit(): void {
+    this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data])
+      .pipe(
+        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+        tap(() => this.reset()),
+        tap(() => this.load()),
+      )
+      .subscribe();
+  }
+
+  reset(): void {
+    this.itemPedidos.set([]);
+  }
+
+  loadNextPage(): void {
     this.load();
   }
 
@@ -61,102 +68,84 @@ export class ItemPedidoComponent implements OnInit {
     modalRef.closed
       .pipe(
         filter(reason => reason === ITEM_DELETED_EVENT),
-        switchMap(() => this.loadFromBackendWithRouteInformations()),
+        tap(() => this.load()),
       )
-      .subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        },
-      });
+      .subscribe();
   }
 
   load(): void {
-    this.loadFromBackendWithRouteInformations().subscribe({
+    this.queryBackend().subscribe({
       next: (res: EntityArrayResponseType) => {
         this.onResponseSuccess(res);
       },
     });
   }
 
-  navigateToWithComponentValues(): void {
-    this.handleNavigation(this.page, this.predicate, this.ascending);
-  }
-
-  navigateToPage(page = this.page): void {
-    this.handleNavigation(page, this.predicate, this.ascending);
-  }
-
-  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
-    return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
-      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending)),
-    );
+  navigateToWithComponentValues(event: SortState): void {
+    this.handleNavigation(event);
   }
 
   protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
-    this.predicate = sort[0];
-    this.ascending = sort[1] === ASC;
+    this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
   }
 
   protected onResponseSuccess(response: EntityArrayResponseType): void {
     this.fillComponentAttributesFromResponseHeader(response.headers);
     const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-    this.itemPedidos = dataFromBody;
+    this.itemPedidos.set(dataFromBody);
   }
 
   protected fillComponentAttributesFromResponseBody(data: IItemPedido[] | null): IItemPedido[] {
-    const itemPedidosNew = this.itemPedidos ?? [];
-    if (data) {
-      for (const d of data) {
-        if (itemPedidosNew.map(op => op.id).indexOf(d.id) === -1) {
-          itemPedidosNew.push(d);
+    // If there is previous link, data is a infinite scroll pagination content.
+    if (this.links().prev) {
+      const itemPedidosNew = this.itemPedidos();
+      if (data) {
+        for (const d of data) {
+          if (itemPedidosNew.some(op => op.id === d.id)) {
+            itemPedidosNew.push(d);
+          }
         }
       }
+      return itemPedidosNew;
     }
-    return itemPedidosNew;
+    return data ?? [];
   }
 
   protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
     const linkHeader = headers.get('link');
     if (linkHeader) {
-      this.links = this.parseLinks.parse(linkHeader);
+      this.links.set(this.parseLinks.parseAll(linkHeader));
     } else {
-      this.links = {
-        last: 0,
-      };
+      this.links.set({});
     }
   }
 
-  protected queryBackend(page?: number, predicate?: string, ascending?: boolean): Observable<EntityArrayResponseType> {
+  protected queryBackend(): Observable<EntityArrayResponseType> {
     this.isLoading = true;
-    const pageToLoad: number = page ?? 1;
-    const queryObject = {
-      page: pageToLoad - 1,
+    const queryObject: any = {
       size: this.itemsPerPage,
-      sort: this.getSortQueryParam(predicate, ascending),
     };
+    if (this.hasMorePage()) {
+      Object.assign(queryObject, this.links().next);
+    } else if (this.isFirstFetch()) {
+      Object.assign(queryObject, { sort: this.sortService.buildSortParam(this.sortState()) });
+    }
+
     return this.itemPedidoService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
   }
 
-  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean): void {
+  protected handleNavigation(sortState: SortState): void {
+    this.links.set({});
+
     const queryParamsObj = {
-      page,
-      size: this.itemsPerPage,
-      sort: this.getSortQueryParam(predicate, ascending),
+      sort: this.sortService.buildSortParam(sortState),
     };
 
-    this.router.navigate(['./'], {
-      relativeTo: this.activatedRoute,
-      queryParams: queryParamsObj,
+    this.ngZone.run(() => {
+      this.router.navigate(['./'], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParamsObj,
+      });
     });
-  }
-
-  protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
-    const ascendingQueryParam = ascending ? ASC : DESC;
-    if (predicate === '') {
-      return [];
-    }
-    return [`${predicate},${ascendingQueryParam}`];
   }
 }

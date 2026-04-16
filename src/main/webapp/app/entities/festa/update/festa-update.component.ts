@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ITipoFesta } from 'app/entities/tipo-festa/tipo-festa.model';
 import { TipoFestaService } from 'app/entities/tipo-festa/service/tipo-festa.service';
@@ -15,6 +18,7 @@ import { FestaFormGroup, FestaFormService } from './festa-form.service';
 @Component({
   selector: 'jhi-festa-update',
   templateUrl: './festa-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class FestaUpdateComponent implements OnInit {
   isSaving = false;
@@ -23,15 +27,14 @@ export class FestaUpdateComponent implements OnInit {
   tipoFestasSharedCollection: ITipoFesta[] = [];
   clientesSharedCollection: ICliente[] = [];
 
-  editForm: FestaFormGroup = this.festaFormService.createFestaFormGroup();
+  protected festaService = inject(FestaService);
+  protected festaFormService = inject(FestaFormService);
+  protected tipoFestaService = inject(TipoFestaService);
+  protected clienteService = inject(ClienteService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    protected festaService: FestaService,
-    protected festaFormService: FestaFormService,
-    protected tipoFestaService: TipoFestaService,
-    protected clienteService: ClienteService,
-    protected activatedRoute: ActivatedRoute,
-  ) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: FestaFormGroup = this.festaFormService.createFestaFormGroup();
 
   compareTipoFesta = (o1: ITipoFesta | null, o2: ITipoFesta | null): boolean => this.tipoFestaService.compareTipoFesta(o1, o2);
 

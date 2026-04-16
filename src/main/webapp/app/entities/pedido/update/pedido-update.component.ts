@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IPedido } from '../pedido.model';
 import { PedidoService } from '../service/pedido.service';
@@ -11,18 +14,18 @@ import { PedidoFormGroup, PedidoFormService } from './pedido-form.service';
 @Component({
   selector: 'jhi-pedido-update',
   templateUrl: './pedido-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class PedidoUpdateComponent implements OnInit {
   isSaving = false;
   pedido: IPedido | null = null;
 
-  editForm: PedidoFormGroup = this.pedidoFormService.createPedidoFormGroup();
+  protected pedidoService = inject(PedidoService);
+  protected pedidoFormService = inject(PedidoFormService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    protected pedidoService: PedidoService,
-    protected pedidoFormService: PedidoFormService,
-    protected activatedRoute: ActivatedRoute,
-  ) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: PedidoFormGroup = this.pedidoFormService.createPedidoFormGroup();
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ pedido }) => {

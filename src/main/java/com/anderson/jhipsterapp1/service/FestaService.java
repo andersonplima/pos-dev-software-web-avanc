@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link Festa}.
+ * Service Implementation for managing {@link com.anderson.jhipsterapp1.domain.Festa}.
  */
 @Service
 @Transactional
 public class FestaService {
 
-    private final Logger log = LoggerFactory.getLogger(FestaService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FestaService.class);
 
     private final FestaRepository festaRepository;
 
@@ -40,7 +40,7 @@ public class FestaService {
      * @return the persisted entity.
      */
     public FestaDTO save(FestaDTO festaDTO) {
-        log.debug("Request to save Festa : {}", festaDTO);
+        LOG.debug("Request to save Festa : {}", festaDTO);
         Festa festa = festaMapper.toEntity(festaDTO);
         festa = festaRepository.save(festa);
         return festaMapper.toDto(festa);
@@ -53,7 +53,7 @@ public class FestaService {
      * @return the persisted entity.
      */
     public FestaDTO update(FestaDTO festaDTO) {
-        log.debug("Request to update Festa : {}", festaDTO);
+        LOG.debug("Request to update Festa : {}", festaDTO);
         Festa festa = festaMapper.toEntity(festaDTO);
         festa = festaRepository.save(festa);
         return festaMapper.toDto(festa);
@@ -66,7 +66,7 @@ public class FestaService {
      * @return the persisted entity.
      */
     public Optional<FestaDTO> partialUpdate(FestaDTO festaDTO) {
-        log.debug("Request to partially update Festa : {}", festaDTO);
+        LOG.debug("Request to partially update Festa : {}", festaDTO);
 
         return festaRepository
             .findById(festaDTO.getId())
@@ -86,7 +86,7 @@ public class FestaService {
      */
     @Transactional(readOnly = true)
     public List<FestaDTO> findAll() {
-        log.debug("Request to get all Festas");
+        LOG.debug("Request to get all Festas");
         return festaRepository.findAll().stream().map(festaMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -107,7 +107,7 @@ public class FestaService {
      */
     @Transactional(readOnly = true)
     public Optional<FestaDTO> findOne(Long id) {
-        log.debug("Request to get Festa : {}", id);
+        LOG.debug("Request to get Festa : {}", id);
         return festaRepository.findOneWithEagerRelationships(id).map(festaMapper::toDto);
     }
 
@@ -117,7 +117,7 @@ public class FestaService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete Festa : {}", id);
+        LOG.debug("Request to delete Festa : {}", id);
         festaRepository.deleteById(id);
     }
 }

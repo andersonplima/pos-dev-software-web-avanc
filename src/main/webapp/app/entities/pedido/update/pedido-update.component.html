@@ -1,20 +1,22 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-pedido-heading" data-cy="PedidoCreateUpdateHeading" jhiTranslate="jhipsterapp1App.pedido.home.createOrEditLabel">
         Criar ou editar Pedido
       </h2>
 
       <div>
-        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert-error />
 
-        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
-          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="jhipsterapp1App.pedido.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.pedido.dataPedido" for="field_dataPedido">Data Pedido</label>
+        <div class="mb-3">
+          <label class="form-label" for="field_dataPedido" jhiTranslate="jhipsterapp1App.pedido.dataPedido">Data Pedido</label>
           <div class="d-flex">
             <input
               id="field_dataPedido"
@@ -28,8 +30,9 @@
           </div>
         </div>
 
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="jhipsterapp1App.pedido.valorPedido" for="field_valorPedido">Valor Pedido</label>
+        @let valorPedidoRef = editForm.get('valorPedido')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_valorPedido" jhiTranslate="jhipsterapp1App.pedido.valorPedido">Valor Pedido</label>
           <input
             type="number"
             class="form-control"
@@ -38,22 +41,19 @@
             data-cy="valorPedido"
             formControlName="valorPedido"
           />
-          <div *ngIf="editForm.get('valorPedido')!.invalid && (editForm.get('valorPedido')!.dirty || editForm.get('valorPedido')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('valorPedido')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              O campo é obrigatório.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('valorPedido')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              Este campo é do tipo numérico.
-            </small>
-          </div>
+          @if (valorPedidoRef.invalid && (valorPedidoRef.dirty || valorPedidoRef.touched)) {
+            <div>
+              @if (editForm.get('valorPedido')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('valorPedido')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Este campo é do tipo numérico.</small
+              >
+            </div>
+          }
         </div>
       </div>
 

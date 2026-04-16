@@ -1,10 +1,13 @@
 package com.anderson.jhipsterapp1.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -30,6 +33,11 @@ public class Pedido implements Serializable {
     @NotNull
     @Column(name = "valor_pedido", precision = 21, scale = 2, nullable = false)
     private BigDecimal valorPedido;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pedido")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "pedido" }, allowSetters = true)
+    private Set<ItemPedido> itemPedidos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -72,6 +80,37 @@ public class Pedido implements Serializable {
         this.valorPedido = valorPedido;
     }
 
+    public Set<ItemPedido> getItemPedidos() {
+        return this.itemPedidos;
+    }
+
+    public void setItemPedidos(Set<ItemPedido> itemPedidos) {
+        if (this.itemPedidos != null) {
+            this.itemPedidos.forEach(i -> i.setPedido(null));
+        }
+        if (itemPedidos != null) {
+            itemPedidos.forEach(i -> i.setPedido(this));
+        }
+        this.itemPedidos = itemPedidos;
+    }
+
+    public Pedido itemPedidos(Set<ItemPedido> itemPedidos) {
+        this.setItemPedidos(itemPedidos);
+        return this;
+    }
+
+    public Pedido addItemPedido(ItemPedido itemPedido) {
+        this.itemPedidos.add(itemPedido);
+        itemPedido.setPedido(this);
+        return this;
+    }
+
+    public Pedido removeItemPedido(ItemPedido itemPedido) {
+        this.itemPedidos.remove(itemPedido);
+        itemPedido.setPedido(null);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -82,7 +121,7 @@ public class Pedido implements Serializable {
         if (!(o instanceof Pedido)) {
             return false;
         }
-        return id != null && id.equals(((Pedido) o).id);
+        return getId() != null && getId().equals(((Pedido) o).getId());
     }
 
     @Override

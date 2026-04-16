@@ -27,12 +27,12 @@ public interface FestaRepository extends JpaRepository<Festa, Long> {
     }
 
     @Query(
-        value = "select distinct festa from Festa festa left join fetch festa.tipoFesta left join fetch festa.cliente",
-        countQuery = "select count(distinct festa) from Festa festa"
+        value = "select festa from Festa festa left join fetch festa.tipoFesta left join fetch festa.cliente",
+        countQuery = "select count(festa) from Festa festa"
     )
     Page<Festa> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct festa from Festa festa left join fetch festa.tipoFesta left join fetch festa.cliente")
+    @Query("select festa from Festa festa left join fetch festa.tipoFesta left join fetch festa.cliente")
     List<Festa> findAllWithToOneRelationships();
 
     @Query("select festa from Festa festa left join fetch festa.tipoFesta left join fetch festa.cliente where festa.id =:id")

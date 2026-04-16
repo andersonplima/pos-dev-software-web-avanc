@@ -1,23 +1,23 @@
 import { IItemPedido, NewItemPedido } from './item-pedido.model';
 
 export const sampleWithRequiredData: IItemPedido = {
-  id: 99459,
-  nomeItem: 'withdrawal',
+  id: 19308,
+  nomeItem: 'how behind',
 };
 
 export const sampleWithPartialData: IItemPedido = {
-  id: 58868,
-  nomeItem: 'Balboa dourado revolutionary',
+  id: 11241,
+  nomeItem: 'quicker',
 };
 
 export const sampleWithFullData: IItemPedido = {
-  id: 60706,
-  nomeItem: 'parsing Account',
-  valorItem: 37819,
+  id: 17748,
+  nomeItem: 'pushy',
+  valorItem: 14257.56,
 };
 
 export const sampleWithNewData: NewItemPedido = {
-  nomeItem: 'override',
+  nomeItem: 'embossing',
   id: null,
 };
 

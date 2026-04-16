@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Subject, from, of } from 'rxjs';
 
 import { TipoFestaService } from '../service/tipo-festa.service';
@@ -21,9 +19,9 @@ describe('TipoFesta Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [TipoFestaUpdateComponent],
+      imports: [TipoFestaUpdateComponent],
       providers: [
+        provideHttpClient(),
         FormBuilder,
         {
           provide: ActivatedRoute,
@@ -45,8 +43,8 @@ describe('TipoFesta Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
-      const tipoFesta: ITipoFesta = { id: 456 };
+    it('should update editForm', () => {
+      const tipoFesta: ITipoFesta = { id: 10605 };
 
       activatedRoute.data = of({ tipoFesta });
       comp.ngOnInit();
@@ -56,10 +54,10 @@ describe('TipoFesta Management Update Component', () => {
   });
 
   describe('save', () => {
-    it('Should call update service on save for existing entity', () => {
+    it('should call update service on save for existing entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<ITipoFesta>>();
-      const tipoFesta = { id: 123 };
+      const tipoFesta = { id: 12172 };
       jest.spyOn(tipoFestaFormService, 'getTipoFesta').mockReturnValue(tipoFesta);
       jest.spyOn(tipoFestaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -79,10 +77,10 @@ describe('TipoFesta Management Update Component', () => {
       expect(comp.isSaving).toEqual(false);
     });
 
-    it('Should call create service on save for new entity', () => {
+    it('should call create service on save for new entity', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<ITipoFesta>>();
-      const tipoFesta = { id: 123 };
+      const tipoFesta = { id: 12172 };
       jest.spyOn(tipoFestaFormService, 'getTipoFesta').mockReturnValue({ id: null });
       jest.spyOn(tipoFestaService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -102,10 +100,10 @@ describe('TipoFesta Management Update Component', () => {
       expect(comp.previousState).toHaveBeenCalled();
     });
 
-    it('Should set isSaving to false on error', () => {
+    it('should set isSaving to false on error', () => {
       // GIVEN
       const saveSubject = new Subject<HttpResponse<ITipoFesta>>();
-      const tipoFesta = { id: 123 };
+      const tipoFesta = { id: 12172 };
       jest.spyOn(tipoFestaService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ tipoFesta });

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ITipoFesta } from '../tipo-festa.model';
 import { TipoFestaService } from '../service/tipo-festa.service';
@@ -11,18 +14,18 @@ import { TipoFestaFormGroup, TipoFestaFormService } from './tipo-festa-form.serv
 @Component({
   selector: 'jhi-tipo-festa-update',
   templateUrl: './tipo-festa-update.component.html',
+  imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class TipoFestaUpdateComponent implements OnInit {
   isSaving = false;
   tipoFesta: ITipoFesta | null = null;
 
-  editForm: TipoFestaFormGroup = this.tipoFestaFormService.createTipoFestaFormGroup();
+  protected tipoFestaService = inject(TipoFestaService);
+  protected tipoFestaFormService = inject(TipoFestaFormService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    protected tipoFestaService: TipoFestaService,
-    protected tipoFestaFormService: TipoFestaFormService,
-    protected activatedRoute: ActivatedRoute,
-  ) {}
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: TipoFestaFormGroup = this.tipoFestaFormService.createTipoFestaFormGroup();
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tipoFesta }) => {

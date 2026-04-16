@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -14,12 +14,10 @@ export type EntityArrayResponseType = HttpResponse<ITipoFesta[]>;
 
 @Injectable({ providedIn: 'root' })
 export class TipoFestaService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tipo-festas');
+  protected readonly http = inject(HttpClient);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  constructor(
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
-  ) {}
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tipo-festas');
 
   create(tipoFesta: NewTipoFesta): Observable<EntityResponseType> {
     return this.http.post<ITipoFesta>(this.resourceUrl, tipoFesta, { observe: 'response' });
@@ -60,7 +58,7 @@ export class TipoFestaService {
   ): Type[] {
     const tipoFestas: Type[] = tipoFestasToCheck.filter(isPresent);
     if (tipoFestas.length > 0) {
-      const tipoFestaCollectionIdentifiers = tipoFestaCollection.map(tipoFestaItem => this.getTipoFestaIdentifier(tipoFestaItem)!);
+      const tipoFestaCollectionIdentifiers = tipoFestaCollection.map(tipoFestaItem => this.getTipoFestaIdentifier(tipoFestaItem));
       const tipoFestasToAdd = tipoFestas.filter(tipoFestaItem => {
         const tipoFestaIdentifier = this.getTipoFestaIdentifier(tipoFestaItem);
         if (tipoFestaCollectionIdentifiers.includes(tipoFestaIdentifier)) {

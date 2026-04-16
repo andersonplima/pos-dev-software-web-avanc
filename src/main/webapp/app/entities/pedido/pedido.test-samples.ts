@@ -3,24 +3,24 @@ import dayjs from 'dayjs/esm';
 import { IPedido, NewPedido } from './pedido.model';
 
 export const sampleWithRequiredData: IPedido = {
-  id: 74389,
-  valorPedido: 93818,
+  id: 18617,
+  valorPedido: 26259.3,
 };
 
 export const sampleWithPartialData: IPedido = {
-  id: 6787,
-  dataPedido: dayjs('2020-02-15T05:47'),
-  valorPedido: 28975,
+  id: 7853,
+  dataPedido: dayjs('2020-02-15T01:46'),
+  valorPedido: 32256.53,
 };
 
 export const sampleWithFullData: IPedido = {
-  id: 97915,
-  dataPedido: dayjs('2020-02-15T10:45'),
-  valorPedido: 47678,
+  id: 29823,
+  dataPedido: dayjs('2020-02-15T07:37'),
+  valorPedido: 29572.93,
 };
 
 export const sampleWithNewData: NewPedido = {
-  valorPedido: 84561,
+  valorPedido: 23489.45,
   id: null,
 };
 

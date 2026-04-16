@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { PedidoDetailComponent } from './pedido-detail.component';
@@ -8,29 +9,46 @@ describe('Pedido Management Detail Component', () => {
   let comp: PedidoDetailComponent;
   let fixture: ComponentFixture<PedidoDetailComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [PedidoDetailComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PedidoDetailComponent],
       providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: { data: of({ pedido: { id: 123 } }) },
-        },
+        provideRouter(
+          [
+            {
+              path: '**',
+              loadComponent: () => import('./pedido-detail.component').then(m => m.PedidoDetailComponent),
+              resolve: { pedido: () => of({ id: 24162 }) },
+            },
+          ],
+          withComponentInputBinding(),
+        ),
       ],
     })
       .overrideTemplate(PedidoDetailComponent, '')
       .compileComponents();
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(PedidoDetailComponent);
     comp = fixture.componentInstance;
   });
 
   describe('OnInit', () => {
-    it('Should load pedido on init', () => {
-      // WHEN
-      comp.ngOnInit();
+    it('should load pedido on init', async () => {
+      const harness = await RouterTestingHarness.create();
+      const instance = await harness.navigateByUrl('/', PedidoDetailComponent);
 
       // THEN
-      expect(comp.pedido).toEqual(expect.objectContaining({ id: 123 }));
+      expect(instance.pedido()).toEqual(expect.objectContaining({ id: 24162 }));
+    });
+  });
+
+  describe('PreviousState', () => {
+    it('should navigate to previous state', () => {
+      jest.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(window.history.back).toHaveBeenCalled();
     });
   });
 });
