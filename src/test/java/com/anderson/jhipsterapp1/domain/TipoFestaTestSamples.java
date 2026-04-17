@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class TipoFestaTestSamples {
 
     private static final Random random = new Random();
-    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     public static TipoFesta getTipoFestaSample1() {
         return new TipoFesta().id(1L).nome("nome1").descricao("descricao1");

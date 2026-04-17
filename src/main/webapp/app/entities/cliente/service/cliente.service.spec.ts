@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { ICliente } from '../cliente.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../cliente.test-samples';
@@ -18,7 +18,7 @@ describe('Cliente Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     });
     expectedResult = null;
     service = TestBed.inject(ClienteService);
@@ -30,7 +30,7 @@ describe('Cliente Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find(123).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -42,7 +42,7 @@ describe('Cliente Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.create(cliente).subscribe(resp => (expectedResult = resp.body));
+      service.create(cliente).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -54,7 +54,7 @@ describe('Cliente Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.update(cliente).subscribe(resp => (expectedResult = resp.body));
+      service.update(cliente).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -66,7 +66,7 @@ describe('Cliente Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
+      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PATCH' });
       req.flush(returnedFromService);
@@ -87,21 +87,17 @@ describe('Cliente Service', () => {
     });
 
     it('should delete a Cliente', () => {
-      const expected = true;
+      service.delete(123).subscribe();
 
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
-
-      const req = httpMock.expectOne({ method: 'DELETE' });
-      req.flush({ status: 200 });
-      expect(expectedResult).toBe(expected);
+      const requests = httpMock.match({ method: 'DELETE' });
+      expect(requests.length).toBe(1);
     });
 
     describe('addClienteToCollectionIfMissing', () => {
       it('should add a Cliente to an empty array', () => {
         const cliente: ICliente = sampleWithRequiredData;
         expectedResult = service.addClienteToCollectionIfMissing([], cliente);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(cliente);
+        expect(expectedResult).toEqual([cliente]);
       });
 
       it('should not add a Cliente to an array that contains it', () => {
@@ -135,16 +131,13 @@ describe('Cliente Service', () => {
         const cliente: ICliente = sampleWithRequiredData;
         const cliente2: ICliente = sampleWithPartialData;
         expectedResult = service.addClienteToCollectionIfMissing([], cliente, cliente2);
-        expect(expectedResult).toHaveLength(2);
-        expect(expectedResult).toContain(cliente);
-        expect(expectedResult).toContain(cliente2);
+        expect(expectedResult).toEqual([cliente, cliente2]);
       });
 
       it('should accept null and undefined values', () => {
         const cliente: ICliente = sampleWithRequiredData;
         expectedResult = service.addClienteToCollectionIfMissing([], null, cliente, undefined);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(cliente);
+        expect(expectedResult).toEqual([cliente]);
       });
 
       it('should return initial array if no Cliente is added', () => {

@@ -26,10 +26,10 @@ export type TipoFestaFormGroup = FormGroup<TipoFestaFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class TipoFestaFormService {
-  createTipoFestaFormGroup(tipoFesta: TipoFestaFormGroupInput = { id: null }): TipoFestaFormGroup {
+  createTipoFestaFormGroup(tipoFesta?: TipoFestaFormGroupInput): TipoFestaFormGroup {
     const tipoFestaRawValue = {
       ...this.getFormDefaults(),
-      ...tipoFesta,
+      ...(tipoFesta ?? { id: null }),
     };
     return new FormGroup<TipoFestaFormGroupContent>({
       id: new FormControl(
@@ -54,12 +54,10 @@ export class TipoFestaFormService {
 
   resetForm(form: TipoFestaFormGroup, tipoFesta: TipoFestaFormGroupInput): void {
     const tipoFestaRawValue = { ...this.getFormDefaults(), ...tipoFesta };
-    form.reset(
-      {
-        ...tipoFestaRawValue,
-        id: { value: tipoFestaRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
-    );
+    form.reset({
+      ...tipoFestaRawValue,
+      id: { value: tipoFestaRawValue.id, disabled: true },
+    });
   }
 
   private getFormDefaults(): TipoFestaFormDefaults {

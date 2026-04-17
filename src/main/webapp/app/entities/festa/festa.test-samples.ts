@@ -2,8 +2,8 @@ import { IFesta, NewFesta } from './festa.model';
 
 export const sampleWithRequiredData: IFesta = {
   id: 7683,
-  nome: 'chainstay',
-  tema: 'intensely terrible',
+  nome: 'calendário',
+  tema: 'intensely rico',
   valor: 29551.97,
 };
 
@@ -22,7 +22,7 @@ export const sampleWithFullData: IFesta = {
 };
 
 export const sampleWithNewData: NewFesta = {
-  nome: 'pip pace',
+  nome: 'marcar ler',
   tema: 'finally lest warmly',
   valor: 9284.04,
   id: null,

@@ -1,5 +1,5 @@
-import { ITipoFesta } from 'app/entities/tipo-festa/tipo-festa.model';
 import { ICliente } from 'app/entities/cliente/cliente.model';
+import { ITipoFesta } from 'app/entities/tipo-festa/tipo-festa.model';
 
 export interface IFesta {
   id: number;

@@ -30,7 +30,7 @@ public class TipoFestaResource {
 
     private static final String ENTITY_NAME = "tipoFesta";
 
-    @Value("${jhipster.clientApp.name}")
+    @Value("${jhipster.clientApp.name:jhipsterapp1}")
     private String applicationName;
 
     private final TipoFestaService tipoFestaService;
@@ -131,9 +131,9 @@ public class TipoFestaResource {
     }
 
     /**
-     * {@code GET  /tipo-festas} : get all the tipoFestas.
+     * {@code GET  /tipo-festas} : get all the Tipo Festas.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of tipoFestas in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Tipo Festas in body.
      */
     @GetMapping("")
     public List<TipoFestaDTO> getAllTipoFestas() {

@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { IPedido } from '../pedido.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../pedido.test-samples';
@@ -19,7 +19,7 @@ describe('Pedido Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     });
     expectedResult = null;
     service = TestBed.inject(PedidoService);
@@ -31,7 +31,7 @@ describe('Pedido Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find(123).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -43,7 +43,7 @@ describe('Pedido Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.create(pedido).subscribe(resp => (expectedResult = resp.body));
+      service.create(pedido).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -55,7 +55,7 @@ describe('Pedido Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.update(pedido).subscribe(resp => (expectedResult = resp.body));
+      service.update(pedido).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -67,7 +67,7 @@ describe('Pedido Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
+      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PATCH' });
       req.flush(returnedFromService);
@@ -88,21 +88,17 @@ describe('Pedido Service', () => {
     });
 
     it('should delete a Pedido', () => {
-      const expected = true;
+      service.delete(123).subscribe();
 
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
-
-      const req = httpMock.expectOne({ method: 'DELETE' });
-      req.flush({ status: 200 });
-      expect(expectedResult).toBe(expected);
+      const requests = httpMock.match({ method: 'DELETE' });
+      expect(requests.length).toBe(1);
     });
 
     describe('addPedidoToCollectionIfMissing', () => {
       it('should add a Pedido to an empty array', () => {
         const pedido: IPedido = sampleWithRequiredData;
         expectedResult = service.addPedidoToCollectionIfMissing([], pedido);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(pedido);
+        expect(expectedResult).toEqual([pedido]);
       });
 
       it('should not add a Pedido to an array that contains it', () => {
@@ -136,16 +132,13 @@ describe('Pedido Service', () => {
         const pedido: IPedido = sampleWithRequiredData;
         const pedido2: IPedido = sampleWithPartialData;
         expectedResult = service.addPedidoToCollectionIfMissing([], pedido, pedido2);
-        expect(expectedResult).toHaveLength(2);
-        expect(expectedResult).toContain(pedido);
-        expect(expectedResult).toContain(pedido2);
+        expect(expectedResult).toEqual([pedido, pedido2]);
       });
 
       it('should accept null and undefined values', () => {
         const pedido: IPedido = sampleWithRequiredData;
         expectedResult = service.addPedidoToCollectionIfMissing([], null, pedido, undefined);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(pedido);
+        expect(expectedResult).toEqual([pedido]);
       });
 
       it('should return initial array if no Pedido is added', () => {

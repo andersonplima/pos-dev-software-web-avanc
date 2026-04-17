@@ -1,0 +1,28 @@
+@if (tipoFesta) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(tipoFesta.id!)">
+    <div class="modal-header">
+      <h4 class="modal-title" data-cy="tipoFestaDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirme a exclusão</h4>
+    </div>
+
+    <div class="modal-body">
+      <jhi-alert-error />
+      <p
+        id="jhi-delete-tipoFesta-heading"
+        jhiTranslate="jhipsterapp1App.tipoFesta.delete.question"
+        [translateValues]="{ id: tipoFesta.id }"
+      >
+        Tem certeza de que deseja excluir Tipo Festa {{ tipoFesta.id }}?
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+        <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+      </button>
+
+      <button id="jhi-confirm-delete-tipoFesta" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times" />&nbsp;<span jhiTranslate="entity.action.delete">Excluir</span>
+      </button>
+    </div>
+  </form>
+}

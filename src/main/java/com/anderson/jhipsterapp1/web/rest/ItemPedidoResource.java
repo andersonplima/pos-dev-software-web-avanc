@@ -35,7 +35,7 @@ public class ItemPedidoResource {
 
     private static final String ENTITY_NAME = "itemPedido";
 
-    @Value("${jhipster.clientApp.name}")
+    @Value("${jhipster.clientApp.name:jhipsterapp1}")
     private String applicationName;
 
     private final ItemPedidoService itemPedidoService;
@@ -136,10 +136,10 @@ public class ItemPedidoResource {
     }
 
     /**
-     * {@code GET  /item-pedidos} : get all the itemPedidos.
+     * {@code GET  /item-pedidos} : get all the Item Pedidos.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of itemPedidos in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Item Pedidos in body.
      */
     @GetMapping("")
     public ResponseEntity<List<ItemPedidoDTO>> getAllItemPedidos(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {

@@ -27,10 +27,10 @@ export type ItemPedidoFormGroup = FormGroup<ItemPedidoFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class ItemPedidoFormService {
-  createItemPedidoFormGroup(itemPedido: ItemPedidoFormGroupInput = { id: null }): ItemPedidoFormGroup {
+  createItemPedidoFormGroup(itemPedido?: ItemPedidoFormGroupInput): ItemPedidoFormGroup {
     const itemPedidoRawValue = {
       ...this.getFormDefaults(),
-      ...itemPedido,
+      ...(itemPedido ?? { id: null }),
     };
     return new FormGroup<ItemPedidoFormGroupContent>({
       id: new FormControl(
@@ -54,12 +54,10 @@ export class ItemPedidoFormService {
 
   resetForm(form: ItemPedidoFormGroup, itemPedido: ItemPedidoFormGroupInput): void {
     const itemPedidoRawValue = { ...this.getFormDefaults(), ...itemPedido };
-    form.reset(
-      {
-        ...itemPedidoRawValue,
-        id: { value: itemPedidoRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
-    );
+    form.reset({
+      ...itemPedidoRawValue,
+      id: { value: itemPedidoRawValue.id, disabled: true },
+    });
   }
 
   private getFormDefaults(): ItemPedidoFormDefaults {

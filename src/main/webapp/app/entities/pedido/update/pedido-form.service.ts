@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import dayjs from 'dayjs/esm';
+
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IPedido, NewPedido } from '../pedido.model';
 
@@ -39,10 +40,10 @@ export type PedidoFormGroup = FormGroup<PedidoFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class PedidoFormService {
-  createPedidoFormGroup(pedido: PedidoFormGroupInput = { id: null }): PedidoFormGroup {
+  createPedidoFormGroup(pedido?: PedidoFormGroupInput): PedidoFormGroup {
     const pedidoRawValue = this.convertPedidoToPedidoRawValue({
       ...this.getFormDefaults(),
-      ...pedido,
+      ...(pedido ?? { id: null }),
     });
     return new FormGroup<PedidoFormGroupContent>({
       id: new FormControl(
@@ -65,12 +66,10 @@ export class PedidoFormService {
 
   resetForm(form: PedidoFormGroup, pedido: PedidoFormGroupInput): void {
     const pedidoRawValue = this.convertPedidoToPedidoRawValue({ ...this.getFormDefaults(), ...pedido });
-    form.reset(
-      {
-        ...pedidoRawValue,
-        id: { value: pedidoRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
-    );
+    form.reset({
+      ...pedidoRawValue,
+      id: { value: pedidoRawValue.id, disabled: true },
+    });
   }
 
   private getFormDefaults(): PedidoFormDefaults {

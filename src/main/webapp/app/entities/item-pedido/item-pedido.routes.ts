@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ASC } from 'app/config/navigation.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+
 import ItemPedidoResolve from './route/item-pedido-routing-resolve.service';
 
 const itemPedidoRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/item-pedido.component').then(m => m.ItemPedidoComponent),
+    loadComponent: () => import('./list/item-pedido').then(m => m.ItemPedido),
     data: {
       defaultSort: `id,${ASC}`,
     },
@@ -15,7 +16,7 @@ const itemPedidoRoute: Routes = [
   },
   {
     path: ':id/view',
-    loadComponent: () => import('./detail/item-pedido-detail.component').then(m => m.ItemPedidoDetailComponent),
+    loadComponent: () => import('./detail/item-pedido-detail').then(m => m.ItemPedidoDetail),
     resolve: {
       itemPedido: ItemPedidoResolve,
     },
@@ -23,7 +24,7 @@ const itemPedidoRoute: Routes = [
   },
   {
     path: 'new',
-    loadComponent: () => import('./update/item-pedido-update.component').then(m => m.ItemPedidoUpdateComponent),
+    loadComponent: () => import('./update/item-pedido-update').then(m => m.ItemPedidoUpdate),
     resolve: {
       itemPedido: ItemPedidoResolve,
     },
@@ -31,7 +32,7 @@ const itemPedidoRoute: Routes = [
   },
   {
     path: ':id/edit',
-    loadComponent: () => import('./update/item-pedido-update.component').then(m => m.ItemPedidoUpdateComponent),
+    loadComponent: () => import('./update/item-pedido-update').then(m => m.ItemPedidoUpdate),
     resolve: {
       itemPedido: ItemPedidoResolve,
     },

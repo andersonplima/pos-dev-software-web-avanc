@@ -30,7 +30,7 @@ public class FestaResource {
 
     private static final String ENTITY_NAME = "festa";
 
-    @Value("${jhipster.clientApp.name}")
+    @Value("${jhipster.clientApp.name:jhipsterapp1}")
     private String applicationName;
 
     private final FestaService festaService;
@@ -131,10 +131,10 @@ public class FestaResource {
     }
 
     /**
-     * {@code GET  /festas} : get all the festas.
+     * {@code GET  /festas} : get all the Festas.
      *
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of festas in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Festas in body.
      */
     @GetMapping("")
     public List<FestaDTO> getAllFestas(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {

@@ -22,7 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,7 +46,7 @@ class ItemPedidoResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     private static Random random = new Random();
-    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     @Autowired
     private ObjectMapper om;
@@ -300,7 +300,7 @@ class ItemPedidoResourceIT {
         ItemPedido partialUpdatedItemPedido = new ItemPedido();
         partialUpdatedItemPedido.setId(itemPedido.getId());
 
-        partialUpdatedItemPedido.nomeItem(UPDATED_NOME_ITEM).valorItem(UPDATED_VALOR_ITEM);
+        partialUpdatedItemPedido.valorItem(UPDATED_VALOR_ITEM);
 
         restItemPedidoMockMvc
             .perform(

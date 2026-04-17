@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { IFesta } from '../festa.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../festa.test-samples';
@@ -18,7 +18,7 @@ describe('Festa Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     });
     expectedResult = null;
     service = TestBed.inject(FestaService);
@@ -30,7 +30,7 @@ describe('Festa Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find(123).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -42,7 +42,7 @@ describe('Festa Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.create(festa).subscribe(resp => (expectedResult = resp.body));
+      service.create(festa).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -54,7 +54,7 @@ describe('Festa Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.update(festa).subscribe(resp => (expectedResult = resp.body));
+      service.update(festa).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -66,7 +66,7 @@ describe('Festa Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
+      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PATCH' });
       req.flush(returnedFromService);
@@ -87,21 +87,17 @@ describe('Festa Service', () => {
     });
 
     it('should delete a Festa', () => {
-      const expected = true;
+      service.delete(123).subscribe();
 
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
-
-      const req = httpMock.expectOne({ method: 'DELETE' });
-      req.flush({ status: 200 });
-      expect(expectedResult).toBe(expected);
+      const requests = httpMock.match({ method: 'DELETE' });
+      expect(requests.length).toBe(1);
     });
 
     describe('addFestaToCollectionIfMissing', () => {
       it('should add a Festa to an empty array', () => {
         const festa: IFesta = sampleWithRequiredData;
         expectedResult = service.addFestaToCollectionIfMissing([], festa);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(festa);
+        expect(expectedResult).toEqual([festa]);
       });
 
       it('should not add a Festa to an array that contains it', () => {
@@ -135,16 +131,13 @@ describe('Festa Service', () => {
         const festa: IFesta = sampleWithRequiredData;
         const festa2: IFesta = sampleWithPartialData;
         expectedResult = service.addFestaToCollectionIfMissing([], festa, festa2);
-        expect(expectedResult).toHaveLength(2);
-        expect(expectedResult).toContain(festa);
-        expect(expectedResult).toContain(festa2);
+        expect(expectedResult).toEqual([festa, festa2]);
       });
 
       it('should accept null and undefined values', () => {
         const festa: IFesta = sampleWithRequiredData;
         expectedResult = service.addFestaToCollectionIfMissing([], null, festa, undefined);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(festa);
+        expect(expectedResult).toEqual([festa]);
       });
 
       it('should return initial array if no Festa is added', () => {

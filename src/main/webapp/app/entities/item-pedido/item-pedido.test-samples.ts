@@ -12,12 +12,12 @@ export const sampleWithPartialData: IItemPedido = {
 
 export const sampleWithFullData: IItemPedido = {
   id: 17748,
-  nomeItem: 'pushy',
+  nomeItem: 'monocromático',
   valorItem: 14257.56,
 };
 
 export const sampleWithNewData: NewItemPedido = {
-  nomeItem: 'embossing',
+  nomeItem: 'doce',
   id: null,
 };
 

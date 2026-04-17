@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 
 import { sampleWithNewData, sampleWithRequiredData } from '../pedido.test-samples';
@@ -8,7 +9,6 @@ describe('Pedido Form Service', () => {
   let service: PedidoFormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(PedidoFormService);
   });
 
@@ -43,7 +43,7 @@ describe('Pedido Form Service', () => {
       it('should return NewPedido for default Pedido initial value', () => {
         const formGroup = service.createPedidoFormGroup(sampleWithNewData);
 
-        const pedido = service.getPedido(formGroup) as any;
+        const pedido = service.getPedido(formGroup);
 
         expect(pedido).toMatchObject(sampleWithNewData);
       });
@@ -51,7 +51,7 @@ describe('Pedido Form Service', () => {
       it('should return NewPedido for empty Pedido initial value', () => {
         const formGroup = service.createPedidoFormGroup();
 
-        const pedido = service.getPedido(formGroup) as any;
+        const pedido = service.getPedido(formGroup);
 
         expect(pedido).toMatchObject({});
       });
@@ -59,7 +59,7 @@ describe('Pedido Form Service', () => {
       it('should return IPedido', () => {
         const formGroup = service.createPedidoFormGroup(sampleWithRequiredData);
 
-        const pedido = service.getPedido(formGroup) as any;
+        const pedido = service.getPedido(formGroup);
 
         expect(pedido).toMatchObject(sampleWithRequiredData);
       });

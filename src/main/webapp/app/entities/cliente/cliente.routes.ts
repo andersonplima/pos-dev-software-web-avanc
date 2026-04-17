@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ASC } from 'app/config/navigation.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+
 import ClienteResolve from './route/cliente-routing-resolve.service';
 
 const clienteRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/cliente.component').then(m => m.ClienteComponent),
+    loadComponent: () => import('./list/cliente').then(m => m.Cliente),
     data: {
       defaultSort: `id,${ASC}`,
     },
@@ -15,7 +16,7 @@ const clienteRoute: Routes = [
   },
   {
     path: ':id/view',
-    loadComponent: () => import('./detail/cliente-detail.component').then(m => m.ClienteDetailComponent),
+    loadComponent: () => import('./detail/cliente-detail').then(m => m.ClienteDetail),
     resolve: {
       cliente: ClienteResolve,
     },
@@ -23,7 +24,7 @@ const clienteRoute: Routes = [
   },
   {
     path: 'new',
-    loadComponent: () => import('./update/cliente-update.component').then(m => m.ClienteUpdateComponent),
+    loadComponent: () => import('./update/cliente-update').then(m => m.ClienteUpdate),
     resolve: {
       cliente: ClienteResolve,
     },
@@ -31,7 +32,7 @@ const clienteRoute: Routes = [
   },
   {
     path: ':id/edit',
-    loadComponent: () => import('./update/cliente-update.component').then(m => m.ClienteUpdateComponent),
+    loadComponent: () => import('./update/cliente-update').then(m => m.ClienteUpdate),
     resolve: {
       cliente: ClienteResolve,
     },

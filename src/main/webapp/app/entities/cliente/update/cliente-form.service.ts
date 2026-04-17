@@ -26,10 +26,10 @@ export type ClienteFormGroup = FormGroup<ClienteFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class ClienteFormService {
-  createClienteFormGroup(cliente: ClienteFormGroupInput = { id: null }): ClienteFormGroup {
+  createClienteFormGroup(cliente?: ClienteFormGroupInput): ClienteFormGroup {
     const clienteRawValue = {
       ...this.getFormDefaults(),
-      ...cliente,
+      ...(cliente ?? { id: null }),
     };
     return new FormGroup<ClienteFormGroupContent>({
       id: new FormControl(
@@ -43,7 +43,10 @@ export class ClienteFormService {
         validators: [Validators.required, Validators.maxLength(100)],
       }),
       cpf: new FormControl(clienteRawValue.cpf, {
-        validators: [Validators.required, Validators.pattern('[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}')],
+        validators: [
+          Validators.required,
+          Validators.pattern('[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}\\-[0-9]{2}'), // NOSONAR
+        ],
       }),
     });
   }
@@ -54,12 +57,10 @@ export class ClienteFormService {
 
   resetForm(form: ClienteFormGroup, cliente: ClienteFormGroupInput): void {
     const clienteRawValue = { ...this.getFormDefaults(), ...cliente };
-    form.reset(
-      {
-        ...clienteRawValue,
-        id: { value: clienteRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
-    );
+    form.reset({
+      ...clienteRawValue,
+      id: { value: clienteRawValue.id, disabled: true },
+    });
   }
 
   private getFormDefaults(): ClienteFormDefaults {

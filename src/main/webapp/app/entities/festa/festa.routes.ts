@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ASC } from 'app/config/navigation.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+
 import FestaResolve from './route/festa-routing-resolve.service';
 
 const festaRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/festa.component').then(m => m.FestaComponent),
+    loadComponent: () => import('./list/festa').then(m => m.Festa),
     data: {
       defaultSort: `id,${ASC}`,
     },
@@ -15,7 +16,7 @@ const festaRoute: Routes = [
   },
   {
     path: ':id/view',
-    loadComponent: () => import('./detail/festa-detail.component').then(m => m.FestaDetailComponent),
+    loadComponent: () => import('./detail/festa-detail').then(m => m.FestaDetail),
     resolve: {
       festa: FestaResolve,
     },
@@ -23,7 +24,7 @@ const festaRoute: Routes = [
   },
   {
     path: 'new',
-    loadComponent: () => import('./update/festa-update.component').then(m => m.FestaUpdateComponent),
+    loadComponent: () => import('./update/festa-update').then(m => m.FestaUpdate),
     resolve: {
       festa: FestaResolve,
     },
@@ -31,7 +32,7 @@ const festaRoute: Routes = [
   },
   {
     path: ':id/edit',
-    loadComponent: () => import('./update/festa-update.component').then(m => m.FestaUpdateComponent),
+    loadComponent: () => import('./update/festa-update').then(m => m.FestaUpdate),
     resolve: {
       festa: FestaResolve,
     },
