@@ -1,51 +1,63 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
+import { Injectable, computed, inject, signal } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
-import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
+import { isPresent } from 'app/core/util/operators';
 import { IItemPedido, NewItemPedido } from '../item-pedido.model';
 
 export type PartialUpdateItemPedido = Partial<IItemPedido> & Pick<IItemPedido, 'id'>;
 
-export type EntityResponseType = HttpResponse<IItemPedido>;
-export type EntityArrayResponseType = HttpResponse<IItemPedido[]>;
+@Injectable()
+export class ItemPedidosService {
+  readonly itemPedidosParams = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(
+    undefined,
+  );
+  readonly itemPedidosResource = httpResource<IItemPedido[]>(() => {
+    const params = this.itemPedidosParams();
+    if (!params) {
+      return undefined;
+    }
+    return { url: this.resourceUrl, params };
+  });
+  /**
+   * This signal holds the list of itemPedido that have been fetched. It is updated when the itemPedidosResource emits a new value.
+   * In case of error while fetching the itemPedidos, the signal is set to an empty array.
+   */
+  readonly itemPedidos = computed(() => (this.itemPedidosResource.hasValue() ? this.itemPedidosResource.value() : []));
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
+  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/item-pedidos');
+}
 
 @Injectable({ providedIn: 'root' })
-export class ItemPedidoService {
+export class ItemPedidoService extends ItemPedidosService {
   protected readonly http = inject(HttpClient);
-  protected readonly applicationConfigService = inject(ApplicationConfigService);
 
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/item-pedidos');
-
-  create(itemPedido: NewItemPedido): Observable<EntityResponseType> {
-    return this.http.post<IItemPedido>(this.resourceUrl, itemPedido, { observe: 'response' });
+  create(itemPedido: NewItemPedido): Observable<IItemPedido> {
+    return this.http.post<IItemPedido>(this.resourceUrl, itemPedido);
   }
 
-  update(itemPedido: IItemPedido): Observable<EntityResponseType> {
-    return this.http.put<IItemPedido>(`${this.resourceUrl}/${this.getItemPedidoIdentifier(itemPedido)}`, itemPedido, {
-      observe: 'response',
-    });
+  update(itemPedido: IItemPedido): Observable<IItemPedido> {
+    return this.http.put<IItemPedido>(`${this.resourceUrl}/${encodeURIComponent(this.getItemPedidoIdentifier(itemPedido))}`, itemPedido);
   }
 
-  partialUpdate(itemPedido: PartialUpdateItemPedido): Observable<EntityResponseType> {
-    return this.http.patch<IItemPedido>(`${this.resourceUrl}/${this.getItemPedidoIdentifier(itemPedido)}`, itemPedido, {
-      observe: 'response',
-    });
+  partialUpdate(itemPedido: PartialUpdateItemPedido): Observable<IItemPedido> {
+    return this.http.patch<IItemPedido>(`${this.resourceUrl}/${encodeURIComponent(this.getItemPedidoIdentifier(itemPedido))}`, itemPedido);
   }
 
-  find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IItemPedido>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  find(id: number): Observable<IItemPedido> {
+    return this.http.get<IItemPedido>(`${this.resourceUrl}/${encodeURIComponent(id)}`);
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any): Observable<HttpResponse<IItemPedido[]>> {
     const options = createRequestOption(req);
     return this.http.get<IItemPedido[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  delete(id: number): Observable<undefined> {
+    return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(id)}`);
   }
 
   getItemPedidoIdentifier(itemPedido: Pick<IItemPedido, 'id'>): number {

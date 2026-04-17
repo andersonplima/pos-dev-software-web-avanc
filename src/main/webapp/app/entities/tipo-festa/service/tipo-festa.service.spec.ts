@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 
 import { ITipoFesta } from '../tipo-festa.model';
 import { sampleWithFullData, sampleWithNewData, sampleWithPartialData, sampleWithRequiredData } from '../tipo-festa.test-samples';
@@ -18,7 +18,7 @@ describe('TipoFesta Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     });
     expectedResult = null;
     service = TestBed.inject(TipoFestaService);
@@ -30,7 +30,7 @@ describe('TipoFesta Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.find(123).subscribe(resp => (expectedResult = resp.body));
+      service.find(123).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
@@ -42,7 +42,7 @@ describe('TipoFesta Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.create(tipoFesta).subscribe(resp => (expectedResult = resp.body));
+      service.create(tipoFesta).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -54,7 +54,7 @@ describe('TipoFesta Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.update(tipoFesta).subscribe(resp => (expectedResult = resp.body));
+      service.update(tipoFesta).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -66,7 +66,7 @@ describe('TipoFesta Service', () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
+      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: 'PATCH' });
       req.flush(returnedFromService);
@@ -87,21 +87,17 @@ describe('TipoFesta Service', () => {
     });
 
     it('should delete a TipoFesta', () => {
-      const expected = true;
+      service.delete(123).subscribe();
 
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
-
-      const req = httpMock.expectOne({ method: 'DELETE' });
-      req.flush({ status: 200 });
-      expect(expectedResult).toBe(expected);
+      const requests = httpMock.match({ method: 'DELETE' });
+      expect(requests.length).toBe(1);
     });
 
     describe('addTipoFestaToCollectionIfMissing', () => {
       it('should add a TipoFesta to an empty array', () => {
         const tipoFesta: ITipoFesta = sampleWithRequiredData;
         expectedResult = service.addTipoFestaToCollectionIfMissing([], tipoFesta);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(tipoFesta);
+        expect(expectedResult).toEqual([tipoFesta]);
       });
 
       it('should not add a TipoFesta to an array that contains it', () => {
@@ -135,16 +131,13 @@ describe('TipoFesta Service', () => {
         const tipoFesta: ITipoFesta = sampleWithRequiredData;
         const tipoFesta2: ITipoFesta = sampleWithPartialData;
         expectedResult = service.addTipoFestaToCollectionIfMissing([], tipoFesta, tipoFesta2);
-        expect(expectedResult).toHaveLength(2);
-        expect(expectedResult).toContain(tipoFesta);
-        expect(expectedResult).toContain(tipoFesta2);
+        expect(expectedResult).toEqual([tipoFesta, tipoFesta2]);
       });
 
       it('should accept null and undefined values', () => {
         const tipoFesta: ITipoFesta = sampleWithRequiredData;
         expectedResult = service.addTipoFestaToCollectionIfMissing([], null, tipoFesta, undefined);
-        expect(expectedResult).toHaveLength(1);
-        expect(expectedResult).toContain(tipoFesta);
+        expect(expectedResult).toEqual([tipoFesta]);
       });
 
       it('should return initial array if no TipoFesta is added', () => {

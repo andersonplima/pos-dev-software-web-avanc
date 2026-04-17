@@ -2,9 +2,9 @@
 name: jhipsterapp1
 services:
   mysql:
-    image: mysql:9.2.0
+    image: mysql:9.6.0
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhipsterapp1

@@ -35,7 +35,7 @@ public class ClienteResource {
 
     private static final String ENTITY_NAME = "cliente";
 
-    @Value("${jhipster.clientApp.name}")
+    @Value("${jhipster.clientApp.name:jhipsterapp1}")
     private String applicationName;
 
     private final ClienteService clienteService;
@@ -136,10 +136,10 @@ public class ClienteResource {
     }
 
     /**
-     * {@code GET  /clientes} : get all the clientes.
+     * {@code GET  /clientes} : get all the Clientes.
      *
      * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of clientes in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Clientes in body.
      */
     @GetMapping("")
     public ResponseEntity<List<ClienteDTO>> getAllClientes(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {

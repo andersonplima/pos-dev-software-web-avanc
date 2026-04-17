@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 
 import { sampleWithNewData, sampleWithRequiredData } from '../festa.test-samples';
@@ -8,7 +9,6 @@ describe('Festa Form Service', () => {
   let service: FestaFormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(FestaFormService);
   });
 
@@ -49,7 +49,7 @@ describe('Festa Form Service', () => {
       it('should return NewFesta for default Festa initial value', () => {
         const formGroup = service.createFestaFormGroup(sampleWithNewData);
 
-        const festa = service.getFesta(formGroup) as any;
+        const festa = service.getFesta(formGroup);
 
         expect(festa).toMatchObject(sampleWithNewData);
       });
@@ -57,7 +57,7 @@ describe('Festa Form Service', () => {
       it('should return NewFesta for empty Festa initial value', () => {
         const formGroup = service.createFestaFormGroup();
 
-        const festa = service.getFesta(formGroup) as any;
+        const festa = service.getFesta(formGroup);
 
         expect(festa).toMatchObject({});
       });
@@ -65,7 +65,7 @@ describe('Festa Form Service', () => {
       it('should return IFesta', () => {
         const formGroup = service.createFestaFormGroup(sampleWithRequiredData);
 
-        const festa = service.getFesta(formGroup) as any;
+        const festa = service.getFesta(formGroup);
 
         expect(festa).toMatchObject(sampleWithRequiredData);
       });

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class FestaTestSamples {
 
     private static final Random random = new Random();
-    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     public static Festa getFestaSample1() {
         return new Festa().id(1L).nome("nome1").tema("tema1");

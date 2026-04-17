@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 
 import { sampleWithNewData, sampleWithRequiredData } from '../item-pedido.test-samples';
@@ -8,7 +9,6 @@ describe('ItemPedido Form Service', () => {
   let service: ItemPedidoFormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(ItemPedidoFormService);
   });
 
@@ -45,7 +45,7 @@ describe('ItemPedido Form Service', () => {
       it('should return NewItemPedido for default ItemPedido initial value', () => {
         const formGroup = service.createItemPedidoFormGroup(sampleWithNewData);
 
-        const itemPedido = service.getItemPedido(formGroup) as any;
+        const itemPedido = service.getItemPedido(formGroup);
 
         expect(itemPedido).toMatchObject(sampleWithNewData);
       });
@@ -53,7 +53,7 @@ describe('ItemPedido Form Service', () => {
       it('should return NewItemPedido for empty ItemPedido initial value', () => {
         const formGroup = service.createItemPedidoFormGroup();
 
-        const itemPedido = service.getItemPedido(formGroup) as any;
+        const itemPedido = service.getItemPedido(formGroup);
 
         expect(itemPedido).toMatchObject({});
       });
@@ -61,7 +61,7 @@ describe('ItemPedido Form Service', () => {
       it('should return IItemPedido', () => {
         const formGroup = service.createItemPedidoFormGroup(sampleWithRequiredData);
 
-        const itemPedido = service.getItemPedido(formGroup) as any;
+        const itemPedido = service.getItemPedido(formGroup);
 
         expect(itemPedido).toMatchObject(sampleWithRequiredData);
       });

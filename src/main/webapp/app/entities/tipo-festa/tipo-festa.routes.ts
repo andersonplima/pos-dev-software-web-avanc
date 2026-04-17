@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { ASC } from 'app/config/navigation.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+
 import TipoFestaResolve from './route/tipo-festa-routing-resolve.service';
 
 const tipoFestaRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/tipo-festa.component').then(m => m.TipoFestaComponent),
+    loadComponent: () => import('./list/tipo-festa').then(m => m.TipoFesta),
     data: {
       defaultSort: `id,${ASC}`,
     },
@@ -15,7 +16,7 @@ const tipoFestaRoute: Routes = [
   },
   {
     path: ':id/view',
-    loadComponent: () => import('./detail/tipo-festa-detail.component').then(m => m.TipoFestaDetailComponent),
+    loadComponent: () => import('./detail/tipo-festa-detail').then(m => m.TipoFestaDetail),
     resolve: {
       tipoFesta: TipoFestaResolve,
     },
@@ -23,7 +24,7 @@ const tipoFestaRoute: Routes = [
   },
   {
     path: 'new',
-    loadComponent: () => import('./update/tipo-festa-update.component').then(m => m.TipoFestaUpdateComponent),
+    loadComponent: () => import('./update/tipo-festa-update').then(m => m.TipoFestaUpdate),
     resolve: {
       tipoFesta: TipoFestaResolve,
     },
@@ -31,7 +32,7 @@ const tipoFestaRoute: Routes = [
   },
   {
     path: ':id/edit',
-    loadComponent: () => import('./update/tipo-festa-update.component').then(m => m.TipoFestaUpdateComponent),
+    loadComponent: () => import('./update/tipo-festa-update').then(m => m.TipoFestaUpdate),
     resolve: {
       tipoFesta: TipoFestaResolve,
     },

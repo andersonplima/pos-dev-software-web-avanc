@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (tipoFesta(); as tipoFestaRef) {
+      <div>
+        <h2 data-cy="tipoFestaDetailsHeading"><span jhiTranslate="jhipsterapp1App.tipoFesta.detail.title">Tipo Festa</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">Código</span></dt>
+          <dd>
+            <span>{{ tipoFestaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterapp1App.tipoFesta.nome">Nome</span></dt>
+          <dd>
+            <span>{{ tipoFestaRef.nome }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterapp1App.tipoFesta.descricao">Descricao</span></dt>
+          <dd>
+            <span>{{ tipoFestaRef.descricao }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Voltar</span>
+        </button>
+
+        <button type="button" [routerLink]="['/tipo-festa', tipoFestaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

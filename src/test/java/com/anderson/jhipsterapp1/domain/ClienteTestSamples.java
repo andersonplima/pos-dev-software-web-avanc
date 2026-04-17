@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ClienteTestSamples {
 
     private static final Random random = new Random();
-    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     public static Cliente getClienteSample1() {
         return new Cliente().id(1L).nome("nome1").cpf("cpf1");

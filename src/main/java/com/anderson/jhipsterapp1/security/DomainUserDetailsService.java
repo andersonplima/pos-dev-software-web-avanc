@@ -4,7 +4,7 @@ import com.anderson.jhipsterapp1.domain.Authority;
 import com.anderson.jhipsterapp1.domain.User;
 import com.anderson.jhipsterapp1.repository.UserRepository;
 import java.util.*;
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;

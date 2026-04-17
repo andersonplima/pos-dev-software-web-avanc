@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 
 import { sampleWithNewData, sampleWithRequiredData } from '../tipo-festa.test-samples';
@@ -8,7 +9,6 @@ describe('TipoFesta Form Service', () => {
   let service: TipoFestaFormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(TipoFestaFormService);
   });
 
@@ -43,7 +43,7 @@ describe('TipoFesta Form Service', () => {
       it('should return NewTipoFesta for default TipoFesta initial value', () => {
         const formGroup = service.createTipoFestaFormGroup(sampleWithNewData);
 
-        const tipoFesta = service.getTipoFesta(formGroup) as any;
+        const tipoFesta = service.getTipoFesta(formGroup);
 
         expect(tipoFesta).toMatchObject(sampleWithNewData);
       });
@@ -51,7 +51,7 @@ describe('TipoFesta Form Service', () => {
       it('should return NewTipoFesta for empty TipoFesta initial value', () => {
         const formGroup = service.createTipoFestaFormGroup();
 
-        const tipoFesta = service.getTipoFesta(formGroup) as any;
+        const tipoFesta = service.getTipoFesta(formGroup);
 
         expect(tipoFesta).toMatchObject({});
       });
@@ -59,7 +59,7 @@ describe('TipoFesta Form Service', () => {
       it('should return ITipoFesta', () => {
         const formGroup = service.createTipoFestaFormGroup(sampleWithRequiredData);
 
-        const tipoFesta = service.getTipoFesta(formGroup) as any;
+        const tipoFesta = service.getTipoFesta(formGroup);
 
         expect(tipoFesta).toMatchObject(sampleWithRequiredData);
       });

@@ -29,10 +29,10 @@ export type FestaFormGroup = FormGroup<FestaFormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
 export class FestaFormService {
-  createFestaFormGroup(festa: FestaFormGroupInput = { id: null }): FestaFormGroup {
+  createFestaFormGroup(festa?: FestaFormGroupInput): FestaFormGroup {
     const festaRawValue = {
       ...this.getFormDefaults(),
-      ...festa,
+      ...(festa ?? { id: null }),
     };
     return new FormGroup<FestaFormGroupContent>({
       id: new FormControl(
@@ -66,12 +66,10 @@ export class FestaFormService {
 
   resetForm(form: FestaFormGroup, festa: FestaFormGroupInput): void {
     const festaRawValue = { ...this.getFormDefaults(), ...festa };
-    form.reset(
-      {
-        ...festaRawValue,
-        id: { value: festaRawValue.id, disabled: true },
-      } as any /* cast to workaround https://github.com/angular/angular/issues/46458 */,
-    );
+    form.reset({
+      ...festaRawValue,
+      id: { value: festaRawValue.id, disabled: true },
+    });
   }
 
   private getFormDefaults(): FestaFormDefaults {

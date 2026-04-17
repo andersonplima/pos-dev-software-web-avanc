@@ -20,7 +20,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,7 +44,7 @@ class TipoFestaResourceIT {
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     private static Random random = new Random();
-    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
 
     @Autowired
     private ObjectMapper om;
@@ -314,8 +314,6 @@ class TipoFestaResourceIT {
         // Update the tipoFesta using partial update
         TipoFesta partialUpdatedTipoFesta = new TipoFesta();
         partialUpdatedTipoFesta.setId(tipoFesta.getId());
-
-        partialUpdatedTipoFesta.nome(UPDATED_NOME).descricao(UPDATED_DESCRICAO);
 
         restTipoFestaMockMvc
             .perform(

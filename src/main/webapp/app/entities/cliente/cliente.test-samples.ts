@@ -8,13 +8,13 @@ export const sampleWithRequiredData: ICliente = {
 
 export const sampleWithPartialData: ICliente = {
   id: 29421,
-  nome: 'finding',
+  nome: 'escada',
   cpf: '310.096.158-03',
 };
 
 export const sampleWithFullData: ICliente = {
   id: 17129,
-  nome: 'circumference',
+  nome: 'caneta',
   cpf: '454.282.310-20',
 };
 
