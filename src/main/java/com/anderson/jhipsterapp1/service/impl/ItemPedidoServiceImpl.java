@@ -1,0 +1,84 @@
+package com.anderson.jhipsterapp1.service.impl;
+
+import com.anderson.jhipsterapp1.domain.ItemPedido;
+import com.anderson.jhipsterapp1.repository.ItemPedidoRepository;
+import com.anderson.jhipsterapp1.service.ItemPedidoService;
+import com.anderson.jhipsterapp1.service.dto.ItemPedidoDTO;
+import com.anderson.jhipsterapp1.service.mapper.ItemPedidoMapper;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service Implementation for managing {@link com.anderson.jhipsterapp1.domain.ItemPedido}.
+ */
+@Service
+@Transactional
+public class ItemPedidoServiceImpl implements ItemPedidoService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ItemPedidoServiceImpl.class);
+
+    private final ItemPedidoRepository itemPedidoRepository;
+
+    private final ItemPedidoMapper itemPedidoMapper;
+
+    public ItemPedidoServiceImpl(ItemPedidoRepository itemPedidoRepository, ItemPedidoMapper itemPedidoMapper) {
+        this.itemPedidoRepository = itemPedidoRepository;
+        this.itemPedidoMapper = itemPedidoMapper;
+    }
+
+    @Override
+    public ItemPedidoDTO save(ItemPedidoDTO itemPedidoDTO) {
+        LOG.debug("Request to save ItemPedido : {}", itemPedidoDTO);
+        ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
+        itemPedido = itemPedidoRepository.save(itemPedido);
+        return itemPedidoMapper.toDto(itemPedido);
+    }
+
+    @Override
+    public ItemPedidoDTO update(ItemPedidoDTO itemPedidoDTO) {
+        LOG.debug("Request to update ItemPedido : {}", itemPedidoDTO);
+        ItemPedido itemPedido = itemPedidoMapper.toEntity(itemPedidoDTO);
+        itemPedido = itemPedidoRepository.save(itemPedido);
+        return itemPedidoMapper.toDto(itemPedido);
+    }
+
+    @Override
+    public Optional<ItemPedidoDTO> partialUpdate(ItemPedidoDTO itemPedidoDTO) {
+        LOG.debug("Request to partially update ItemPedido : {}", itemPedidoDTO);
+
+        return itemPedidoRepository
+            .findById(itemPedidoDTO.getId())
+            .map(existingItemPedido -> {
+                itemPedidoMapper.partialUpdate(existingItemPedido, itemPedidoDTO);
+
+                return existingItemPedido;
+            })
+            .map(itemPedidoRepository::save)
+            .map(itemPedidoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ItemPedidoDTO> findAll(Pageable pageable) {
+        LOG.debug("Request to get all ItemPedidos");
+        return itemPedidoRepository.findAll(pageable).map(itemPedidoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<ItemPedidoDTO> findOne(Long id) {
+        LOG.debug("Request to get ItemPedido : {}", id);
+        return itemPedidoRepository.findById(id).map(itemPedidoMapper::toDto);
+    }
+
+    @Override
+    public void delete(Long id) {
+        LOG.debug("Request to delete ItemPedido : {}", id);
+        itemPedidoRepository.deleteById(id);
+    }
+}

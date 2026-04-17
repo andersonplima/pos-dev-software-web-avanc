@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (itemPedido(); as itemPedidoRef) {
+      <div>
+        <h2 data-cy="itemPedidoDetailsHeading"><span jhiTranslate="jhipsterapp1App.itemPedido.detail.title">Item Pedido</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">Código</span></dt>
+          <dd>
+            <span>{{ itemPedidoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterapp1App.itemPedido.nomeItem">Nome Item</span></dt>
+          <dd>
+            <span>{{ itemPedidoRef.nomeItem }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterapp1App.itemPedido.valorItem">Valor Item</span></dt>
+          <dd>
+            <span>{{ itemPedidoRef.valorItem }}</span>
+          </dd>
+          <dt><span jhiTranslate="jhipsterapp1App.itemPedido.pedido">Pedido</span></dt>
+          <dd>
+            @if (itemPedido()!.pedido) {
+              <div>
+                <a [routerLink]="['/pedido', itemPedido()!.pedido?.id, 'view']">{{ itemPedidoRef.pedido?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Voltar</span>
+        </button>
+
+        <button type="button" [routerLink]="['/item-pedido', itemPedidoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
