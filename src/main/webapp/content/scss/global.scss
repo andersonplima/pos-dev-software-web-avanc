@@ -1,7 +1,4 @@
-@import 'bootstrap-variables';
-@import 'bootstrap/scss/functions';
-@import 'bootswatch/dist/solar/variables';
-@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/bootstrap';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -16,7 +13,6 @@ h4 {
 }
 
 a:hover {
-  /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
 }
 
@@ -24,21 +20,12 @@ a:hover {
   color: $dropdown-link-hover-color;
 }
 
-/* ==========================================================================
-Browser Upgrade Prompt
-========================================================================== */
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
 }
-
-/* ==========================================================================
-Generic styles
-========================================================================== */
-
-/* other generic styles */
 
 .jh-card {
   padding: 1.5%;
@@ -86,9 +73,6 @@ Generic styles
   cursor: pointer;
 }
 
-/* ==========================================================================
-Custom alerts for notification
-========================================================================== */
 .alerts {
   .alert {
     text-overflow: ellipsis;
@@ -128,17 +112,10 @@ Custom alerts for notification
   }
 }
 
-/* ==========================================================================
-entity list page css
-========================================================================== */
-
 .table-entities thead th .d-flex > * {
   margin: auto 0;
 }
 
-/* ==========================================================================
-entity detail page css
-========================================================================== */
 .row-md.jh-entity-details {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -165,9 +142,6 @@ entity detail page css
   }
 }
 
-/* ==========================================================================
-ui bootstrap tweaks
-========================================================================== */
 .nav,
 .pagination,
 .carousel,
@@ -186,10 +160,6 @@ ui bootstrap tweaks
   padding-left: 0;
 }
 
-/* ==========================================================================
-angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
-========================================================================== */
-/* page-ribbon.scss */
 .ribbon {
   left: -3.5em;
   -moz-transform: rotate(-45deg);
@@ -199,7 +169,6 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   transform: rotate(-45deg);
 }
 
-/* navbar.scss */
 .navbar {
   ul.navbar-nav {
     .nav-item {
