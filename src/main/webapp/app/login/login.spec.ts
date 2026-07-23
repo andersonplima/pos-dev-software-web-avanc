@@ -3,7 +3,7 @@ import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Navigation, Router } from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -20,8 +20,8 @@ describe('Login', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
       providers: [
+        provideTranslateService(),
         {
           provide: ActivatedRoute,
           useValue: {},
@@ -93,7 +93,7 @@ describe('Login', () => {
       const node = {
         focus: vitest.fn(),
       };
-      comp.username = signal<ElementRef>(new ElementRef(node));
+      comp.username = signal(new ElementRef(node));
 
       // WHEN
       comp.ngAfterViewInit();

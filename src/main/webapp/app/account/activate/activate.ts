@@ -1,8 +1,7 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs';
 
 import { TranslateDirective } from 'app/shared/language';
 
@@ -10,7 +9,8 @@ import { ActivateService } from './activate.service';
 
 @Component({
   selector: 'jhi-activate',
-  imports: [RouterLink, TranslateDirective, TranslateModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, TranslateDirective],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {

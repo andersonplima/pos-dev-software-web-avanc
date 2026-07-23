@@ -6,7 +6,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { Subject, of } from 'rxjs';
 
 import { sampleWithRequiredData } from '../item-pedido.test-samples';
@@ -25,8 +25,8 @@ describe('ItemPedido Management Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
       providers: [
+        provideTranslateService(),
         provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
@@ -121,7 +121,7 @@ describe('ItemPedido Management Component', () => {
     let req = httpMock.expectOne({ method: 'GET' });
     req.flush([{ id: 14110 }], { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } });
     await vitest.runAllTimersAsync();
-    expect(comp.itemPedidos().length).toEqual(1);
+    expect(comp.itemPedidos()).toHaveLength(1);
     expect(comp.itemPedidos()[0]).toEqual(expect.objectContaining({ id: 14110 }));
 
     // WHEN
@@ -133,7 +133,7 @@ describe('ItemPedido Management Component', () => {
       headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' },
     });
     await vitest.runAllTimersAsync();
-    expect(comp.itemPedidos().length).toEqual(2);
+    expect(comp.itemPedidos()).toHaveLength(2);
     expect(comp.itemPedidos()[1]).toEqual(expect.objectContaining({ id: 30572 }));
 
     comp.loadNextPage();
@@ -144,7 +144,7 @@ describe('ItemPedido Management Component', () => {
       headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' },
     });
     await vitest.runAllTimersAsync();
-    expect(comp.itemPedidos().length).toEqual(2);
+    expect(comp.itemPedidos()).toHaveLength(2);
     expect(comp.itemPedidos()[1]).toEqual(expect.objectContaining({ id: 30572 }));
   });
 

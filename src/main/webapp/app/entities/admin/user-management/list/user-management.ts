@@ -1,12 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
-import { TranslateModule } from '@ngx-translate/core';
 import { combineLatest } from 'rxjs';
 
 import { SORT } from 'app/config/navigation.constants';
@@ -23,6 +22,7 @@ import { IUserManagement } from '../user-management.model';
 
 @Component({
   selector: 'jhi-user-mgmt',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management.html',
   imports: [
     RouterLink,
@@ -31,7 +31,6 @@ import { IUserManagement } from '../user-management.model';
     Alert,
     NgbPagination,
     TranslateDirective,
-    TranslateModule,
     SortDirective,
     SortByDirective,
     ItemCount,

@@ -31,6 +31,7 @@ export class ClienteFormService {
       ...this.getFormDefaults(),
       ...(cliente ?? { id: null }),
     };
+
     return new FormGroup<ClienteFormGroupContent>({
       id: new FormControl(
         { value: clienteRawValue.id, disabled: true },
@@ -52,7 +53,7 @@ export class ClienteFormService {
   }
 
   getCliente(form: ClienteFormGroup): ICliente | NewCliente {
-    return form.getRawValue() as ICliente | NewCliente;
+    return form.getRawValue();
   }
 
   resetForm(form: ClienteFormGroup, cliente: ClienteFormGroupInput): void {

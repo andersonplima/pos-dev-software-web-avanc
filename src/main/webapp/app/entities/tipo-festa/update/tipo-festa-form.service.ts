@@ -31,6 +31,7 @@ export class TipoFestaFormService {
       ...this.getFormDefaults(),
       ...(tipoFesta ?? { id: null }),
     };
+
     return new FormGroup<TipoFestaFormGroupContent>({
       id: new FormControl(
         { value: tipoFestaRawValue.id, disabled: true },
@@ -49,7 +50,7 @@ export class TipoFestaFormService {
   }
 
   getTipoFesta(form: TipoFestaFormGroup): ITipoFesta | NewTipoFesta {
-    return form.getRawValue() as ITipoFesta | NewTipoFesta;
+    return form.getRawValue();
   }
 
   resetForm(form: TipoFestaFormGroup, tipoFesta: TipoFestaFormGroupInput): void {

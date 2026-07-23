@@ -34,6 +34,7 @@ export class FestaFormService {
       ...this.getFormDefaults(),
       ...(festa ?? { id: null }),
     };
+
     return new FormGroup<FestaFormGroupContent>({
       id: new FormControl(
         { value: festaRawValue.id, disabled: true },
@@ -61,7 +62,7 @@ export class FestaFormService {
   }
 
   getFesta(form: FestaFormGroup): IFesta | NewFesta {
-    return form.getRawValue() as IFesta | NewFesta;
+    return form.getRawValue();
   }
 
   resetForm(form: FestaFormGroup, festa: FestaFormGroupInput): void {

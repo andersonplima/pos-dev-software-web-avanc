@@ -21,10 +21,10 @@
           <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
           @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
             <div>
-              @if (editForm.get('nome')?.errors?.required) {
+              @if (nomeRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
-              @if (editForm.get('nome')?.errors?.maxlength) {
+              @if (nomeRef.errors?.maxlength) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
                   >Este campo não pode ter mais de 100 caracteres.</small
                 >
@@ -39,10 +39,10 @@
           <input type="text" class="form-control" name="cpf" id="field_cpf" data-cy="cpf" formControlName="cpf" />
           @if (cpfRef.invalid && (cpfRef.dirty || cpfRef.touched)) {
             <div>
-              @if (editForm.get('cpf')?.errors?.required) {
+              @if (cpfRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
-              @if (editForm.get('cpf')?.errors?.pattern) {
+              @if (cpfRef.errors?.pattern) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Cpf' }"
                   >Este campo deve estar dentro do seguinte padrão Cpf.</small
                 >

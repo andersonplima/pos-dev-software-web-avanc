@@ -1,7 +1,7 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { LANGUAGES } from 'app/config/language.constants';
 import { Account } from 'app/core/auth/account.model';
@@ -13,7 +13,8 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: 'jhi-settings',
-  imports: [TranslateDirective, TranslateModule, FindLanguageFromKeyPipe, AlertError, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TranslateDirective, TranslatePipe, FindLanguageFromKeyPipe, AlertError, ReactiveFormsModule],
   templateUrl: './settings.html',
 })
 export default class Settings implements OnInit {

@@ -66,7 +66,7 @@ describe('Festa routing resolve service', () => {
             next(result) {
               // THEN
               expect(service.find).not.toHaveBeenCalled();
-              expect(result).toEqual(null);
+              expect(result).toBeNull();
               resolve();
             },
           });
@@ -81,7 +81,7 @@ describe('Festa routing resolve service', () => {
 
       // WHEN
       await TestBed.runInInjectionContext(async () => {
-        await expect(lastValueFrom(festaResolve(mockActivatedRouteSnapshot))).rejects.toThrowError('no elements in sequence');
+        await expect(lastValueFrom(festaResolve(mockActivatedRouteSnapshot))).rejects.toThrow('no elements in sequence');
         // THEN
         expect(service.find).toHaveBeenCalledWith(123);
         expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
@@ -97,7 +97,7 @@ describe('Festa routing resolve service', () => {
 
       // WHEN
       await TestBed.runInInjectionContext(async () => {
-        await expect(lastValueFrom(festaResolve(mockActivatedRouteSnapshot))).rejects.toThrowError('no elements in sequence');
+        await expect(lastValueFrom(festaResolve(mockActivatedRouteSnapshot))).rejects.toThrow('no elements in sequence');
         // THEN
         expect(service.find).toHaveBeenCalledWith(123);
         expect(mockRouter.navigate).toHaveBeenCalledWith(['error']);

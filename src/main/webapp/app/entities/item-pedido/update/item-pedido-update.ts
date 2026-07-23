@@ -1,12 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TranslateModule } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { TranslatePipe } from '@ngx-translate/core';
+import { Observable, finalize, map } from 'rxjs';
 
 import { IPedido } from 'app/entities/pedido/pedido.model';
 import { PedidoService } from 'app/entities/pedido/service/pedido.service';
@@ -18,9 +17,10 @@ import { ItemPedidoService } from '../service/item-pedido.service';
 import { ItemPedidoFormGroup, ItemPedidoFormService } from './item-pedido-form.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'jhi-item-pedido-update',
   templateUrl: './item-pedido-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [TranslateDirective, TranslatePipe, FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export class ItemPedidoUpdate implements OnInit {
   readonly isSaving = signal(false);

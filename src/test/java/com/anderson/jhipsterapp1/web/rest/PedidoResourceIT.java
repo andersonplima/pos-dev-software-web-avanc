@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -39,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 class PedidoResourceIT {
 
     private static final Instant DEFAULT_DATA_PEDIDO = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_DATA_PEDIDO = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant UPDATED_DATA_PEDIDO = Instant.ofEpochMilli(1581770480647L);
 
     private static final BigDecimal DEFAULT_VALOR_PEDIDO = new BigDecimal(1);
     private static final BigDecimal UPDATED_VALOR_PEDIDO = new BigDecimal(2);
@@ -47,8 +46,8 @@ class PedidoResourceIT {
     private static final String ENTITY_API_URL = "/api/pedidos";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
-    private static Random random = new Random();
-    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2L * Integer.MAX_VALUE));
+    private static final Random random = new Random();
+    private static final AtomicLong longCount = new AtomicLong(random.nextInt() + 2L * Integer.MAX_VALUE);
 
     @Autowired
     private ObjectMapper om;

@@ -26,10 +26,10 @@
           />
           @if (nameRef.invalid && (nameRef.dirty || nameRef.touched)) {
             <div>
-              @if (editForm.get('name')?.errors?.required) {
+              @if (nameRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
-              @if (editForm.get('name')?.errors?.maxlength) {
+              @if (nameRef.errors?.maxlength) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
                   >Este campo não pode ter mais de 50 caracteres.</small
                 >

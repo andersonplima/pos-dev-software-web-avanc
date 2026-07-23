@@ -1,11 +1,11 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, WritableSignal, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 import { Subscription, combineLatest, filter, tap } from 'rxjs';
 
@@ -21,6 +21,7 @@ import { IItemPedido } from '../item-pedido.model';
 import { ItemPedidoService } from '../service/item-pedido.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'jhi-item-pedido',
   templateUrl: './item-pedido.html',
   imports: [
@@ -32,7 +33,7 @@ import { ItemPedidoService } from '../service/item-pedido.service';
     SortDirective,
     SortByDirective,
     TranslateDirective,
-    TranslateModule,
+    TranslatePipe,
     InfiniteScrollDirective,
   ],
 })

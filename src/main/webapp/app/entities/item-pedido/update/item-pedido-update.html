@@ -25,7 +25,7 @@
           <input type="text" class="form-control" name="nomeItem" id="field_nomeItem" data-cy="nomeItem" formControlName="nomeItem" />
           @if (nomeItemRef.invalid && (nomeItemRef.dirty || nomeItemRef.touched)) {
             <div>
-              @if (editForm.get('nomeItem')?.errors?.required) {
+              @if (nomeItemRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
             </div>

@@ -32,6 +32,7 @@ export class ItemPedidoFormService {
       ...this.getFormDefaults(),
       ...(itemPedido ?? { id: null }),
     };
+
     return new FormGroup<ItemPedidoFormGroupContent>({
       id: new FormControl(
         { value: itemPedidoRawValue.id, disabled: true },
@@ -49,7 +50,7 @@ export class ItemPedidoFormService {
   }
 
   getItemPedido(form: ItemPedidoFormGroup): IItemPedido | NewItemPedido {
-    return form.getRawValue() as IItemPedido | NewItemPedido;
+    return form.getRawValue();
   }
 
   resetForm(form: ItemPedidoFormGroup, itemPedido: ItemPedidoFormGroupInput): void {

@@ -25,10 +25,10 @@
           <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
           @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
             <div>
-              @if (editForm.get('nome')?.errors?.required) {
+              @if (nomeRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
-              @if (editForm.get('nome')?.errors?.maxlength) {
+              @if (nomeRef.errors?.maxlength) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '50' }"
                   >Este campo não pode ter mais de 50 caracteres.</small
                 >
@@ -43,10 +43,10 @@
           <input type="text" class="form-control" name="descricao" id="field_descricao" data-cy="descricao" formControlName="descricao" />
           @if (descricaoRef.invalid && (descricaoRef.dirty || descricaoRef.touched)) {
             <div>
-              @if (editForm.get('descricao')?.errors?.required) {
+              @if (descricaoRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
-              @if (editForm.get('descricao')?.errors?.maxlength) {
+              @if (descricaoRef.errors?.maxlength) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
                   >Este campo não pode ter mais de 100 caracteres.</small
                 >

@@ -1,12 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TranslateModule } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { TranslatePipe } from '@ngx-translate/core';
+import { Observable, finalize, map } from 'rxjs';
 
 import { ICliente } from 'app/entities/cliente/cliente.model';
 import { ClienteService } from 'app/entities/cliente/service/cliente.service';
@@ -20,9 +19,10 @@ import { FestaService } from '../service/festa.service';
 import { FestaFormGroup, FestaFormService } from './festa-form.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'jhi-festa-update',
   templateUrl: './festa-update.html',
-  imports: [TranslateDirective, TranslateModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [TranslateDirective, TranslatePipe, FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export class FestaUpdate implements OnInit {
   readonly isSaving = signal(false);

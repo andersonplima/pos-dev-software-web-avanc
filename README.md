@@ -1,8 +1,8 @@
 # jhipsterapp1
 
-This application was generated using JHipster 9.0.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.0.0](https://www.jhipster.tech/documentation-archive/v9.0.0).
+This application was generated using JHipster 9.2.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.2.0](https://www.jhipster.tech/documentation-archive/v9.2.0).
 
-This application is configured for Service Discovery and Configuration with the JHipster-Registry. On launch, it will refuse to start if it is not able to connect to the JHipster-Registry at [http://localhost:8761](http://localhost:8761). For more information, read our documentation on [JHipster Registry](https://www.jhipster.tech/documentation-archive/v9.0.0/jhipster-registry/).
+This application is configured for Service Discovery and Configuration with the JHipster-Registry. On launch, it will refuse to start if it is not able to connect to the JHipster-Registry at [http://localhost:8761](http://localhost:8761). For more information, read our documentation on [JHipster Registry](https://www.jhipster.tech/documentation-archive/v9.2.0/jhipster-registry/).
 
 ## Project Structure
 
@@ -34,9 +34,9 @@ In the project root, JHipster generates configuration files for tools like git, 
 
 Then implements the generated delegate classes with `@Service` classes.
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](<>). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
 
-Refer to [Doing API-First development](https://www.jhipster.tech/documentation-archive/v9.0.0/doing-api-first-development/) for more details.
+Refer to [Doing API-First development](https://www.jhipster.tech/documentation-archive/v9.2.0/doing-api-first-development/) for more details.
 The build system will install automatically the recommended version of Node and npm.
 
 We provide a wrapper to launch npm.
@@ -244,7 +244,7 @@ To achieve this, first build a Docker image of your app by running:
 npm run java:docker
 ```
 
-Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M\*), running:
+Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M*), running:
 
 ```bash
 npm run java:docker:arm64
@@ -256,28 +256,28 @@ Then run:
 docker compose -f src/main/docker/app.yml up -d
 ```
 
-For more information refer to [Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.0.0/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
+For more information refer to [Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.2.0/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.0.0/setting-up-ci/) page for more information.
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.2.0/setting-up-ci/) page for more information.
 
 ## References
 
 - [JHipster Homepage and latest documentation](https://www.jhipster.tech/)
-- [JHipster 9.0.0 archive](https://www.jhipster.tech/documentation-archive/v9.0.0)
-- [Using JHipster in development](https://www.jhipster.tech/documentation-archive/v9.0.0/development/)
-- [Service Discovery and Configuration with the JHipster-Registry](https://www.jhipster.tech/documentation-archive/v9.0.0/microservices-architecture/#jhipster-registry)
-- [Using Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.0.0/docker-compose)
-- [Using JHipster in production](https://www.jhipster.tech/documentation-archive/v9.0.0/production/)
-- [Running tests page](https://www.jhipster.tech/documentation-archive/v9.0.0/running-tests/)
-- [Code quality page](https://www.jhipster.tech/documentation-archive/v9.0.0/code-quality/)
-- [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.0.0/setting-up-ci/)
+- [JHipster 9.2.0 archive](https://www.jhipster.tech/documentation-archive/v9.2.0)
+- [Using JHipster in development](https://www.jhipster.tech/documentation-archive/v9.2.0/development/)
+- [Using Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.2.0/docker-compose)
+- [Using JHipster in production](https://www.jhipster.tech/documentation-archive/v9.2.0/production/)
+- [Running tests page](https://www.jhipster.tech/documentation-archive/v9.2.0/running-tests/)
+- [Code quality page](https://www.jhipster.tech/documentation-archive/v9.2.0/code-quality/)
+- [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.2.0/setting-up-ci/)
 - [Node.js](https://nodejs.org/)
 - [NPM](https://www.npmjs.com/)
+- [Service Discovery and Configuration with the JHipster-Registry](https://www.jhipster.tech/documentation-archive/v9.2.0/microservices-architecture/#jhipster-registry)
 - [OpenAPI-Generator](https://openapi-generator.tech)
 - [Swagger-Editor](https://editor.swagger.io)
-- [Doing API-First development](https://www.jhipster.tech/documentation-archive/v9.0.0/doing-api-first-development/)
+- [Doing API-First development](https://www.jhipster.tech/documentation-archive/v9.2.0/doing-api-first-development/)
 - [Webpack](https://webpack.js.org/)
 - [BrowserSync](https://www.browsersync.io/)
 - [Jest](https://jestjs.io)

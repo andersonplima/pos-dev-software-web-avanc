@@ -43,13 +43,10 @@
           />
           @if (valorPedidoRef.invalid && (valorPedidoRef.dirty || valorPedidoRef.touched)) {
             <div>
-              @if (editForm.get('valorPedido')?.errors?.required) {
+              @if (valorPedidoRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">O campo é obrigatório.</small>
               }
-              <small
-                class="form-text text-danger"
-                [hidden]="!editForm.get('valorPedido')?.errors?.number"
-                jhiTranslate="entity.validation.number"
+              <small class="form-text text-danger" [hidden]="!valorPedidoRef.errors?.number" jhiTranslate="entity.validation.number"
                 >Este campo é do tipo numérico.</small
               >
             </div>

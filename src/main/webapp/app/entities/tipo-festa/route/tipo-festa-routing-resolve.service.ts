@@ -2,14 +2,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
-import { EMPTY, Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { EMPTY, Observable, catchError, of } from 'rxjs';
 
 import { TipoFestaService } from '../service/tipo-festa.service';
 import { ITipoFesta } from '../tipo-festa.model';
 
 const tipoFestaResolve = (route: ActivatedRouteSnapshot): Observable<null | ITipoFesta> => {
-  const id = route.params.id;
+  const { id } = route.params;
   if (id) {
     const router = inject(Router);
     const service = inject(TipoFestaService);

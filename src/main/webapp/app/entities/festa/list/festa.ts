@@ -1,10 +1,10 @@
-import { Component, OnInit, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Subscription, combineLatest, filter, tap } from 'rxjs';
 
 import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
@@ -17,6 +17,7 @@ import { IFesta } from '../festa.model';
 import { FestaService } from '../service/festa.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'jhi-festa',
   templateUrl: './festa.html',
   imports: [
@@ -28,7 +29,7 @@ import { FestaService } from '../service/festa.service';
     SortDirective,
     SortByDirective,
     TranslateDirective,
-    TranslateModule,
+    TranslatePipe,
   ],
 })
 export class Festa implements OnInit {
