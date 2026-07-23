@@ -151,3 +151,5 @@ Desktop.ini
 ######################
 coverage/
 .nyc_output/
+.devcontainer/devcontainer-lock.json
+.vscode/settings.json
