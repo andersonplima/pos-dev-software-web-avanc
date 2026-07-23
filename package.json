@@ -72,7 +72,8 @@
     "packaging": "jar"
   },
   "overrides": {
-    "browser-sync": "3.0.4",
+    "fast-xml-parser": "5.10.1",
+    "shell-quote": "1.9.0",
     "webpack": "5.108.4"
   },
   "dependencies": {
